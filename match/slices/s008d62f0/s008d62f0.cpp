@@ -724,7 +724,7 @@ int DatabaseDirectoryFiles::GetKeyList(void* pKeyVector, void* pFilter)
     return nCount;
 }
 
-// @ 0x008d6be0
+// 0x008d6be0 (byte-exact lifted version: match/slices/s008d6be0/s008d6be0.cpp)
 void ExtTreeDoNukeSubtree(RBTree* pTree, RBNode* pNode)
 {
     while (pNode != 0)

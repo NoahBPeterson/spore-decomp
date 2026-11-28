@@ -615,7 +615,7 @@ cLocaleChangeMessage::cLocaleChangeMessage(const FixedString16& id)
 : mLocaleId(id) {}
 }  // namespace App
 
-// @ 0x006963d0
+// 0x006963d0 (byte-exact lifted version: match/slices/s006963d0/s006963d0.cpp)
 namespace App {
 cLocaleChangeMessage::~cLocaleChangeMessage()
 {}

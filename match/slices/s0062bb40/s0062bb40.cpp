@@ -752,7 +752,7 @@ bool PM::FUN_0062c7e0(int idx, int a) {
   return true;
 }
 
-// @ 0x0062c910
+// 0x0062c910 (byte-exact lifted version: match/slices/s0062c910/s0062c910.cpp)
 void PM::FUN_0062c910() {
   char* s = (char*)this;
   void* p = *(void**)(s + 0x94);

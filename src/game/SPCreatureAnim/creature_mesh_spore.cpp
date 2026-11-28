@@ -1437,7 +1437,7 @@ void creature_mesh_instance_data_s009c_6fc0::Update(Bone* out, float r, float g,
 }
 }  // namespace nSPCreatureAnim
 
-// @ 0x009c7ff0
+// 0x009c7ff0 (byte-exact lifted version: match/slices/s009c7ff0/s009c7ff0_lifted.cpp)
 void creature_mesh_instance_data_s009c_7ff0::Clear()
 {
     force_not_in_world = false;

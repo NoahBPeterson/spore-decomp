@@ -241,7 +241,7 @@ void DatabasePackedFile::FUN_006bd300()
     head->mpVtbl0 = vtbl_DBPF_13effb8;
 }
 
-// @ 0x006bd430
+// 0x006bd430 (byte-exact lifted version: match/slices/s006bd430/s006bd430.cpp)
 char DatabasePackedFile::FUN_006bd430(char p2)
 {
     char bl;

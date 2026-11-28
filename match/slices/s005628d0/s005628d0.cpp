@@ -336,7 +336,7 @@ int LookupDB::FindAssetIndex(const ResourceKey& key) {
     return index;
 }
 
-// @ 0x005632d0
+// 0x005632d0 (byte-exact lifted version: match/slices/s005632d0/s005632d0.cpp)
 bool LookupDB::FUN_005632d0(PodDeque* dq, SpVecV3* out) {
     DqIter p30;
     DqIter n10;

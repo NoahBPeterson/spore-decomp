@@ -41,7 +41,6 @@
 00f1a320 259 goal/avatar scan; register allocation differs; equiv PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00f1a440 430 goal-pair scan; register allocation differs; equiv WEAK (203 valid, 34.7%) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00f1a640 256 goal/act scan; register allocation differs; equiv WEAK (159 valid, 68.7%) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00f1aa10 161 bbox distance lerp; maxss/minss vs x87 compare; equiv FAIL xmm1 clobber only flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00f1ad00 198 goal-entry advance; codegen differs; equiv WEAK (458 valid, 24.2%) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00f1ae10 453 FAIL: 1-ulp float difference in memory pool (reduction order in Add distance/pos math), reg-alloc/scheduling flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00f1aff0 334 FAIL: clobbers ecx which original leaves untouched (LTCG caller-visible); reg-alloc flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

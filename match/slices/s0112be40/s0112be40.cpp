@@ -679,13 +679,15 @@ void hkVtableClassRegistry::registerList(hkTypeInfo const* const* types,
     }
 }
 
+extern "C" char g_14a7c44[];     // the lock owner tag the rwaudio System passes to its mutexes
+
 // =====================================================================================
 // 0112c560  System::lockVoiceList
 // =====================================================================================
 // @ 0x112c560
 void System::lockVoiceList()
 {
-    mpMutexA->Lock(0x14a7c44);
+    mpMutexA->Lock((u32)g_14a7c44);
 }
 
 // =====================================================================================
@@ -731,7 +733,7 @@ void System::Lock()
     void* fn = mpLockFn;
     if (fn == 0)
     {
-        mpMutexB->Lock(0x14a7c44);
+        mpMutexB->Lock((u32)g_14a7c44);
         return;
     }
     ((void (__fastcall*)(System*))fn)(this);
@@ -755,12 +757,12 @@ void System::Unlock()
 // =====================================================================================
 // 0112c640  System::someCheck
 // =====================================================================================
-// @ 0x112c640
+// 0x0112c640 (byte-exact lifted version: match/slices/s0112c640/s0112c640.cpp)
 bool System::someCheck(u32 v)
 {
     Mutex m;
     m.ctor(0, 1);
-    m.Lock(0x14a7c44);
+    m.Lock((u32)g_14a7c44);
     u32 x = m_e0;
     m.Unlock();
     m.dtor();
@@ -876,7 +878,7 @@ void System::shutdown()
     }
     Unlock();
 
-    mpMutexA->Lock(0x14a7c44);
+    mpMutexA->Lock((u32)g_14a7c44);
     while (m_b4 != 0 || (int)m_e4 > 0)
     {
         pump();

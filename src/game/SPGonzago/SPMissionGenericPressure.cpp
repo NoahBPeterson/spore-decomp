@@ -469,7 +469,7 @@ void cSPGenericPressureEvent_s00c5_62b0::OnComplete()
 }
 }  // namespace SP
 
-// @ 0x00c56360
+// 0x00c56360 (byte-exact lifted version: match/slices/s00c56360/s00c56360.cpp)
 namespace SP {
 bool cSPGenericPressureEvent_s00c5_62b0::Init()
 {

@@ -302,7 +302,7 @@ hkMoppSettings* hkMoppSettings::construct(int preset)
     self->m_d3 = 0;
     return self;
 }
-// @ 0x011037e0
+// 0x011037e0 (byte-exact lifted version: match/slices/s011037e0/s011037e0.cpp)
 hkMoppSettingsPartA* hkMoppSettingsPartA::init(int preset)
 {
     m_i4 = 5;

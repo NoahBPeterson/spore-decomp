@@ -303,7 +303,7 @@ void ArgCommand::ExecuteType(void* argsRaw)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00a98b00  ArgCommand::ExecuteSize
+// 0x00a98b00 (byte-exact lifted version: match/slices/s00a98b00/s00a98b00.cpp)  ArgCommand::ExecuteSize
 // ---------------------------------------------------------------------------
 extern void __stdcall Vec0C_erase(void* first, void* last);   // 0x9e0480 (ret 8)
 

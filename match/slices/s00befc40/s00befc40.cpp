@@ -513,7 +513,7 @@ void CStub::FUN_00bf02b0(void* arg, int b, int c, int d)
 }
 
 // ===========================================================================
-// @ 0x00bf0330
+// 0x00bf0330 (byte-exact lifted version: match/slices/s00bf0330/s00bf0330.cpp)
 // Comm hook: fire the "embassy" event when the object becomes interesting.
 // ===========================================================================
 void CStub::FUN_00bf0330(void* city)

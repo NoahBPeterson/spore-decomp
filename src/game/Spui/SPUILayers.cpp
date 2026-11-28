@@ -618,7 +618,7 @@ void __stdcall FUN_0080dcd0(void* a, i32 b, u8 c)
     if (apply.mDelta != 0) VisitTree(a, (void*)FUN_0080d670, &apply);
 }
 
-// @ 0x0080dd50
+// 0x0080dd50 (byte-exact lifted version: match/slices/s0080dd50/s0080dd50.cpp)
 int Layered::MethodDD50()
 {
     void* p = vBegin;

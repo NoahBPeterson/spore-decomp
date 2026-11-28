@@ -703,7 +703,7 @@ bool cSPUIAssetWebBrowser::Init(void* parent, void* content) {
   return mpContentWin != 0;
 }
 
-// @ 0x0065bc20
+// 0x0065bc20 (byte-exact lifted version: match/slices/s0065bc20/s0065bc20.cpp)
 bool cSPUIAssetWebBrowser::LoadPage(void* url) {
   if (!mpContentWin)
     return false;

@@ -792,7 +792,7 @@ bool IWinGrid::SetCellGutters(float a, float b, float c, float d)
 // ===========================================================================
 // 0x971b60 IWinGrid::ScrollToColumn
 // ===========================================================================
-// @ 0x00971b60
+// 0x00971b60 (byte-exact lifted version: match/slices/s00971b60/s00971b60.cpp)
 void IWinGrid::ScrollToColumn(int col)
 {
     if (col == mnFirstVisibleColumn)
@@ -814,7 +814,7 @@ void IWinGrid::ScrollToColumn(int col)
 // ===========================================================================
 // 0x971be0 IWinGrid::ScrollToRow
 // ===========================================================================
-// @ 0x00971be0
+// 0x00971be0 (byte-exact lifted version: match/slices/s00971be0/s00971be0.cpp)
 void IWinGrid::ScrollToRow(int row)
 {
     if (row == mnFirstVisibleRow)

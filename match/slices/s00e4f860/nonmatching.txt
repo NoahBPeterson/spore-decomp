@@ -6,7 +6,6 @@
 00e4ff50  100  zero-flag counter (0x390-0x397): complete; 0x14/0x18 id compare and increment schedule differ
 00e500a0  158  UI notify handler: complete (0x5107b17/0x5107b1a paths, cheat/quit/messageserver); switch shape differs
 00e504b0  118  alpha apply: complete (0.0 / 0xffffff paths); rounding conversion via cvtss2si from memory, call schedule differs. difftest PASS (375 valid inputs, 100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e50540   15  egg-kid predicate: complete; FNV call scheduling differs
 00e50620   73  remove first matching 0xc entry: complete (shift last down); register-convention (EAX/ESI/EDI) differs
 00e50680  118  recursive set byte: complete; nested guard schedule differs
 00e4fac0  110  configure collectable items: complete (two table passes); call/arg schedule differs

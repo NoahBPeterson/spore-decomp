@@ -4,7 +4,6 @@
 01103470 214 min/max are set before the n<=0 early-out and the container is loaded only inside the loop (fixes the negative-n fault) [equiv: WEAK 288 valid inputs, 25.0% coverage]
 01103610 80  inits are called through opaque indirect calls so `this` stays in esi and edx is never written; call/register schedule differs [equiv: PASS 389 valid inputs, 100.0% coverage]
 01103670 271 havok-equivalent
-011037e0 49 havok-equivalent, returns this in eax (hidden return read by caller); equiv PASS flags /vc71 /O2 /MD /Gy /TP
 01103850 171 havok-equivalent
 01103930 180 havok-equivalent
 01103a10 117 havok-equivalent

@@ -347,7 +347,7 @@ void FlagObj::SetFlag(unsigned mask, bool on)
     }
 }
 
-// @ 0x007fd390
+// 0x007fd390 (byte-exact lifted version: match/slices/s007fd390/s007fd390.cpp)
 bool WriteSerItem(SerBuffer* p, C53* self, SerItem14* item, void* alloc)
 {
     void* begin = self->M(item);

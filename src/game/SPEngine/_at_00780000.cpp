@@ -785,7 +785,7 @@ char* Func_00782800(char* self, char* first, char* last)
     return first;
 }
 
-// @ 0x00782b00
+// 0x00782b00 (byte-exact lifted version: match/slices/s00782b00/s00782b00.cpp)
 void __fastcall FUN_00782B00(int p)
 {
     char* self = (char*)p + 0x2c;

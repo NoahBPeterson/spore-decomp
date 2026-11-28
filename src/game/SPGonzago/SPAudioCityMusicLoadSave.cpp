@@ -504,7 +504,7 @@ void cCityMusicLoadSave::FinishSave()
     mbWaitingForSaveDialog = 0;
 }
 
-// @ 0x00ea2670
+// 0x00ea2670 (byte-exact lifted version: match/slices/s00ea2670/s00ea2670.cpp)
 bool cCityMusicLoadSave::DoMessage(void* pMessage, int* pData)
 {
     int nKind = pData[2];

@@ -1,7 +1,6 @@
 01082350 248 complete; caller-clean custom ABI reproduced by an argument-less member that reads its stack argument via _AddressOfReturnAddress; returns the q[2] bits in eax; equiv PASS (400/400 valid, 100% coverage)
 01082490 11 flags /vc71 /O2 /MD /Gy /TP; complete, equiv PASS (400/400 valid, 100% coverage, tolerated inline-calls). The original wrapper calls the custom-ABI hkRotation::toQuat (0x01082350; ecx=rotation, out pushed, caller-pop), which cl 15.00 cannot express: a direct thiscall call left the pushed out on the stack (`ret 4` returned into it). set now converts through a __thiscall member hkQuaternion::toQuatImpl (same body as toQuat); it pops its argument and returns with ecx==this, so the wrapper's esp, ecx and eax (the q[2] bits) all match the original.
 010824a0 181 havok-equivalent
-010825a0 93 complete; inline capacity check and field-only property write leave m_alignmentPadding (+4) untouched; equiv PASS (373/400 valid, 89.7% coverage)
 01082600 60 havok-equivalent
 01082660 78 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 memory]
 010826e0 79 havok-equivalent

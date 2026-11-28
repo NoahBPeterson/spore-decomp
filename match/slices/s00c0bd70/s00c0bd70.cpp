@@ -371,7 +371,7 @@ int __thiscall C::C0c250_() {
   return 1;
 }
 
-// @ 0x00c0ccc0
+// 0x00c0ccc0 (byte-exact lifted version: match/slices/s00c0ccc0/s00c0ccc0.cpp)
 char __cdecl FUN_00c0ccc0(float* p, float dt) {
   TransitionState* s = (TransitionState*)p;
   TransitionObject* pre = (TransitionObject*)s->m3c;

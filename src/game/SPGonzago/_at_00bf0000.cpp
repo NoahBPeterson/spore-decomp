@@ -2330,7 +2330,7 @@ void CStub::FUN_00bf02b0(void* arg, int b, int c, int d)
         ((NoopStub*)this)->FUN_00bef850();
 }
 
-// @ 0x00bf0330
+// 0x00bf0330 (byte-exact lifted version: match/slices/s00bf0330/s00bf0330.cpp)
 void CStub::FUN_00bf0330(void* city)
 {
     if (!(**(u8(__thiscall**)(int))(*(int*)((char*)city + 0x120) + 0x58))((int)city + 0x120)) return;

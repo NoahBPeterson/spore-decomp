@@ -3,7 +3,6 @@
 007a9e10  155  property-list ctor: vtable/EH schedule
 007a9eb0  96   hashtable DoFreeNodes: EH frame + refcount schedule
 007aa320  104  JobSlots::Clear: 0x690120 is thiscall cJob::Release (ecx=this), vtable slots need *(void***) deref; chk diff 75; equiv PASS 280/500 valid (88.1% cov)
-007aa3a0  122  JobSlots::Transfer: returns char in al; vtable slots deref via *(void***); chk diff 127; equiv PASS 481/500 valid (92.7% cov); src PASS
 007aa620  52   empty 16-byte ctor: EH frame shape; equiv: PASS (now Empty16 ctor, ECX fixed)
 007aa800  76   cNodeAllocator::Create: retail does xchg [chunk+0x10],1 not add; chk diff 73; equiv PASS 460/500 valid (100% cov); src PASS
 007a9f30  331  placeholder-texture one-time init (FUN_007a9f30 __fastcall, ecx=self): builds both placeholder textures through the manager's own vtable; chk diff 331 (size 410 vs 402); equiv WEAK 297/400 valid (6.0% cov, need 60%) — the two texture-creation paths are rarely reachable from generated inputs

@@ -2155,7 +2155,7 @@ void hkRotation_s0108_2350::set(const hkQuaternion_s0108_2350& q)
     m[10] = (float)(1.0f - ((hkX87Real)yy + xx));
 }
 
-// @ 0x010825a0
+// 0x010825a0 (byte-exact lifted version: match/slices/s010825a0/s010825a0.cpp)
 void hkWorldObject_s0108_2350::addProperty(uint32_t key, hkPropertyValue_s0108_2350 value)
 {
     for (int i = 0; i < m_properties.m_size; ++i)
