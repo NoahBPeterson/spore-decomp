@@ -145,7 +145,7 @@ inline void UninitFillNWrap(uint32_t* first, uint32_t n, const uint32_t* v) {
     UninitFillNMid(f, n, v);
 }
 
-// @ 0x0042BFA0
+// 0x0042bfa0 (byte-exact lifted version: match/slices/s0042bfa0/s0042bfa0.cpp)
 void VecU32::Assign(uint32_t n, const uint32_t* value) {
     if (n > (uint32_t)(mCap - mBegin)) {
         VecHolder holder(n, &mAlloc);

@@ -2,3 +2,4 @@
 slices/s00501f40/s00501f40.cpp  ?F@Deque@@QAEXXZ  00502e70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00501f40/s00501f40.cpp  ?deallocate@Alloc2@@QAEXPAXH@Z  00502eb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00501f40/s00501f40.cpp  ?DoPushBackSlow@Deque@@QAEXABI@Z  00502dd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00501f40/s00501f40_lifted.cpp  ?FUN_00501f40@D_00501f40@@QAEXHHH@Z  00501f40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

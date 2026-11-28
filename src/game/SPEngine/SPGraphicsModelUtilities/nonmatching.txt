@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 004103c0 1504 large /Od function (2299 bytes); behaviorally approximate source, inlined smart-pointer/EH structure not reproduced
-004298f0 707 Vec56::DoInsertValues (vector<0x38-byte rec>::insert(pos,n,value)): logic, call sequence and inline layers match; stack frame 0xbc vs 0x134 because dead slots of nested EASTL inline layers are not reproduced, so every offset shifts flags: /Od /Ob1 /MD /Gy /TP
 00429e00 312 RefVector::DoInsertN (vector of intrusive refs insert(pos,n,value)): same structure and calls; frame 0x9c vs 0xf0, dead-slot layout of inline layers differs flags: /Od /Ob1 /MD /Gy /TP
 00430450 835 BuildMaterials: frame/slot layout differs (orig 0xc8 locals) and the bit-field key helper constant-folds differently on 2 of 3 inlined calls; stream otherwise follows original flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00430900 209 BuildAbility: instruction stream equivalent but named-local stack slots are allocated in reverse order vs original (radius/props lowest, refs highest) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

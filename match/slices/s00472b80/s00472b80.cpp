@@ -252,7 +252,7 @@ StrW::StrW(int unused, const wchar_t* p, ...)
 // (CharVec copy ctor above: marker at its definition)
 // @ 0x00473270
 template void vector<AutoRefCount, 4>::resize(uint32_t);
-// @ 0x00473500
+// 0x00473500 (byte-exact lifted version: match/slices/s00473500/s00473500.cpp)
 template vector<Pod12, 4>& vector<Pod12, 4>::operator=(const vector<Pod12, 4>&);
 // @ 0x004737f0
 template uint32_t vector<Pod12, 4>::size() const;

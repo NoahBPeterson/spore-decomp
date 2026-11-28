@@ -301,7 +301,7 @@ void cPaintVarCtx::Destroy()
     mpVptr = gVtGmeRefCount;
 }
 
-// @ 0x0053e580
+// 0x0053e580 (byte-exact lifted version: match/slices/s0053e580/s0053e580.cpp)
 void cPaintVarCtx::Reset()
 {
     mRing.Resize(0x4000);

@@ -728,7 +728,7 @@ void fill(ForwardIterator first, ForwardIterator last, const T& value) {
         *first = value;
 }
 
-// @ 0x005550A0 / 0x00555540  vector<string>::DoInsertValues
+// 0x005550a0 (byte-exact lifted version: match/slices/s005550a0/s005550a0.cpp) / 0x00555540  vector<string>::DoInsertValues
 template <class T, class A>
 void vector<T, A>::DoInsertValues(iterator position, uint32_t n, const value_type& value) {
     if ((uint32_t)(mpCapacity - mpEnd) < n) {

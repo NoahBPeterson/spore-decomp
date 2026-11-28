@@ -120,7 +120,7 @@ void WideFixedStr::EnsureCapacity(uint32_t n)
 // Remaining editor-skin / wide-string helpers (PARTIAL skeletons).
 // ===========================================================================
 
-// @ 0x004c2100  vector<T> swap-with-fallback (3-pointer swap when allocators match)
+// 0x004c2100 (byte-exact lifted version: match/slices/s004c2100/s004c2100_lifted.cpp)  vector<T> swap-with-fallback (3-pointer swap when allocators match)
 void VectorSwap4(uint32_t* a, uint32_t* b)
 {
     if (&a[3] == &b[3]) {

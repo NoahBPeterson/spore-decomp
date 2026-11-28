@@ -1,3 +1,2 @@
 0045d3e0  616  recursive Collada <node> writer. Fixed the Matrix44 default-ctor reference (mapped ??0Matrix44@@QAE@XZ to the original's empty ctor at 0x402ab0; the annotation match had bound it to the 0x45dca0 copy ctor and the replay faulted there) and corrected the 16 matrix arguments to the original column-major order (m[0],m[4],m[8],m[12],...). Replay matches the one 0x402ab0 call with no memory/return difference; fresh equiv WEAK 335 valid, 11.4% coverage (recursive budget) with no mismatches. Remaining 616 bytes are the original's runtime row/col index arithmetic vs our direct fld offsets (419 vs 717).
-0045d790  698  vector<Elem(0x40)>::assign; EASTL grow/shrink scheduling differs
 0045dca0  362  Matrix44 copy ctor; compiler-unrolled 4-row staging not reproduced

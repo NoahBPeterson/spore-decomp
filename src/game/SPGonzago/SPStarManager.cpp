@@ -881,7 +881,7 @@ Elem100& Elem100::operator=(const Elem100& x)
     return *this;
 }
 
-// @ 0x0050f290
+// 0x0050f290 (byte-exact lifted version: match/slices/s0050f290/s0050f290.cpp)
 void Vec24Full::DoInsertValues(T24* position, uint32_t n, const T24& value)
 {
     if ((uint32_t)(mpCapacity - mpEnd) < n) {
@@ -1133,7 +1133,7 @@ void InsertionSortSimpleU32(uint32_t* first, uint32_t* last)
     }
 }
 
-// @ 0x00510350
+// 0x00510350 (byte-exact lifted version: match/slices/s00510350/s00510350.cpp)
 void Vec12I::insert(T12* position, T12* first, T12* last)
 {
     if (first != last) {
@@ -1231,7 +1231,7 @@ void Vec8I::insert(P2* position, P2* first, P2* last)
     }
 }
 
-// @ 0x00510bc0
+// 0x00510bc0 (byte-exact lifted version: match/slices/s00510bc0/s00510bc0.cpp)
 void Vec24I::insert(T24_s0051_07d0* position, T24_s0051_07d0* first, T24_s0051_07d0* last)
 {
     if (first != last) {

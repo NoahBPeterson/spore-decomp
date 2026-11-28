@@ -210,7 +210,7 @@ int FUN_00549840(int param_1, int param_2, short* param_3, short* param_4)
     }
 }
 
-// @ 0x00549940
+// 0x00549940 (byte-exact lifted version: match/slices/s00549940/s00549940.cpp)
 unsigned* Obj44::FUN_00549940(unsigned* param_2)
 {
     unsigned* p = (unsigned*)this;

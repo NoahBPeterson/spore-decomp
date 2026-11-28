@@ -197,7 +197,7 @@ inline void DoFree12(T12* p)
     }
 }
 
-// @ 0x0050dea0
+// 0x0050dea0 (byte-exact lifted version: match/slices/s0050dea0/s0050dea0.cpp)
 Vec12& Vec12::operator=(const Vec12& x)
 {
     if (this != &x) {
@@ -259,7 +259,7 @@ Vec20::Vec20(const Vec20& x)
     mpEnd = (T20*)pResult;
 }
 
-// @ 0x0050db60
+// 0x0050db60 (byte-exact lifted version: match/slices/s0050db60/s0050db60.cpp)
 Vec20& Vec20::operator=(const Vec20& x)
 {
     if (this != &x) {

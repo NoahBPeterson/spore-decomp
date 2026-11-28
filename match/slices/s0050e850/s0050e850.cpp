@@ -389,7 +389,7 @@ void Fill24(T24* first, T24* last, const T24& value)
         *first = value;
 }
 
-// @ 0x0050f290
+// 0x0050f290 (byte-exact lifted version: match/slices/s0050f290/s0050f290.cpp)
 void Vec24Full::DoInsertValues(T24* position, uint32_t n, const T24& value)
 {
     if ((uint32_t)(mpCapacity - mpEnd) < n) {

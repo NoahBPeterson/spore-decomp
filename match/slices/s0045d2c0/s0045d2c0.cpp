@@ -300,7 +300,7 @@ void WriteNode(int out, char** names, int* parents, Matrix44* mats,
 }
 
 // =====================================================================
-// @ 0x45d790  vector<Elem(0x40)>::assign
+// 0x0045d790 (byte-exact lifted version: match/slices/s0045d790/s0045d790.cpp)  vector<Elem(0x40)>::assign
 // =====================================================================
 struct Elem {
     char b[0x40];

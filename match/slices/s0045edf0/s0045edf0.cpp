@@ -176,7 +176,7 @@ StrBuf* StrBuf::assign(const char* first, const char* last)
 }
 
 // =====================================================================
-// @ 0x45f430  append a range, growing if needed
+// 0x0045f430 (byte-exact lifted version: match/slices/s0045f430/s0045f430.cpp)  append a range, growing if needed
 // =====================================================================
 StrBuf& StrBuf::appendGrow(const char* pBegin, const char* pEnd)
 {

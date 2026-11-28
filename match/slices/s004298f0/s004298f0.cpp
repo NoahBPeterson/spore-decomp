@@ -137,7 +137,7 @@ struct Vec56 {
     void DoInsertValues(Rec56* position, uint32_t n, const Rec56& value);
 };
 
-// @ 0x004298f0  (nonmatching: stack slot layout only)
+// 0x004298f0 (byte-exact lifted version: match/slices/s004298f0/s004298f0_lifted.cpp)  (nonmatching: stack slot layout only)
 void Vec56::DoInsertValues(Rec56* position, uint32_t n, const Rec56& value)
 {
     if (n <= (uint32_t)(mpCapacity - mpEnd)) {

@@ -900,7 +900,7 @@ Quaternion* QuaternionFromMatrix33(Quaternion* out, const Matrix33* mat, float e
     return out;
 }
 
-// @ 0x004c09e0
+// 0x004c09e0 (byte-exact lifted version: match/slices/s004c09e0/s004c09e0.cpp)
 BasicString16* BasicString16::sprintf_va_list(const wchar_t* fmt, char* args)
 {
     const int nOldSize = (int)(((char*)mpEnd - (char*)mpBegin) >> 1);
@@ -969,7 +969,7 @@ WideFixedStr_s004c_10e0* WideFixedStr_s004c_10e0::AppendN(uint32_t n, uint16_t c
 }
 }  // namespace eastl
 
-// @ 0x004c2100
+// 0x004c2100 (byte-exact lifted version: match/slices/s004c2100/s004c2100_lifted.cpp)
 void VectorSwap4(uint32_t* a, uint32_t* b)
 {
     if (&a[3] == &b[3]) {
