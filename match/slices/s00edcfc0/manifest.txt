@@ -6,3 +6,4 @@ slices/s00edcfc0/s00edcfc0.cpp  ?f00edde90@C@@QAEXXZ           00edde90  /O2 /MD
 slices/s00edcfc0/s00edcfc0.cpp  ?f00eddee0@@YAHPAXH@Z          00eddee0  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00edcfc0/s00edcfc0.cpp  ?f00edddc0@Sub14@@QAEXPAH@Z    00edddc0  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00edcfc0/s00edcfc0.cpp  ?f00eddbe0@C@@QAEXXZ           00eddbe0  /O2 /MD /Gy /EHsc /TP /fp:fast
+slices/s00edcfc0/s00edcfc0.cpp  ?f00edd240@@YAPAUV3@@PAU1@H@Z  00edd240  /O2 /MD /Gy /EHsc /TP /fp:fast

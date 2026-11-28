@@ -1796,10 +1796,9 @@ Vec8* Vec8::Init(unsigned n, const float* value)
 
 // @ 0x006a4660
 Vec10* Vec10::Init(int n, const void* value)
-{
-    Alloc(n, value);
+{    Alloc(n, value);
     uint32_t tmp[4];
-    Fill16a(begin, n, tmp, value);
+    Fill16a(begin, n, tmp, *(const void* volatile*)&value);
     end = (char*)begin + n * 0x10;
     return this;
 }
@@ -1829,10 +1828,9 @@ VecC* VecC::InitValue(unsigned n, const float* value)
 
 // @ 0x006a4730
 Vec10b* Vec10b::Init(int n, const void* value)
-{
-    Alloc(n, value);
+{    Alloc(n, value);
     uint32_t tmp[4];
-    Fill16b(begin, n, tmp, value);
+    Fill16b(begin, n, tmp, *(const void* volatile*)&value);
     end = (char*)begin + n * 0x10;
     return this;
 }

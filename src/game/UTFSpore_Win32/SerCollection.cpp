@@ -175,17 +175,21 @@ struct Misc34 {
 
 // @ 0x00998fc0
 void Misc34::f98fc0(void* o)
-{
-    char* self = (char*)this;
-    (*(void(__thiscall**)(void*))*(void**)o)(o);
-    void** p = *(void***)(self + 0x60);
-    if (p < *(void***)(self + 0x64)) {
-        *(void***)(self + 0x60) = p + 1;
-        if (p != 0)
-            *p = o;
-        return;
-    }
-    FUN_00a80dd0(p, &o);
+{    struct Vec {
+        void** b; void** e; void** c;
+        void push(void* obj, void** orig) {
+            void** p = e;
+            if (p < c) {
+                e = p + 1;
+                if (p != 0) *p = obj;
+                return;
+            }
+            ((void(__thiscall*)(void*, void**, void**))FUN_00a80dd0)(this, p, orig);
+        }
+    };
+    void* obj = *(void* volatile*)&o;
+    (*(void(__thiscall**)(void*))*(void**)obj)(obj);
+    ((Vec*)((char*)this + 0x5c))->push(obj, &o);
 }
 
 // @ 0x00999000

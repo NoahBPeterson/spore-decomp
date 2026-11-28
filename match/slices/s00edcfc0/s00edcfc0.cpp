@@ -243,26 +243,24 @@ struct V3 { int x, y, z; };
 struct PropObj { V3* F25190(V3* vec, bool* flag); };
 // @ 0x00edd240
 V3* __cdecl f00edd240(V3* out, int id)
-{
-    out->x = 0;
-    out->y = 0;
-    out->z = 0;
+{    V3* __restrict pOut = out;
+    pOut->x = 0;
+    pOut->y = 0;
+    pOut->z = 0;
     if (id == -2) {
-        V3* p = (V3*)MGR()->F3bcb0();
-        out->x = p->x;
-        out->z = p->z;
-        out->y = 0x2f7d0004;
+        V3* __restrict p = (V3*)MGR()->F3bcb0();
+        *pOut = *p;
+        pOut->y = 0x2f7d0004;
     } else {
         PropObj* v = (PropObj*)MGR()->F3e8a0(id);
         if (v != 0) {
             V3 tmp;
             bool flag;
-            V3* r = v->F25190(&tmp, &flag);
-            *out = *r;
+            V3* __restrict r = v->F25190(&tmp, &flag);
+            *pOut = *r;
         }
     }
-    return out;
-}
+    return pOut;}
 
 // ============================================================ 0x00edd2d0
 extern "C" int FUN_00efc8f0();

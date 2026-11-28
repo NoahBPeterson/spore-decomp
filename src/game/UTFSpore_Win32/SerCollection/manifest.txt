@@ -4,3 +4,4 @@
 ../src/game/UTFSpore_Win32/SerCollection.cpp  ??1SerCollection_s0099_9110@@QAE@XZ  00999110  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/SerCollection.cpp  ?Shutdown@SerCollection_s0099_9110@@QAEXXZ  009991e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/SerCollection.cpp  ?SerCollection_RemoveAll@@YIXPAD@Z  00999000  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/SerCollection.cpp  ?f98fc0@Misc34@@QAEXPAX@Z  00998fc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

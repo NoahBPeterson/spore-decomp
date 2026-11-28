@@ -27,3 +27,5 @@
 ../src/game/SPEngine/SPPropertyManager.cpp  ?FUN_006a61c0@ArgMgr@@QAEXPAXII@Z  006a61c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPPropertyManager.cpp  ?FUN_006a5b80@ArgMgr@@QAEXHPAH@Z  006a5b80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyManager.cpp  ?OnRegister@cCommandStateB@@QAEXPAXH@Z  006a38f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?Init@Vec10@@QAEPAU1@HPBX@Z  006a4660  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?Init@Vec10b@@QAEPAU1@HPBX@Z  006a4730  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

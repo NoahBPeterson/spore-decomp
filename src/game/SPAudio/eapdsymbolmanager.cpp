@@ -464,7 +464,7 @@ public:
     void* BindX(uint32_t key, uint32_t b);                       // 0xa66ec0
     void* FindByClass(uint32_t key, void* a2, void* a3);         // 0xa66f10
     void  SendBang(uint32_t key, uint32_t a2);                   // 0xa66f70
-    void  SendFloat(uint32_t key, uint32_t a2, float f);         // 0xa66fd0
+    void  SendFloat(EA::Audio::Eapd::t_symbol s, float f);       // 0xa66fd0
     void  SendSymbol(uint32_t key, uint32_t b, uint32_t c, uint32_t d); // 0xa67040
 };
 class EapdRec {
@@ -1528,22 +1528,18 @@ void SymbolManager::SendBang(uint32_t key, uint32_t a2)
 }
 
 // @ 0x00a66fd0
-void SymbolManager::SendFloat(uint32_t key, uint32_t a2, float f)
-{
-    Hashtable& h = mBindings;
-    HashRange t;
-    t = h.EqualRange(key);
-    HashNode*  node   = t.first.mpNode;
+void SymbolManager::SendFloat(EA::Audio::Eapd::t_symbol s, float f)
+{    uint32_t key = s.mHash;
+    HashRange t = mBindings.EqualRange(key);
+    HashNode*  node   = *(HashNode* volatile*)&t.first.mpNode;
+    HashNode*  end    = *(HashNode* volatile*)&t.second.mpNode;
     HashNode** bucket = t.first.mpBucket;
-    HashNode*  end    = t.second.mpNode;
     while (node != end) {
         OutletFloat(node->mValue, f);
         node = node->mpNext;
         while (!node)
             node = *++bucket;
-    }
-    (void)a2;
-}
+    }}
 
 // @ 0x00a67040
 void SymbolManager::SendSymbol(uint32_t key, uint32_t b, uint32_t c, uint32_t d)

@@ -95,3 +95,4 @@
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?InitThing@WrappedAnim@@QAE_NPAXEIEE@Z  00a05510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a095a0@@YAXPAURec@@0PBU1@@Z  00a095a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FindRaw@RBTreeHead@@QAEPAXPAPAXPAI@Z  00a057f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a049f0@cAnimatingCreature_s00a0_3da0@@QAEMH@Z  00a049f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
