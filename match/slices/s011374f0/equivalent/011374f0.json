@@ -1,0 +1,11 @@
+{
+ "build": "46746969278532b4fee7179e8951f4a4344bafcf72b1e23478fa71d685de1045",
+ "facts": "the same source built with VS2008 (cl 15.00, flags /O2 /MD /Gy /TP /arch:SSE) is byte-identical to retail (chk.py MATCH); this bundle records the /vc71 build of it",
+ "layer": "cross_compiler",
+ "level": "L0",
+ "retail_fp": "e1354cad663ce818a0bd2071025fcce6c2e9ff1d9cb0ba4f7ba7ea0154b5ee8d",
+ "tools": {
+  "prove": "none: recorded by hand at the maintainer's request (2026-11-27)"
+ },
+ "va": "011374f0"
+}
