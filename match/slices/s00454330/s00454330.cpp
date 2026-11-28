@@ -248,7 +248,7 @@ void __fastcall KeyVec_resize(KeyVec* self, int, unsigned n)
     }
 }
 
-// @ 0x004549b0  (remove(first,last,value) for intrusive ptr ranges)
+// 0x004549b0 (byte-exact lifted version: match/slices/s004549b0/s004549b0.cpp)  (remove(first,last,value) for intrusive ptr ranges)
 cRefCounted** PtrRange_Remove(cRefCounted** first, cRefCounted** last, cRefCounted* const* value)
 {
     cRefCounted** it = first;

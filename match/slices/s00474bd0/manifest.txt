@@ -3,3 +3,4 @@ slices/s00474bd0/s00474bd0.cpp  ?push_backA@Vec8@@QAEXPAI@Z  00475670  /Od /Ob1 
 slices/s00474bd0/s00474bd0.cpp  ?push_backB@Vec8@@QAEXPAI@Z  00475800  /Od /Ob1 /MD /Gy /EHsc /TP /GS-
 slices/s00474bd0/s00474bd0.cpp  ?Wrap4@@YAPAXPAX0PAM@Z  00475550  /Od /Ob1 /MD /Gy /TP
 slices/s00474bd0/s00474bd0.cpp  ?initFromVec@StreamDesc@@QAEPAU1@PBUIndexVec@@PAUIRefObj@@H@Z  004755a0  /Od /Ob1 /MD /Gy /TP
+slices/s00474bd0/s00474bd0_lifted.cpp  ?FUN_00474bd0@D_00474bd0@@QAEHH@Z  00474bd0  /Od /Ob1 /MD /Gy /TP

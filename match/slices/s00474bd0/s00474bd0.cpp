@@ -26,7 +26,7 @@ struct RefVec {
 void CopyNode(DefaultRefCounted** p);                     // 0x4e4350 (ref-counted pointer copy)
 void UninitCopy(void* out, DefaultRefCounted** first, DefaultRefCounted** last, DefaultRefCounted** dst, uchar t); // 0x42e860
 
-// @ 0x00474bd0
+// 0x00474bd0 (byte-exact lifted version: match/slices/s00474bd0/s00474bd0_lifted.cpp)
 RefVec& RefVec::assign(const RefVec& x)
 {
     if (&x != this) {
