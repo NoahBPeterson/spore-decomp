@@ -114,7 +114,7 @@ int Obj::FUN_005400a0(int param_2, int param_3, float param_4)
     return 1;
 }
 
-// @ 0x00540210
+// 0x00540210 (byte-exact lifted version: match/slices/s00540210/s00540210.cpp)
 void Obj::FUN_00540210()
 {
     char* self = (char*)this;

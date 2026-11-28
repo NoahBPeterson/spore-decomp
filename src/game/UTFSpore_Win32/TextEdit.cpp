@@ -3612,7 +3612,7 @@ void ParagraphVector_s0098_c880::push_back(const Paragraph_s0098_c880& v)
 }
 }}  // namespace EA::UTFWinControls
 
-// @ 0x0098cbb0
+// 0x0098cbb0 (byte-exact lifted version: match/slices/s0098cbb0/s0098cbb0.cpp)
 namespace EA { namespace UTFWinControls {
 WinTextEdit_s0098_c880::~WinTextEdit_s0098_c880()
 {

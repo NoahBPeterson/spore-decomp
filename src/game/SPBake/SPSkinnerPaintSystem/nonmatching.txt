@@ -4,7 +4,6 @@
 00520140 187 /Od x87-sqrt normalize schedule differs; complete
 00520220 166 /Od temp-frame / helper return schedule differs; complete
 005219d0 142 /Od message handler complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE); instructions match, only the /Od stack-slot layout differs; difftest WEAK after fixing the missing second parameter (ret 8), thiscall AtomicRefCounted::Release and thiscall EASTL erase/assign/ctor/DoFree helpers that were declared cdecl
-00521ba0 264 /Od per-frame update complete; AutoRefCount temp layout differs
 00521d70 1702 nSPSkinner::cPaintSystem::HandleUpdateMessage complete; /Od layout differs
 00522b40 1478 /Od frame: original has ~0xc0 more temp slots (inline ref/copy temps); complete SetCreatureSkin, same calls in order (fabs inline needs /Oi)
 00523690  -  complete draft carried over from s00523690 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 649, retail 612

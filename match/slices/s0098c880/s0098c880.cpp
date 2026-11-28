@@ -399,7 +399,7 @@ bool IWinTextEdit::Redo()
 
 // ------------------------------------------------------------------ WinTextEdit
 
-// @ 0x98cbb0
+// 0x0098cbb0 (byte-exact lifted version: match/slices/s0098cbb0/s0098cbb0.cpp)
 WinTextEdit::~WinTextEdit()
 {
     if (mIWin.mInited)

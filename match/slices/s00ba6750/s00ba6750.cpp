@@ -213,7 +213,7 @@ void FUN_00ba6a40(unsigned which, unsigned* bits) {
   }
 }
 
-// @ 0x00ba6ab0
+// 0x00ba6ab0 (byte-exact lifted version: match/slices/s00ba6ab0/s00ba6ab0.cpp)
 int FUN_00ba6ab0(unsigned* flags) {
   unsigned f = *flags;
   int n = (f & 1) != 0;

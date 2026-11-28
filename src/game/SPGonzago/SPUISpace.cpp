@@ -7682,7 +7682,7 @@ void cSPUISpace_s0106_78e0::FUN_01067e70(void* p1, Key* key)
     SetToolTip(p1, img, mTooltipText.GetText(), 0, &local);
 }
 
-// @ 0x01067ef0
+// 0x01067ef0 (byte-exact lifted version: match/slices/s01067ef0/s01067ef0.cpp)
 Blk28* cSPUISpace_s0106_78e0::FUN_01067ef0(u32 id)
 {
     int count = (int)(mpListEnd - mpListBegin);
