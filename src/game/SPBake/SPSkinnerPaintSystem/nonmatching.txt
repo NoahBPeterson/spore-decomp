@@ -9,7 +9,6 @@
 00522b40 1478 /Od frame: original has ~0xc0 more temp slots (inline ref/copy temps); complete SetCreatureSkin, same calls in order (fabs inline needs /Oi)
 00523690  -  complete draft carried over from s00523690 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 649, retail 612
 00523900 1623 Ctx9::BuildHit complete (29 calls = original 29, all targets/order equal; size 1920 vs 2012): only /Od frame-slot/temp placement differs (orig frame 0x344 vs ours 0x198) and the 0-2/default switch folds to a table starting at 3; difftest WEAK (31% coverage, 0 mismatches) (compiled with /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-005240e0  -  complete draft carried over from s00523690 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 80, retail 109
 00524150  -  complete draft carried over from s00523690 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 135, retail 130
 005247d0 129 /Od packed-value unpack inlining / slot layout differs; complete GetChecked [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00524a50 1494 /Od frame slot layout (large inlined-helper frame 0x188); behaviorally complete, frame offsets diverge
