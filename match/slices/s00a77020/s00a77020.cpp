@@ -1,84 +1,65 @@
-// 0x00a77020: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: src/game/Swarm/_at_00a70000.cpp, match/slices/s00a76cf0/s00a76cf0.cpp.
+// 0x00a77020: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: src/game/Swarm/_at_00a70000.cpp, match/slices/s00a76cf0/s00a76cf0.cpp.
 
-struct il2c_vc0 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual int s6(int);
+struct VObject {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual int Unk_06(int);
 };
-struct il2c_vc1 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual int s6(int);
+struct VObject2 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual int Unk_06(int);
 };
-struct il2c_vc2 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual int s6(int);
+struct VObject3 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual int Unk_06(int);
 };
-
 
 // @ 0x00a77020
-extern "C" int __fastcall FUN_00a77020(char* self, int edx_unused, int a4)
+extern "C" int __fastcall FUN_00a77020(char* value, int unused, int obj)
 {
-    int t1002;
-    int t1003;
-    int t1005;
-    int t1008;
-    int t1011;
-    int t1014;
-    int t1017;
-    int t1020;
-    float t1023;
-    float t1024;
-    float t1025;
-    float t1026;
-    int t1028;
-    int t1031;
-    t1002 = (int)((int)(self));
-    t1003 = (int)(*(int*)((char*)(t1002) + 112));
-    t1005 = (int)((int)(a4));
-    if (t1003 != (int)0) {
-        t1008 = (int)((il2c_vc0*)(t1003))->s6((int)(t1005));
-        if ((unsigned char)(t1008) == (unsigned char)0) goto La77094;
+    int ptr;
+    int ptr2;
+    int ptr3;
+    float f;
+    float f2;
+    ptr = *(int*)((char*)(int)value + 0x70);
+    if (ptr != 0) {
+        if ((unsigned char)((VObject*)ptr)->Unk_06(obj) == 0) goto done;
     }
-    t1011 = (int)(*(int*)((char*)(t1002) + 116));
-    if (t1011 != (int)0) {
-        t1014 = (int)((il2c_vc1*)(t1011))->s6((int)(t1005));
-        if ((unsigned char)(t1014) == (unsigned char)0) goto La77094;
+    ptr2 = *(int*)((char*)(int)value + 0x74);
+    if (ptr2 != 0) {
+        if ((unsigned char)((VObject2*)ptr2)->Unk_06(obj) == 0) goto done;
     }
-    t1017 = (int)(*(int*)((char*)(t1002) + 120));
-    if (t1017 != (int)0) {
-        t1020 = (int)((il2c_vc2*)(t1017))->s6((int)(t1005));
-        if ((unsigned char)(t1020) == (unsigned char)0) goto La77094;
+    ptr3 = *(int*)((char*)(int)value + 0x78);
+    if (ptr3 != 0) {
+        if ((unsigned char)((VObject3*)ptr3)->Unk_06(obj) == 0) goto done;
     }
-    t1023 = (float)(*(float*)((char*)(t1005)));
-    if (t1023 >= (float)*(float*)((char*)(t1002) + 24)) {
-        t1024 = (float)(*(float*)((char*)(t1002) + 32));
-        if (t1024 > t1023) {
-            t1025 = (float)(*(float*)((char*)(t1005) + 4));
-            if (t1025 >= (float)*(float*)((char*)(t1002) + 28)) {
-                t1026 = (float)(*(float*)((char*)(t1002) + 36));
-                if (t1026 > t1025) {
-                    t1028 = (int)((int)1);
-                    return (int)(t1028);
+    f = *(float*)obj;
+    if (f >= *(float*)((char*)(int)value + 0x18)) {
+        if (*(float*)((char*)(int)value + 0x20) > f) {
+            f2 = *(float*)((char*)obj + 4);
+            if (f2 >= *(float*)((char*)(int)value + 0x1c)) {
+                if (*(float*)((char*)(int)value + 0x24) > f2) {
+                    return 1;
                 }
             }
         }
     }
-    La77094:;
-    t1031 = (int)((int)0);
-    return (int)(t1031);
+    done:
+    return 0;
 }

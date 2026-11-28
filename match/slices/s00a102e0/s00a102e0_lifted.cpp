@@ -1,105 +1,105 @@
-// 0x00a102e0: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: src/game/SPAudio/_at_00a10000.cpp, match/slices/s00a102e0/s00a102e0.cpp.
+// 0x00a102e0: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: src/game/SPAudio/_at_00a10000.cpp, match/slices/s00a102e0/s00a102e0.cpp.
 
 struct C_00a0ff50 { int FUN_00a0ff50(unsigned int); };
 
 // @ 0x00a102e0
-extern "C" int __fastcall FUN_00a102e0(char* self, int edx_unused, int a4)
+extern "C" int __fastcall FUN_00a102e0(char* value, int unused, int value2)
 {
-    int t1003;
-    int t1004;
-    int t1005;
-    int t1006;
-    int t1007;
-    int t1008;
-    int t1009;
-    int t1010;
-    int t1011;
-    int t1012;
-    int t1013;
-    int t1014;
-    int t1018;
-    int t1019;
-    int t1020;
-    int t1021;
-    int t1022;
-    int t1023;
-    int t1024;
-    int t1025;
-    int t1026;
-    int t1027;
-    int t1028;
-    int t1032;
-    int t1033;
-    int t1034;
-    int t1035;
-    int t1036;
-    int t1037;
-    int t1038;
-    int t1039;
-    int t1040;
-    int t1041;
-    int t1044;
-    t1003 = (int)((int)(self));
-    t1004 = (int)((int)0);
-    if ((int)*(int*)((char*)(t1003) + 56) != t1004) {
-        t1005 = (int)(*(int*)((char*)(t1003) + 52));
-        if (t1005 != t1004) {
-            *(int*)((char*)(t1003) + 44) = (int)(t1005);
-            *(int*)((char*)(t1003) + 52) = (int)(t1004);
-            *(int*)((char*)(t1003) + 56) = (int)(t1004);
-            *(int*)((char*)(t1003) + 60) = (int)(t1004);
+    int ptr;
+    int value3;
+    int value4;
+    int value5;
+    int value6;
+    int value7;
+    int value8;
+    int value9;
+    int value10;
+    int value11;
+    int value12;
+    int ptr2;
+    int ptr3;
+    int value13;
+    int value14;
+    int value15;
+    int value16;
+    int value17;
+    int value18;
+    int value19;
+    int value20;
+    int value21;
+    int ptr4;
+    int ptr5;
+    int value22;
+    int result;
+    int value23;
+    int value24;
+    int value25;
+    int value26;
+    int value27;
+    int value28;
+    int ptr6;
+    int ptr7;
+    ptr = (int)value;
+    value3 = 0;
+    if (*(int*)((char*)ptr + 0x38) != value3) {
+        value4 = *(int*)((char*)ptr + 0x34);
+        if (value4 != value3) {
+            *(int*)((char*)ptr + 0x2c) = value4;
+            *(int*)((char*)ptr + 0x34) = value3;
+            *(int*)((char*)ptr + 0x38) = value3;
+            *(int*)((char*)ptr + 0x3c) = value3;
         }
     }
-    t1006 = (int)(*(int*)((char*)(t1003)));
-    t1007 = (int)(*(int*)((char*)(t1003) + 44));
-    t1008 = (int)(t1006);
-    t1009 = (int)(t1008 - t1007);
-    t1010 = (int)(t1009 + (int)*(int*)((char*)(t1003) + 68));
-    *(int*)((char*)(t1003) + 52) = (int)(t1007);
-    if ((unsigned int)(t1010) < (unsigned int)4) {
-        t1011 = (int)(*(int*)((char*)(t1003) + 4));
-        t1012 = (int)(t1011 - t1006);
-        t1013 = (int)(t1012 + t1012);
-        t1014 = (int)(t1003);
-        ((C_00a0ff50*)(t1014))->FUN_00a0ff50((unsigned int)(t1013));
+    value5 = *(int*)ptr;
+    value6 = *(int*)((char*)ptr + 0x2c);
+    value7 = value5;
+    value8 = value7 - value6;
+    value9 = value8 + *(int*)((char*)ptr + 0x44);
+    *(int*)((char*)ptr + 0x34) = value6;
+    if ((unsigned int)value9 < 4) {
+        value10 = *(int*)((char*)ptr + 4);
+        value11 = value10 - value5;
+        value12 = value11 + value11;
+        ptr2 = ptr;
+        ((C_00a0ff50*)ptr2)->FUN_00a0ff50((unsigned int)value12);
     }
-    t1018 = (int)(*(int*)((char*)(t1003) + 44));
-    t1019 = (int)((int)(a4));
-    *(int*)((char*)(t1018)) = (int)(t1019);
-    *(int*)((char*)(t1003) + 44) += (int)4;
-    t1020 = (int)(*(int*)((char*)(t1003)));
-    t1021 = (int)(*(int*)((char*)(t1003) + 44));
-    t1022 = (int)(t1020);
-    t1023 = (int)(t1022 - t1021);
-    t1024 = (int)(t1023 + (int)*(int*)((char*)(t1003) + 68));
-    *(int*)((char*)(t1003) + 56) = (int)(t1021);
-    if ((unsigned int)(t1024) < (unsigned int)4) {
-        t1025 = (int)(*(int*)((char*)(t1003) + 4));
-        t1026 = (int)(t1025 - t1020);
-        t1027 = (int)(t1026 + t1026);
-        t1028 = (int)(t1003);
-        ((C_00a0ff50*)(t1028))->FUN_00a0ff50((unsigned int)(t1027));
+    ptr3 = *(int*)((char*)ptr + 0x2c);
+    value13 = value2;
+    *(int*)ptr3 = value13;
+    *(int*)((char*)ptr + 0x2c) += 4;
+    value14 = *(int*)ptr;
+    value15 = *(int*)((char*)ptr + 0x2c);
+    value16 = value14;
+    value17 = value16 - value15;
+    value18 = value17 + *(int*)((char*)ptr + 0x44);
+    *(int*)((char*)ptr + 0x38) = value15;
+    if ((unsigned int)value18 < 4) {
+        value19 = *(int*)((char*)ptr + 4);
+        value20 = value19 - value14;
+        value21 = value20 + value20;
+        ptr4 = ptr;
+        ((C_00a0ff50*)ptr4)->FUN_00a0ff50((unsigned int)value21);
     }
-    t1032 = (int)(*(int*)((char*)(t1003) + 44));
-    *(int*)((char*)(t1032)) = (int)(t1004);
-    *(int*)((char*)(t1003) + 44) += (int)4;
-    t1033 = (int)(*(int*)((char*)(t1003)));
-    t1034 = (int)(*(int*)((char*)(t1003) + 44));
-    t1035 = (int)(t1033);
-    t1036 = (int)(t1035 - t1034);
-    t1037 = (int)(t1036 + (int)*(int*)((char*)(t1003) + 68));
-    *(int*)((char*)(t1003) + 60) = (int)(t1034);
-    if ((unsigned int)(t1037) < (unsigned int)4) {
-        t1038 = (int)(*(int*)((char*)(t1003) + 4));
-        t1039 = (int)(t1038 - t1033);
-        t1040 = (int)(t1039 + t1039);
-        t1041 = (int)(t1003);
-        t1034 = (int)((C_00a0ff50*)(t1041))->FUN_00a0ff50((unsigned int)(t1040));
+    ptr5 = *(int*)((char*)ptr + 0x2c);
+    *(int*)ptr5 = value3;
+    *(int*)((char*)ptr + 0x2c) += 4;
+    value22 = *(int*)ptr;
+    result = *(int*)((char*)ptr + 0x2c);
+    value23 = value22;
+    value24 = value23 - result;
+    value25 = value24 + *(int*)((char*)ptr + 0x44);
+    *(int*)((char*)ptr + 0x3c) = result;
+    if ((unsigned int)value25 < 4) {
+        value26 = *(int*)((char*)ptr + 4);
+        value27 = value26 - value22;
+        value28 = value27 + value27;
+        ptr6 = ptr;
+        result = (int)((C_00a0ff50*)ptr6)->FUN_00a0ff50((unsigned int)value28);
     }
-    t1044 = (int)(*(int*)((char*)(t1003) + 44));
-    *(int*)((char*)(t1044)) = (int)(t1004);
-    *(int*)((char*)(t1003) + 44) += (int)4;
-    *(int*)((char*)(t1003) + 72) = (int)(t1004);
-    return (int)(t1034);
+    ptr7 = *(int*)((char*)ptr + 0x2c);
+    *(int*)ptr7 = value3;
+    *(int*)((char*)ptr + 0x2c) += 4;
+    *(int*)((char*)ptr + 0x48) = value3;
+    return result;
 }

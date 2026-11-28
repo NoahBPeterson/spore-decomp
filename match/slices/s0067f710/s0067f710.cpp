@@ -1,58 +1,46 @@
-// 0x0067f710: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: src/game/SPEngine/SPCheatManager.cpp, match/slices/s0067eae0/s0067eae0.cpp.
+// 0x0067f710: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: src/game/SPEngine/SPCheatManager.cpp, match/slices/s0067eae0/s0067eae0.cpp.
 
 struct C_00690b80 { void FUN_00690b80(unsigned int, unsigned int); };
 extern "C" int __cdecl FUN_00921580(...);
 extern "C" int __cdecl FUN_0093d5d0(...);
 
 // @ 0x0067f710
-extern "C" int __fastcall FUN_0067f710(char* self, int edx_unused, int a4, int a8)
+extern "C" int __fastcall FUN_0067f710(char* value, int unused, int value2, int obj)
 {
-    int t1003;
-    int t1004;
-    int t1005;
-    int v_l4;
-    int t1007;
-    int t1009;
-    int t1011;
-    int t1012;
-    int t1015;
-    int t1016;
-    int t1017;
-    int t1018;
-    int t1019;
-    int t1023;
-    t1003 = (int)(*(int*)((char*)((int)(self)) + 20));
-    t1004 = (int)((int)0);
-    t1005 = (int)((int)(self) + (int)16);
-    v_l4 = (int)(t1004);
-    if (t1003 != t1005) {
-        t1007 = (int)((int)(a4));
-        t1009 = (int)((int)(a8));
+    int ptr;
+    int result;
+    int value3;
+    int index;
+    int ptr2;
+    int value4;
+    int ptr3;
+    int ptr4;
+    ptr = *(int*)((char*)(int)value + 0x14);
+    result = 0;
+    value3 = (int)value + 16;
+    index = result;
+    if (ptr != value3) {
+        ptr2 = obj;
         do {
-            t1011 = (int)(*(int*)((char*)(t1003) + 16));
-            t1012 = (int)FUN_0093d5d0((unsigned int)(t1011), (unsigned int)(t1007), (unsigned int)((int)0));
-            if ((unsigned char)(t1012) != (unsigned char)0) {
-                t1015 = (int)(*(int*)((char*)(t1009) + 4));
-                t1016 = (int)(*(int*)((char*)(t1003) + 16));
-                *(int*)&(a8) = (int)(t1016);
-                if ((unsigned int)(t1015) < (unsigned int)*(int*)((char*)(t1009) + 8)) {
-                    t1017 = (int)(t1015 + (int)4);
-                    *(int*)((char*)(t1009) + 4) = (int)(t1017);
-                    if (t1015 == (int)0) goto L67f76d;
-                    *(int*)((char*)(t1015)) = (int)(t1016);
-                    goto L67f76d;
+            value4 = *(int*)((char*)ptr + 0x10);
+            if ((unsigned char)(int)FUN_0093d5d0((unsigned int)value4, (unsigned int)value2, (unsigned int)0) != 0) {
+                ptr3 = *(int*)((char*)ptr2 + 4);
+                ptr4 = *(int*)((char*)ptr + 0x10);
+                obj = ptr4;
+                if ((unsigned int)ptr3 < (unsigned int)*(int*)((char*)ptr2 + 8)) {
+                    *(int*)((char*)ptr2 + 4) = ptr3 + 4;
+                    if (ptr3 == 0) goto done;
+                    *(int*)ptr3 = ptr4;
+                    goto done;
                 }
-                t1018 = (int)((int)&a8);
-                t1019 = (int)(t1009);
-                ((C_00690b80*)(t1019))->FUN_00690b80((unsigned int)(t1015), (unsigned int)(t1018));
-                L67f76d:;
-                v_l4 = (int)(v_l4 + (int)1);
+                ((C_00690b80*)ptr2)->FUN_00690b80((unsigned int)ptr3, (unsigned int)(int)&obj);
+                done:
+                ++index;
             }
-            t1023 = (int)FUN_00921580((unsigned int)(t1003));
-            t1003 = (int)(t1023);
-        } while (t1003 != t1005);
-        t1004 = (int)(v_l4);
+            ptr = (int)FUN_00921580((unsigned int)ptr);
+        } while (ptr != value3);
+        result = index;
     }
-    return (int)(t1004);
+    return result;
 }

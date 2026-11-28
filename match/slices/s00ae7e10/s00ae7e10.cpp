@@ -1,152 +1,120 @@
-// 0x00ae7e10: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: match/slices/s00ae73e0/guicomm.cpp.
+// 0x00ae7e10: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: match/slices/s00ae73e0/guicomm.cpp.
 
-struct il2c_vc0 {
-    virtual void s0();
-    virtual void s1();
-    virtual int s2(int, int);
+struct VObject {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual int Unk_02(int, int);
 };
-struct il2c_vc1 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3(int, int);
+struct VObject2 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03(int, int);
 };
-struct il2c_vc2 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6(int);
+struct VObject3 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06(int);
 };
-struct il2c_vc3 {
-    virtual void s0();
-    virtual void s1();
-    virtual int s2(int, int);
+struct VObject4 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual int Unk_02(int, int);
 };
-struct il2c_vc4 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3(int, int);
+struct VObject5 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03(int, int);
 };
-struct il2c_vc5 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4(int, int);
+struct VObject6 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04(int, int);
 };
-struct il2c_vc6 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6(int);
+struct VObject7 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06(int);
 };
-struct il2c_vc7 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8(int, int);
+struct VObject8 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06();
+    virtual void Unk_07();
+    virtual void Unk_08(int, int);
 };
-struct il2c_vc8 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual int s9(int, float);
+struct VObject9 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06();
+    virtual void Unk_07();
+    virtual void Unk_08();
+    virtual int Unk_09(int, float);
 };
 
-extern "C" unsigned char g_013eb1bc[];
+extern "C" float DAT_013eb1bc;
 struct C_00a02ab0 { void FUN_00a02ab0(unsigned int); };
 struct C_00a02b20 { int FUN_00a02b20(unsigned int); };
 
 // @ 0x00ae7e10
-extern "C" void __fastcall FUN_00ae7e10(char* self, int edx_unused, int a4, int a8, int a12, int a16)
+extern "C" void __fastcall FUN_00ae7e10(char* value, int unused, int value2, int value3, int value4, int value5)
 {
-    int t1002;
-    int t1004;
-    int t1005;
-    int t1006;
-    int t1007;
-    int t1010;
-    int t1014;
-    int t1015;
-    int t1018;
-    int t1021;
-    int t1027;
-    int t1029;
-    int t1034;
-    int t1037;
-    int t1040;
-    int t1046;
-    int t1048;
-    int t1053;
-    int t1055;
-    int t1060;
-    int t1062;
-    int t1067;
-    int t1069;
-    t1002 = (int)((int)(a12));
-    t1004 = (int)((int)(self));
-    t1005 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-    if (t1005 != (int)0) {
-        if ((unsigned char)(a16) == (unsigned char)0) {
-            t1006 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 68));
-            if (t1006 != (int)0) {
-                t1007 = (int)((C_00a02b20*)(t1005))->FUN_00a02b20((unsigned int)(t1006));
-                if ((unsigned char)(t1007) == (unsigned char)0) goto Lae7efa;
+    int ptr;
+    int value6;
+    int value7;
+    int value8;
+    int ptr2;
+    int value9;
+    int ptr3;
+    ptr = *(int*)((char*)(int)value + value4 * 4 + 44);
+    if (ptr != 0) {
+        if ((unsigned char)value5 == 0) {
+            value6 = *(int*)((char*)(int)value + value4 * 4 + 68);
+            if (value6 != 0) {
+                value7 = (int)((C_00a02b20*)ptr)->FUN_00a02b20((unsigned int)value6);
+                if ((unsigned char)value7 == 0) goto done;
             }
         }
-        t1010 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-        ((C_00a02ab0*)(t1010))->FUN_00a02ab0((unsigned int)((int)0));
-        t1014 = (int)((int)(a4));
-        if (t1014 != (int)0) {
-            t1015 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-            t1018 = (int)((il2c_vc0*)(t1015))->s2((int)(t1014), (int)((int)0));
-            t1021 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-            *(int*)((char*)(t1004) + (t1002)*4 + 60) = (int)(t1018);
-            ((il2c_vc1*)(t1021))->s3((int)(t1018), (int)((int)1));
-            t1027 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-            t1029 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 60));
-            ((il2c_vc2*)(t1027))->s6((int)(t1029));
+        ((C_00a02ab0*)*(int*)((char*)(int)value + value4 * 4 + 44))->FUN_00a02ab0((unsigned int)0);
+        if (value2 != 0) {
+            value8 = ((VObject*)*(int*)((char*)(int)value + value4 * 4 + 44))->Unk_02(value2, 0);
+            ptr2 = *(int*)((char*)(int)value + value4 * 4 + 44);
+            *(int*)((char*)(int)value + value4 * 4 + 60) = value8;
+            ((VObject2*)ptr2)->Unk_03(value8, 1);
+            ((VObject3*)*(int*)((char*)(int)value + value4 * 4 + 44))->Unk_06(*(int*)((char*)(int)value + value4 * 4 + 60));
         }
-        t1007 = (int)((int)(a8));
-        if (t1007 != (int)0) {
-            t1034 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-            t1037 = (int)((il2c_vc3*)(t1034))->s2((int)(t1007), (int)((int)0));
-            t1040 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-            *(int*)((char*)(t1004) + (t1002)*4 + 68) = (int)(t1037);
-            ((il2c_vc4*)(t1040))->s3((int)(t1037), (int)((int)0));
-            t1046 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-            t1048 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 68));
-            ((il2c_vc5*)(t1046))->s4((int)(t1048), (int)((int)1));
-            t1053 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-            t1055 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 68));
-            ((il2c_vc6*)(t1053))->s6((int)(t1055));
-            t1060 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-            t1062 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 68));
-            ((il2c_vc7*)(t1060))->s8((int)(t1062), (int)((int)1));
-            t1067 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 44));
-            t1069 = (int)(*(int*)((char*)(t1004) + (t1002)*4 + 68));
-            t1007 = (int)((il2c_vc8*)(t1067))->s9((int)(t1069), (float)((float)(*(float*)g_013eb1bc)));
+        value7 = value3;
+        if (value7 != 0) {
+            value9 = ((VObject4*)*(int*)((char*)(int)value + value4 * 4 + 44))->Unk_02(value7, 0);
+            ptr3 = *(int*)((char*)(int)value + value4 * 4 + 44);
+            *(int*)((char*)(int)value + value4 * 4 + 68) = value9;
+            ((VObject5*)ptr3)->Unk_03(value9, 0);
+            ((VObject6*)*(int*)((char*)(int)value + value4 * 4 + 44))->Unk_04(*(int*)((char*)(int)value + value4 * 4 + 68), 1);
+            ((VObject7*)*(int*)((char*)(int)value + value4 * 4 + 44))->Unk_06(*(int*)((char*)(int)value + value4 * 4 + 68));
+            ((VObject8*)*(int*)((char*)(int)value + value4 * 4 + 44))->Unk_08(*(int*)((char*)(int)value + value4 * 4 + 68), 1);
+            value7 = ((VObject9*)*(int*)((char*)(int)value + value4 * 4 + 44))->Unk_09(*(int*)((char*)(int)value + value4 * 4 + 68), DAT_013eb1bc);
         }
     }
-    Lae7efa:;
+    done:
     return;
 }

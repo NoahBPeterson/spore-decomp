@@ -1,196 +1,196 @@
-// 0x00663860: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: match/slices/s00662d70/s00662d70.cpp, src/game/SPEditors/SPUIFeedList.cpp.
+// 0x00663860: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: match/slices/s00662d70/s00662d70.cpp, src/game/SPEditors/SPUIFeedList.cpp.
 
-struct il2c_vc0 {
-    virtual void s0();
+struct VObject {
+    virtual void Unk_00();
 };
-struct il2c_vc1 {
-    virtual void s0();
-    virtual void s1();
+struct VObject2 {
+    virtual void Unk_00();
+    virtual void Unk_01();
 };
-struct il2c_vc2 {
-    virtual void s0();
+struct VObject7 {
+    virtual void Unk_00();
 };
-struct il2c_vc3 {
-    virtual void s0();
-    virtual void s1();
+struct VObject8 {
+    virtual void Unk_00();
+    virtual void Unk_01();
 };
-struct il2c_vc4 {
-    virtual void s0();
+struct VObject9 {
+    virtual void Unk_00();
 };
-struct il2c_vc5 {
-    virtual void s0();
-    virtual void s1();
+struct VObject10 {
+    virtual void Unk_00();
+    virtual void Unk_01();
 };
-struct il2c_vc6 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual void s11();
-    virtual void s12();
-    virtual void s13();
-    virtual void s14();
-    virtual void s15();
-    virtual void s16();
-    virtual void s17();
-    virtual void s18();
-    virtual void s19();
-    virtual void s20();
-    virtual void s21();
-    virtual void s22();
-    virtual void s23();
-    virtual void s24();
-    virtual void s25();
-    virtual void s26();
-    virtual void s27();
-    virtual void s28();
-    virtual void s29();
-    virtual void s30();
-    virtual void s31(int, int);
+struct VObject11 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06();
+    virtual void Unk_07();
+    virtual void Unk_08();
+    virtual void Unk_09();
+    virtual void Unk_0A();
+    virtual void Unk_0B();
+    virtual void Unk_0C();
+    virtual void Unk_0D();
+    virtual void Unk_0E();
+    virtual void Unk_0F();
+    virtual void Unk_10();
+    virtual void Unk_11();
+    virtual void Unk_12();
+    virtual void Unk_13();
+    virtual void Unk_14();
+    virtual void Unk_15();
+    virtual void Unk_16();
+    virtual void Unk_17();
+    virtual void Unk_18();
+    virtual void Unk_19();
+    virtual void Unk_1A();
+    virtual void Unk_1B();
+    virtual void Unk_1C();
+    virtual void Unk_1D();
+    virtual void Unk_1E();
+    virtual void Unk_1F(int, int);
 };
-struct il2c_vc7 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual void s11();
-    virtual void s12();
-    virtual void s13();
-    virtual void s14();
-    virtual void s15();
-    virtual void s16();
-    virtual void s17();
-    virtual void s18();
-    virtual void s19();
-    virtual void s20();
-    virtual void s21();
-    virtual void s22();
-    virtual void s23();
-    virtual void s24();
-    virtual void s25();
-    virtual void s26();
-    virtual void s27();
-    virtual void s28();
-    virtual void s29();
-    virtual void s30();
-    virtual void s31(int, int);
+struct VObject12 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06();
+    virtual void Unk_07();
+    virtual void Unk_08();
+    virtual void Unk_09();
+    virtual void Unk_0A();
+    virtual void Unk_0B();
+    virtual void Unk_0C();
+    virtual void Unk_0D();
+    virtual void Unk_0E();
+    virtual void Unk_0F();
+    virtual void Unk_10();
+    virtual void Unk_11();
+    virtual void Unk_12();
+    virtual void Unk_13();
+    virtual void Unk_14();
+    virtual void Unk_15();
+    virtual void Unk_16();
+    virtual void Unk_17();
+    virtual void Unk_18();
+    virtual void Unk_19();
+    virtual void Unk_1A();
+    virtual void Unk_1B();
+    virtual void Unk_1C();
+    virtual void Unk_1D();
+    virtual void Unk_1E();
+    virtual void Unk_1F(int, int);
 };
-struct il2c_vc8 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual void s11();
-    virtual void s12();
-    virtual void s13();
-    virtual void s14();
-    virtual void s15();
-    virtual void s16();
-    virtual void s17();
-    virtual void s18();
-    virtual void s19();
-    virtual void s20();
-    virtual void s21();
-    virtual void s22();
-    virtual void s23();
-    virtual void s24();
-    virtual void s25();
-    virtual void s26();
-    virtual void s27();
-    virtual void s28();
-    virtual void s29();
-    virtual void s30();
-    virtual void s31();
-    virtual void s32();
-    virtual void s33();
-    virtual void s34();
-    virtual void s35();
-    virtual void s36();
-    virtual void s37();
-    virtual void s38();
-    virtual void s39();
-    virtual void s40();
-    virtual void s41();
-    virtual void s42();
-    virtual void s43();
-    virtual void s44();
-    virtual void s45();
-    virtual void s46();
-    virtual void s47();
-    virtual void s48();
-    virtual void s49();
-    virtual void s50();
-    virtual void s51();
-    virtual void s52();
-    virtual void s53();
-    virtual void s54(int);
+struct VObject13 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06();
+    virtual void Unk_07();
+    virtual void Unk_08();
+    virtual void Unk_09();
+    virtual void Unk_0A();
+    virtual void Unk_0B();
+    virtual void Unk_0C();
+    virtual void Unk_0D();
+    virtual void Unk_0E();
+    virtual void Unk_0F();
+    virtual void Unk_10();
+    virtual void Unk_11();
+    virtual void Unk_12();
+    virtual void Unk_13();
+    virtual void Unk_14();
+    virtual void Unk_15();
+    virtual void Unk_16();
+    virtual void Unk_17();
+    virtual void Unk_18();
+    virtual void Unk_19();
+    virtual void Unk_1A();
+    virtual void Unk_1B();
+    virtual void Unk_1C();
+    virtual void Unk_1D();
+    virtual void Unk_1E();
+    virtual void Unk_1F();
+    virtual void Unk_20();
+    virtual void Unk_21();
+    virtual void Unk_22();
+    virtual void Unk_23();
+    virtual void Unk_24();
+    virtual void Unk_25();
+    virtual void Unk_26();
+    virtual void Unk_27();
+    virtual void Unk_28();
+    virtual void Unk_29();
+    virtual void Unk_2A();
+    virtual void Unk_2B();
+    virtual void Unk_2C();
+    virtual void Unk_2D();
+    virtual void Unk_2E();
+    virtual void Unk_2F();
+    virtual void Unk_30();
+    virtual void Unk_31();
+    virtual void Unk_32();
+    virtual void Unk_33();
+    virtual void Unk_34();
+    virtual void Unk_35();
+    virtual void Unk_36(int);
 };
-struct il2c_vc9 {
-    virtual void s0();
-    virtual void s1();
+struct VObject14 {
+    virtual void Unk_00();
+    virtual void Unk_01();
 };
-struct il2c_vc10 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual int s11(int, int, int);
+struct VObject3 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06();
+    virtual void Unk_07();
+    virtual void Unk_08();
+    virtual void Unk_09();
+    virtual void Unk_0A();
+    virtual int Unk_0B(int, int, int);
 };
-struct il2c_vc11 {
-    virtual void s0();
-    virtual void s1();
+struct VObject4 {
+    virtual void Unk_00();
+    virtual void Unk_01();
 };
-struct il2c_vc12 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
+struct VObject5 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
 };
-struct il2c_vc13 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual int s9(int, int);
+struct VObject6 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06();
+    virtual void Unk_07();
+    virtual void Unk_08();
+    virtual int Unk_09(int, int);
 };
 
-extern "C" unsigned char g_013fa29c[];
-extern "C" unsigned char g_01400188[];
-extern "C" unsigned char g_01400194[];
-extern "C" unsigned char g_01527284[];
+extern "C" unsigned char DAT_013fa29c[];
+extern "C" unsigned char DAT_01400188[];
+extern "C" unsigned char DAT_01400194[];
+extern "C" int DAT_01527284;
 extern "C" void __cdecl FUN_00663680(...);
 extern "C" int __cdecl FUN_0067dcc0(...);
 extern "C" int __cdecl FUN_0067de30(...);
@@ -204,180 +204,124 @@ struct C_00962a10 { int FUN_00962a10(); };
 extern "C" int __cdecl FUN_00f473a0(...);
 
 // @ 0x00663860
-extern "C" void __fastcall FUN_00663860(char* self, int edx_unused, int a4, int a8, int a12, int a16)
+extern "C" void __fastcall FUN_00663860(char* value, int unused, int obj, int value2, int value3, int obj2)
 {
-    int t1001;
-    int t1004;
-    int t1006;
-    int t1009;
-    int t1015;
-    int t1019;
-    int t1020;
-    int t1023;
-    int t1029;
-    int t1033;
-    int t1036;
-    int t1039;
-    int t1040;
-    int t1043;
-    int t1044;
-    int t1047;
-    int t1053;
-    int t1057;
-    int t1063;
-    int t1069;
-    int t1071;
-    int t1076;
-    int t1079;
-    int t1080;
-    int t1081;
-    int t1088;
-    int t1090;
-    unsigned char t1094;
-    int t1095;
-    int t1098;
-    int t1099;
-    int t1102;
-    int t1103;
-    int t1106;
-    int t1112;
-    int t1116;
-    int t1117;
     int v_l12[3];
-    int t1118;
-    int t1122;
-    int t1123;
-    int t1127;
-    int t1131;
-    int t1135;
-    int t1136;
-    int t1139;
-    int t1140;
-    int t1141;
-    int t1144;
-    t1001 = (int)((int)(a4));
-    t1004 = (int)((int)(self));
-    t1006 = (int)(*(int*)((char*)(t1004) + 36));
-    if (t1001 != t1006) {
-        if (t1001 != (int)0) {
-            t1009 = (int)(t1001);
-            ((il2c_vc0*)(t1009))->s0();
+    int ptr;
+    int ptr2;
+    int ptr3;
+    int ptr4;
+    int ptr5;
+    int ptr6;
+    int ptr7;
+    int ptr8;
+    int ptr9;
+    int ptr10;
+    int ptr11;
+    int ptr12;
+    int ptr13;
+    int value4;
+    int value5;
+    int ptr14;
+    int value6;
+    int ptr15;
+    int ptr16;
+    int cursor;
+    ptr = *(int*)((char*)(int)value + 0x24);
+    if (obj != ptr) {
+        if (obj != 0) {
+            ((VObject*)obj)->Unk_00();
         }
-        *(int*)((char*)(t1004) + 36) = (int)(t1001);
-        if (t1006 != (int)0) {
-            t1015 = (int)(t1006);
-            ((il2c_vc1*)(t1015))->s1();
-        }
-    }
-    t1019 = (int)((int)(a16));
-    if (t1019 != (int)0) {
-        t1020 = (int)(*(int*)((char*)(t1004) + 40));
-        if (t1019 == t1020) goto L663943;
-        t1023 = (int)(t1019);
-        ((il2c_vc2*)(t1023))->s0();
-        *(int*)((char*)(t1004) + 40) = (int)(t1019);
-        if (t1020 == (int)0) goto L663943;
-        t1029 = (int)(t1020);
-        ((il2c_vc3*)(t1029))->s1();
-        goto L663943;
-    }
-    t1033 = (int)FUN_009512c0();
-    t1036 = (int)FUN_009512d0((unsigned int)((int)524), (unsigned int)((int)4), (unsigned int)((int)g_01400194), (unsigned int)(t1033));
-    if (t1036 != (int)0) {
-        t1039 = (int)(t1036);
-        t1040 = (int)((C_00962a10*)(t1039))->FUN_00962a10();
-        if (t1040 != (int)0) {
-            t1043 = (int)(t1040 + (int)4);
-            goto L6638f3;
+        *(int*)((char*)(int)value + 0x24) = obj;
+        if (ptr != 0) {
+            ((VObject2*)ptr)->Unk_01();
         }
     }
-    t1043 = (int)((int)0);
-    L6638f3:;
-    t1044 = (int)(*(int*)((char*)(t1004) + 40));
-    if (t1043 != t1044) {
-        if (t1043 != (int)0) {
-            t1047 = (int)(t1043);
-            ((il2c_vc4*)(t1047))->s0();
-        }
-        *(int*)((char*)(t1004) + 40) = (int)(t1043);
-        if (t1044 != (int)0) {
-            t1053 = (int)(t1044);
-            ((il2c_vc5*)(t1053))->s1();
+    if (obj2 != 0) {
+        ptr2 = *(int*)((char*)(int)value + 0x28);
+        if (obj2 == ptr2) goto done2;
+        ((VObject7*)obj2)->Unk_00();
+        *(int*)((char*)(int)value + 0x28) = obj2;
+        if (ptr2 == 0) goto done2;
+        ((VObject8*)ptr2)->Unk_01();
+        goto done2;
+    }
+    ptr3 = (int)FUN_009512d0((unsigned int)524, (unsigned int)4, (unsigned int)(int)DAT_01400194, (unsigned int)(int)FUN_009512c0());
+    if (ptr3 != 0) {
+        ptr4 = (int)((C_00962a10*)ptr3)->FUN_00962a10();
+        if (ptr4 != 0) {
+            ptr5 = ptr4 + 4;
+            goto done;
         }
     }
-    t1057 = (int)(*(int*)((char*)(t1004) + 40));
-    ((il2c_vc6*)(t1057))->s31((int)((int)64), (int)((int)1));
-    t1063 = (int)(*(int*)((char*)(t1004) + 40));
-    ((il2c_vc7*)(t1063))->s31((int)((int)16), (int)((int)1));
-    t1069 = (int)(*(int*)((char*)(t1004) + 36));
-    t1071 = (int)(*(int*)((char*)(t1004) + 40));
-    ((il2c_vc8*)(t1069))->s54((int)(t1071));
-    L663943:;
-    t1076 = (int)FUN_0067de30();
-    t1079 = (int)(*(int*)((char*)(t1004) + 104));
-    t1080 = (int)(t1004 + (int)104);
-    t1081 = (int)(t1076);
-    if (t1079 != (int)0) {
-        *(int*)((char*)(t1080)) = (int)((int)0);
-        ((il2c_vc9*)(t1079))->s1();
+    ptr5 = 0;
+    done:
+    ptr6 = *(int*)((char*)(int)value + 0x28);
+    if (ptr5 != ptr6) {
+        if (ptr5 != 0) {
+            ((VObject9*)ptr5)->Unk_00();
+        }
+        *(int*)((char*)(int)value + 0x28) = ptr5;
+        if (ptr6 != 0) {
+            ((VObject10*)ptr6)->Unk_01();
+        }
     }
-    t1088 = (int)((int)(a8));
-    t1090 = (int)(t1081);
-    ((il2c_vc10*)(t1090))->s11((int)(t1088), (int)((int)1859916500), (int)(t1080));
-    t1094 = (unsigned char)((unsigned char)(a12));
-    *(unsigned char*)((char*)(t1004) + 18) = (unsigned char)(t1094);
-    *(unsigned char*)((char*)(t1004) + 16) = (unsigned char)((int)1);
-    t1095 = (int)FUN_00f473a0((unsigned int)((int)24), (unsigned int)((int)g_013fa29c), (unsigned int)((int)0), (unsigned int)((int)0), (unsigned int)((int)0), (unsigned int)((int)0));
-    if (t1095 != (int)0) {
-        t1098 = (int)(t1095);
-        t1099 = (int)((C_00810000*)(t1098))->FUN_00810000();
-        t1102 = (int)(t1099);
+    ((VObject11*)*(int*)((char*)(int)value + 0x28))->Unk_1F(64, 1);
+    ((VObject12*)*(int*)((char*)(int)value + 0x28))->Unk_1F(16, 1);
+    ((VObject13*)*(int*)((char*)(int)value + 0x24))->Unk_36(*(int*)((char*)(int)value + 0x28));
+    done2:
+    ptr7 = (int)FUN_0067de30();
+    ptr8 = *(int*)((char*)(int)value + 0x68);
+    ptr9 = (int)value + 104;
+    ptr10 = ptr7;
+    if (ptr8 != 0) {
+        *(int*)ptr9 = 0;
+        ((VObject14*)ptr8)->Unk_01();
+    }
+    ((VObject3*)ptr10)->Unk_0B(value2, 1859916500, ptr9);
+    *(unsigned char*)((char*)(int)value + 0x12) = (unsigned char)value3;
+    *(unsigned char*)((char*)(int)value + 0x10) = 1;
+    ptr11 = (int)FUN_00f473a0((unsigned int)24, (unsigned int)(int)DAT_013fa29c, (unsigned int)0, (unsigned int)0, (unsigned int)0, (unsigned int)0);
+    if (ptr11 != 0) {
+        ptr12 = (int)((C_00810000*)ptr11)->FUN_00810000();
     } else {
-        t1102 = (int)((int)0);
+        ptr12 = 0;
     }
-    t1103 = (int)(*(int*)((char*)(t1004) + 32));
-    if (t1102 != t1103) {
-        if (t1102 != (int)0) {
-            t1106 = (int)(t1102);
-            ((il2c_vc11*)(t1106))->s1();
+    ptr13 = *(int*)((char*)(int)value + 0x20);
+    if (ptr12 != ptr13) {
+        if (ptr12 != 0) {
+            ((VObject4*)ptr12)->Unk_01();
         }
-        *(int*)((char*)(t1004) + 32) = (int)(t1102);
-        if (t1103 != (int)0) {
-            t1112 = (int)(t1103);
-            ((il2c_vc12*)(t1112))->s2();
+        *(int*)((char*)(int)value + 0x20) = ptr12;
+        if (ptr13 != 0) {
+            ((VObject5*)ptr13)->Unk_02();
         }
     }
-    t1116 = (int)((int)(*(int*)g_01527284));
-    t1117 = (int)((int)&v_l12);
-    (*(int*)&v_l12[2]) = (int)(t1116);
-    t1118 = (int)(*(int*)((char*)(t1004) + 32));
-    (*(int*)&v_l12[0]) = (int)((int)(-2064144611));
-    (*(int*)&v_l12[1]) = (int)((int)84978011);
-    ((C_008120d0*)(t1118))->FUN_008120d0((unsigned int)(t1117), (unsigned int)((int)1), (unsigned int)((int)95787258));
-    t1122 = (int)(*(int*)((char*)(t1004) + 36));
-    t1123 = (int)(*(int*)((char*)(t1004) + 32));
-    ((C_008121b0*)(t1123))->FUN_008121b0((unsigned int)(t1122), (unsigned int)((int)1), (unsigned int)((int)95787258));
-    t1127 = (int)(*(int*)((char*)(t1004) + 32));
-    ((C_00810090*)(t1127))->FUN_00810090((unsigned int)((int)&FUN_00663680), (unsigned int)(t1004));
-    t1131 = (int)(*(int*)((char*)(t1004) + 32));
-    FUN_00663680((unsigned int)(t1004), (unsigned int)(t1131), (unsigned int)((int)1));
-    t1135 = (int)(t1004 + (int)4);
-    t1136 = (int)FUN_0067dcc0();
-    t1139 = (int)(t1136);
-    *(int*)((char*)(t1004) + 84) = (int)(t1139);
-    *(int*)((char*)(t1004) + 88) = (int)(t1135);
-    *(int*)((char*)(t1004) + 92) = (int)((int)g_01400188);
-    *(int*)((char*)(t1004) + 96) = (int)((int)3);
-    *(int*)((char*)(t1004) + 100) = (int)((int)0);
-    if (t1139 != (int)0) {
-        if (t1135 != (int)0) {
-            t1140 = (int)((int)0);
+    value4 = DAT_01527284;
+    value5 = (int)&v_l12;
+    *(int*)&v_l12[2] = value4;
+    ptr14 = *(int*)((char*)(int)value + 0x20);
+    *(int*)&v_l12[0] = -2064144611;
+    *(int*)&v_l12[1] = 84978011;
+    ((C_008120d0*)ptr14)->FUN_008120d0((unsigned int)value5, (unsigned int)1, (unsigned int)95787258);
+    ((C_008121b0*)*(int*)((char*)(int)value + 0x20))->FUN_008121b0((unsigned int)*(int*)((char*)(int)value + 0x24), (unsigned int)1, (unsigned int)95787258);
+    ((C_00810090*)*(int*)((char*)(int)value + 0x20))->FUN_00810090((unsigned int)(int)&FUN_00663680, (unsigned int)(int)value);
+    FUN_00663680((unsigned int)(int)value, (unsigned int)*(int*)((char*)(int)value + 0x20), (unsigned int)1);
+    value6 = (int)value + 4;
+    ptr15 = (int)FUN_0067dcc0();
+    ptr16 = ptr15;
+    *(int*)((char*)(int)value + 0x54) = ptr16;
+    *(int*)((char*)(int)value + 0x58) = value6;
+    *(int*)((char*)(int)value + 0x5c) = (int)DAT_01400188;
+    *(int*)((char*)(int)value + 0x60) = 3;
+    *(int*)((char*)(int)value + 0x64) = 0;
+    if (ptr16 != 0) {
+        if (value6 != 0) {
+            cursor = 0;
             do {
-                t1141 = (int)(*(int*)((char*)(t1140) + (int)g_01400188));
-                t1144 = (int)(t1139);
-                t1136 = (int)((il2c_vc13*)(t1144))->s9((int)(t1135), (int)(t1141));
-                t1140 = (int)(t1140 + (int)4);
-            } while ((unsigned int)(t1140) < (unsigned int)12);
+                ptr15 = ((VObject6*)ptr16)->Unk_09(value6, *(int*)((char*)cursor + (int)DAT_01400188));
+                cursor = cursor + 4;
+            } while ((unsigned int)cursor < 12);
         }
     }
     return;

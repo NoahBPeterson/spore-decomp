@@ -1,15 +1,15 @@
-// 0x00aeef00: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: match/slices/s00aee680/s00aee680.cpp, src/game/SPGonzago/SPAnimalBehaviorTrees.cpp.
+// 0x00aeef00: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: match/slices/s00aee680/s00aee680.cpp, src/game/SPGonzago/SPAnimalBehaviorTrees.cpp.
 
-struct il2c_vc0 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3(int, int, int, int, int, int);
+struct VObject {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03(int, int, int, int, int, int);
 };
-struct il2c_vc1 {
-    virtual void s0();
-    virtual void s1();
+struct VObject2 {
+    virtual void Unk_00();
+    virtual void Unk_01();
 };
 
 struct C_0067dcd0 { int FUN_0067dcd0(); };
@@ -18,76 +18,36 @@ struct C_00aed580 { int FUN_00aed580(unsigned int, unsigned int); };
 struct C_00e39fb0 { int FUN_00e39fb0(unsigned int, unsigned int); };
 
 // @ 0x00aeef00
-extern "C" int __fastcall FUN_00aeef00(char* self, int edx_unused, int a4, int a8, int a12)
+extern "C" int __fastcall FUN_00aeef00(char* value, int unused, int value2, int value3, int value4)
 {
-    int t1000;
-    int t1004;
-    int t1007;
-    int v_l16;
     int v_l12[3];
-    int t1008;
-    int t1013;
-    int t1014;
-    int t1015;
-    int t1019;
-    int t1020;
-    int t1021;
-    int t1022;
-    int t1023;
-    int t1024;
-    int t1027;
-    int t1028;
-    int t1029;
-    int t1030;
-    int t1033;
-    int t1034;
-    int t1035;
-    int t1036;
-    int t1037;
-    int t1042;
-    int t1048;
-    t1000 = (int)((int)(a4));
-    t1004 = (int)((int)0);
-    t1007 = (int)((int)(self));
-    v_l16 = (int)(t1004);
-    (*(int*)&v_l12[1]) = (int)((int)89840164);
-    (*(int*)&v_l12[2]) = (int)((int)89840163);
-    (*(int*)&v_l12[0]) = (int)(t1000);
-    t1008 = (int)((C_0067dcd0*)((int)(self)))->FUN_0067dcd0();
-    t1013 = (int)((int)&v_l16);
-    t1014 = (int)((int)&v_l12);
-    t1015 = (int)(t1008);
-    ((il2c_vc0*)(t1015))->s3((int)(t1014), (int)(t1013), (int)(t1004), (int)(t1004), (int)(t1004), (int)(t1004));
-    t1019 = (int)(v_l16);
-    t1020 = (int)((int)&a8);
-    t1021 = (int)((int)&a4);
-    t1022 = (int)(t1019 + (int)24);
-    t1023 = (int)(t1022);
-    t1024 = (int)((C_00e39fb0*)(t1023))->FUN_00e39fb0((unsigned int)(t1021), (unsigned int)(t1020));
-    t1027 = (int)(t1019 + (int)28);
-    if ((int)*(int*)((char*)(t1024)) != t1027) {
-        t1028 = (int)((int)&a8);
-        t1029 = (int)(t1022);
-        t1030 = (int)((C_00684610*)(t1029))->FUN_00684610((unsigned int)(t1028));
-        t1033 = (int)(t1030);
-        t1034 = (int)(*(int*)((char*)(t1033) + 60));
-        if (t1034 != (int)*(int*)((char*)(t1033) + 64)) {
+    int ptr4;
+    int index;
+    int result = 0;
+    int ptr = result;
+    *(int*)&v_l12[1] = 89840164;
+    *(int*)&v_l12[2] = 89840163;
+    *(int*)&v_l12[0] = value2;
+    ((VObject*)(int)((C_0067dcd0*)(int)value)->FUN_0067dcd0())->Unk_03((int)&v_l12, (int)&ptr, result, result, result, result);
+    int ptr2 = ptr;
+    int value5 = (int)&value3;
+    int value6 = (int)&value2;
+    int ptr3 = ptr2 + 24;
+    if (*(int*)(int)((C_00e39fb0*)ptr3)->FUN_00e39fb0((unsigned int)value6, (unsigned int)value5) != ptr2 + 28) {
+        ptr4 = (int)((C_00684610*)ptr3)->FUN_00684610((unsigned int)(int)&value3);
+        index = *(int*)((char*)ptr4 + 0x3c);
+        if (index != *(int*)((char*)ptr4 + 0x40)) {
             do {
-                t1035 = (int)((int)(a12));
-                t1036 = (int)(t1007);
-                t1037 = (int)((C_00aed580*)(t1036))->FUN_00aed580((unsigned int)(t1034), (unsigned int)(t1035));
-                if ((unsigned char)(t1037) != (unsigned char)0) {
-                    t1004 = (int)(t1004 + (int)1);
+                if ((unsigned char)(int)((C_00aed580*)(int)value)->FUN_00aed580((unsigned int)index, (unsigned int)value4) != 0) {
+                    ++result;
                 }
-                t1034 = (int)(t1034 + (int)196);
-            } while (t1034 != (int)*(int*)((char*)(t1033) + 64));
+                index += 196;
+            } while (index != *(int*)((char*)ptr4 + 0x40));
         }
-        t1019 = (int)(v_l16);
+        ptr2 = ptr;
     }
-    if (t1019 != (int)0) {
-        t1042 = (int)(t1019);
-        ((il2c_vc1*)(t1042))->s1();
+    if (ptr2 != 0) {
+        ((VObject2*)ptr2)->Unk_01();
     }
-    t1048 = (int)(t1004);
-    return (int)(t1048);
+    return result;
 }

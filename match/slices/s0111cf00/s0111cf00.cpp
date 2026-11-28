@@ -1,45 +1,33 @@
-// 0x0111cf00: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: match/slices/s0111c7f0/s0111c7f0.cpp.
+// 0x0111cf00: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: match/slices/s0111c7f0/s0111c7f0.cpp.
 
 // @ 0x0111cf00
-extern "C" int __stdcall FUN_0111cf00(int a4, int a8, int a12)
+extern "C" int __stdcall FUN_0111cf00(int obj, int obj2, int obj3)
 {
-    int t1000;
-    int t1001;
-    int t1002;
-    int t1005;
-    int t1006;
-    int t1008;
-    int t1009;
-    int t1010;
-    int t1011;
-    int t1012;
-    t1000 = (int)((int)(a8));
-    t1001 = (int)(*(int*)((char*)(t1000) + 52));
-    t1002 = (int)((int)(a4));
-    t1005 = (int)((int)(a12));
-    *(int*)((char*)(t1005) + 52) = (int)(t1001);
-    t1006 = (int)(*(int*)((char*)(t1000) + 52));
-    t1008 = (int)(*(int*)((char*)(t1002) + 36));
-    t1009 = (int)(*(int*)((char*)(t1005) + 56));
-    t1010 = (int)(t1009);
-    t1011 = (int)(t1010 - t1006);
-    t1012 = (int)(t1011 + t1008);
-    if ((unsigned int)(t1012) >= (unsigned int)32) {
-        if ((unsigned int)(t1009) <= (unsigned int)2) {
-            if ((unsigned int)(t1012) < (unsigned int)256) goto L111cf65;
+    int value;
+    int value2;
+    int value3;
+    int result;
+    *(int*)((char*)obj3 + 0x34) = *(int*)((char*)obj2 + 0x34);
+    value = *(int*)((char*)obj2 + 0x34);
+    value2 = *(int*)((char*)obj + 0x24);
+    value3 = *(int*)((char*)obj3 + 0x38);
+    result = value3 - value + value2;
+    if ((unsigned int)result >= 32) {
+        if ((unsigned int)value3 <= 2) {
+            if ((unsigned int)result < 256) goto done2;
         }
-        if ((unsigned int)(t1009) < (unsigned int)32) {
-            if ((unsigned int)*(int*)((char*)(t1000) + 56) >= (unsigned int)32) goto L111cf62;
+        if ((unsigned int)value3 < 32) {
+            if ((unsigned int)*(int*)((char*)obj2 + 0x38) >= 32) goto done;
         }
-        if ((unsigned int)(t1009) < (unsigned int)256) {
-            if ((unsigned int)*(int*)((char*)(t1000) + 56) >= (unsigned int)256) goto L111cf62;
+        if ((unsigned int)value3 < 256) {
+            if ((unsigned int)*(int*)((char*)obj2 + 0x38) >= 256) goto done;
         }
-        if ((unsigned int)(t1009) >= (unsigned int)65536) goto L111cf65;
-        if ((unsigned int)*(int*)((char*)(t1000) + 56) < (unsigned int)65536) goto L111cf65;
-        L111cf62:;
-        *(int*)((char*)(t1005) + 52) = (int)(t1008);
+        if ((unsigned int)value3 >= 65536) goto done2;
+        if ((unsigned int)*(int*)((char*)obj2 + 0x38) < 65536) goto done2;
+        done:
+        *(int*)((char*)obj3 + 0x34) = value2;
     }
-    L111cf65:;
-    return (int)(t1012);
+    done2:
+    return result;
 }
