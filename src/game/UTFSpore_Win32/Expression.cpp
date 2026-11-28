@@ -145,6 +145,7 @@ struct cExpression_s0083_d3d0 {
     void  EvalRealParentheses(const char** p, float* a, float* b);  // 0x0083d2f0
     float EvalRealNumber(const char** p);                       // 0x0083d3d0
     int   EvalIntParentheses(const char** p);                   // 0x0083db70
+    int   EvalIntExpression(const char** p);                    // 0x0083eb00
     void  EvalString(const char** p, eastl::string8_s0083_d3d0* out);      // 0x0083dc00
     long double EvalSignedRealNumber(const char** p);           // 0x0083dd70
     long double EvalRealFactor(const char** p);                 // 0x0083e160
@@ -505,20 +506,22 @@ float EA::ArgScript::cExpression_s0083_d3d0::EvalRealNumber(const char** p)
     return (*r)->fn->Eval(p, this);
 }
 
-// 0x0083db70 (byte-exact lifted version: match/slices/s0083db70/s0083db70.cpp)
+// @ 0x0083db70
 int EA::ArgScript::cExpression_s0083_d3d0::EvalIntParentheses(const char** p)
 {
     DiscardWhiteSpace(p);
     if (**p != '(') {
         char buf[16];
         ThrowCError(buf, "Expected '%c'", 0x28);
+        CxxThrowException(buf, &g_TI_cError);
     }
     ++*p;
-    int v = EvalIntExpression(this, p);
+    int v = EvalIntExpression(p);
     DiscardWhiteSpace(p);
     if (**p != ')') {
         char buf[16];
         ThrowCError(buf, "Expected '%c'", 0x29);
+        CxxThrowException(buf, &g_TI_cError);
     }
     ++*p;
     return v;
