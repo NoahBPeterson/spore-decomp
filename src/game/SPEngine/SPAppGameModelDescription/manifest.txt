@@ -18,3 +18,4 @@
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?MakeState@@YAPAXPAXH@Z  007d44c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ??1cGameModelEffectCommandView_7d2490@@QAE@XZ  007d2490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ??0GameModelEffect@@QAE@XZ  007d18c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?Execute@CmdBase@@QAEXPAUcArguments@@@Z  007d1970  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

@@ -14,7 +14,6 @@
 00bbe850 95 FAIL /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL 5/6 valid inputs mismatched; fake-arity at 44712e2d flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bbe970 184 FAIL /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL 5/5 valid mismatched; vcall addRef sret shape not reproduced flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bbea40 148 FAIL /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL 5/35 valid mismatched; vcall addRef sret + FUN_00bbd1f0 call shape flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00bbeb20 48 WEAK /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest WEAK 229 valid, 35.5% coverage flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bbeb60 55 WEAK /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest WEAK 226 valid, 27.0% coverage flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bbebb0 32 UNSUPPORTED /O2 /MD /Gy /TP /arch:SSE /fp:fast unresolved ?dtor@ViewVector@@QAEXXZ, ?nuke@ViewRBTree@@QAEXPAX@Z, ?release@ViewHash1c@@QAEXPAX0@Z flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bbec60 71 UNSUPPORTED /O2 /MD /Gy /TP /arch:SSE /fp:fast unresolved ?find@ViewHash1c@@QAEXPAX0@Z, ?insert@ViewHash1c@@QAEXPBX@Z flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

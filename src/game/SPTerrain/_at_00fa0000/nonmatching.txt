@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00fad040 55 CopyBoxElemsChecked: complete; 0x14-byte {u32 mKey; float mVal[4];} copy from [first,last) to dst with a per-iteration null-destination guard. The element body is identical (integer move for mKey, four x87 fld/fstp pairs for mVal), but 61 bytes against 82: the original carries four pointers (src, src+0xc, dst, dst+0xc) and addresses the four floats as [ecx-8]..[ecx+4], while our build uses one base pointer per side with positive displacements and a scratch register for mKey. flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
-00fad0a0 49 CopyBoxElems: complete; unguarded forward copy of the same 0x14-byte element. 57 bytes against 79 for the same reason as CopyBoxElemsChecked (original keeps a second src+0xc/dst+0xc pointer pair for the float group). flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00fad0f0 55 CopyBoxElemsBackward: complete; decrement-first backward copy of the same 0x14-byte element into the storage ending at dstEnd. 58 bytes against 80; same dual-pointer addressing difference as the forward variants. flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00fad730 139 flags: /O2 /MD /Gy /TP /arch:SSE /GS-
 00fadac0 279 flags: /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -33,3 +33,4 @@
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?EraseLast@BanVec@@QAEPAUBanEntry@@PAU2@@Z  00e03c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?OnDeactivate@BanContent@@QAEXHH@Z  00e03e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?OnToggle@BanContent@@QAEXD@Z  00e03f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00c40_impl@@YADXZ  00e00c40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

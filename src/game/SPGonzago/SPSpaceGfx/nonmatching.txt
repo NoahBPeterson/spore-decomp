@@ -6,7 +6,6 @@
 01036c20 198 codegen mismatch (270 vs 265)
 01036d30 170 codegen mismatch (227 vs 220) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#2 esp, ret#3 esp]
 01036e20 286 codegen/register-allocation mismatch (378 vs 414)
-01036fc0 46 codegen/register-allocation mismatch (88 vs 98)
 01037030 546 codegen mismatch (568 vs 563)
 010372b0 130 codegen/loop-structure mismatch (1075 vs 1091)
 01037760 94 codegen mismatch (139 vs 136)

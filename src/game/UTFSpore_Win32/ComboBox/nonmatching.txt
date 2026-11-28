@@ -2,7 +2,6 @@
 00967b10 143 bool return and 4-arg ABI match, but the original marshals the two float args through x87 stack slots.
 00967bc0 167 same float-argument marshalling difference.
 00967d80 164 OnModalWindowEnd /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fake-arity/fault-read, 0/400 valid) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00967f00 47 GetNaturalSize /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 400/400 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009680f0 205 WinComboBox_TransformComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fault-read, 0/400 valid) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00968230 99 RenderComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/328; RenderContext_Begin2D ecx ABI not reproducible) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00968400 543 Refresh /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/285; component-area layout uncertain) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

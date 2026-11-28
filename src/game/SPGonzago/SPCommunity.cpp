@@ -770,42 +770,61 @@ void FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
 
 // @ 0x00c008c0
 void FUN_00c008c0(uint32_t* out)
-{
-    void* val;
-    if (out[0] != 0) {
+{    if (out[0] != 0) {
         return;
     }
     AutoRef<cProperty> prop;
     void* pm = SP_PropertyManager();
     if (((FnGetProps)VT(pm, 0x2c))(pm, 0x16d4dff8, 0, prop.AsPPTypeParam())) {
         if (!prop.mp) return;
-        if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e43, &val) &&
-            ((cProperty*)val)->mType == 9)
-            out[0] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        {
+            void* val;
+            if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e43, &val) &&
+                ((cProperty*)val)->mType == 9)
+                out[0] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        }
         if (!prop.mp) return;
-        if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e44, &val) &&
-            ((cProperty*)val)->mType == 9)
-            out[1] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        {
+            void* val;
+            if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e44, &val) &&
+                ((cProperty*)val)->mType == 9)
+                out[1] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        }
         if (!prop.mp) return;
-        if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e45, &val) &&
-            ((cProperty*)val)->mType == 9)
-            out[2] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        {
+            void* val;
+            if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e45, &val) &&
+                ((cProperty*)val)->mType == 9)
+                out[2] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        }
         if (!prop.mp) return;
-        if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e46, &val) &&
-            ((cProperty*)val)->mType == 9)
-            out[3] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        {
+            void* val;
+            if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e46, &val) &&
+                ((cProperty*)val)->mType == 9)
+                out[3] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        }
         if (!prop.mp) return;
-        if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e47, &val) &&
-            ((cProperty*)val)->mType == 9)
-            out[4] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        {
+            void* val;
+            if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e47, &val) &&
+                ((cProperty*)val)->mType == 9)
+                out[4] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        }
         if (!prop.mp) return;
-        if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e48, &val) &&
-            ((cProperty*)val)->mType == 9)
-            out[5] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        {
+            void* val;
+            if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e48, &val) &&
+                ((cProperty*)val)->mType == 9)
+                out[5] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        }
         if (!prop.mp) return;
-        if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e49, &val) &&
-            ((cProperty*)val)->mType == 9)
-            out[6] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        {
+            void* val;
+            if (((FnBool2)VT(prop.mp, 0x24))(prop.mp, 0x1905e49, &val) &&
+                ((cProperty*)val)->mType == 9)
+                out[6] = *(const uint32_t*)((cProperty*)val)->GetString8();
+        }
     }
 }
 

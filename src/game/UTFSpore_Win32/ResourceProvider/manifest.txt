@@ -13,3 +13,4 @@
 ../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?FreeNodes@WMap@@QAEXPAPAUWNode@@I@Z  008ff110  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?Resolve@HolderMap@@QAEPAXPBG@Z  008feef0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?DoInsertValue@WMap@@QAEPAUWIns@@PAU2@PAUWKV@@UTagT@@@Z  008ffa20  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?Splice@@YGXULIter@@PAX0@Z  008fe6d0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include

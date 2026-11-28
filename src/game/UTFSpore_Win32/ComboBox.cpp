@@ -607,16 +607,17 @@ uint32_t WCB::GetColor(uint32_t index)
 
 // @ 0x00967f00
 bool CBD::GetNaturalSize(float* out, uint32_t a, uint32_t which)
-{
-    (void)a;
-    if (which != 2)
-        return false;
-    Image* im = (Image*)mComponentImage[2];
-    if (!im)
-        return false;
-    out[0] = (float)im->mSizeX * g_kOneQuarter;
-    out[1] = (float)im->mSizeY;
-    return true;
+{    (void)a;
+    switch (which) {
+    case 2:
+        if (mComponentImage[2] != 0) {
+            out[0] = (float)((Image*)mComponentImage[2])->mSizeX * g_kOneQuarter;
+            out[1] = (float)((Image*)mComponentImage[2])->mSizeY;
+            return true;
+        }
+        break;
+    }
+    return false;
 }
 
 // @ 0x00967f40

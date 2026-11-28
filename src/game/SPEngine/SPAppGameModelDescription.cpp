@@ -1233,13 +1233,15 @@ void GameModelSizeCommand::Execute(cArguments* args)
 
 // @ 0x007d1970
 void CmdBase::Execute(cArguments* args)
-{
-    int self = (int)this;
-    ObjV* obj = *(ObjV**)(self + 4);
+{    int self = (int)this;
+    int vtbl = **(int**)(self + 4);
     void** a = args->MainArguments(1);
-    V3 v = obj->Get(*a);
-    *(V3*)(*(int*)(self + 0xc) + 0x18) = v;
-}
+    V3 tmp;
+    V3* p = ((V3*(__thiscall*)(void*, V3*, const void*))(*(void**)(vtbl + 0xb0)))(*(void**)(self + 4), &tmp, *a);
+    int* dst = (int*)(*(int*)(self + 0xc) + 0x18);
+    dst[0] = p->a;
+    dst[1] = p->b;
+    dst[2] = p->c;}
 
 // @ 0x007d19c0
 void cGameModelAlphaCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)

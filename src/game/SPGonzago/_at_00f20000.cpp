@@ -2082,22 +2082,42 @@ void fn24b30(EffectRoot* root, unsigned mode)
 
 // @ 0x00f24d30
 void fn24d30()
-{
+{  struct RBNodeBase {
+    RBNodeBase* mpNodeRight;
+    RBNodeBase* mpNodeLeft;
+    RBNodeBase* mpNodeParent;
+    unsigned char mColor;
+  };
+  struct LocalTree {
+    void* mpUnused00;
+    RBNodeBase mAnchor;
+    void* mpSize;
+    unsigned mPad18;
+    void Reset() {
+      mAnchor.mpNodeRight = &mAnchor;
+      mAnchor.mpNodeLeft = &mAnchor;
+      mAnchor.mpNodeParent = 0;
+      mAnchor.mColor = 0;
+      mpSize = 0;
+    }
+    LocalTree() : mAnchor(), mpSize(0) {
+      Reset();
+    }
+  };
+  struct LocalGlobal {
+    LocalTree worlds;
+    LocalTree collections;
+    static void* operator new(unsigned, void* p) { return p; }
+    static void operator delete(void*, void*) {}
+    LocalGlobal() : worlds(), collections() {}
+  };
   LayoutGlobal* g = (LayoutGlobal*)FUN_00f473a0(0x38, "Simulator", 0, 0, 0, 0);
   if (g) {
-    // default-construct the two embedded event-tree headers
-    g->worlds.mpNext = (void*)&g->worlds.mpNext;
-    g->worlds.mpPrev = (void*)&g->worlds.mpNext;
-    g->worlds.mpRoot = 0;
-    g->worlds.mColor = 0;
-    g->worlds.mpSize = 0;
-    g->collections.mpNext = (void*)&g->collections.mpNext;
-    g->collections.mpPrev = (void*)&g->collections.mpNext;
-    g->collections.mpRoot = 0;
-    g->collections.mColor = 0;
-    g->collections.mpSize = 0;
+    new (g) LocalGlobal();
+    gLayoutManager = g;
+    return;
   }
-  gLayoutManager = g;
+  gLayoutManager = 0;
 }
 
 // @ 0x00f24d90

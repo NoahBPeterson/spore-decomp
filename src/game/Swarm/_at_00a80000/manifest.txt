@@ -25,3 +25,4 @@
 ../src/game/Swarm/_at_00a80000.cpp  ?Sim_Dtor@@YIXPAUSim_s00a8_6b30@@@Z  00a87720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  ?EnumGroupOverrides@@YAHPAXPADPAIH@Z  00a85f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  ?Activate@Sim@@QAEX_N@Z  00a850d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?ReadDescRec@@YAXPAUIOStream@@PAX@Z  00a848d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

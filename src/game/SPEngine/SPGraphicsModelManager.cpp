@@ -3150,19 +3150,19 @@ void SortDescGuarded(Pair8* first, Pair8* last)
 
 // @ 0x00743c50
 void SortDescUnguarded(Pair8* first, Pair8* last)
-{
+{    struct Cmp {
+        bool operator()(const Pair8& a, const Pair8& b) const {
+            return a.key > b.key;
+        }
+    } cmp;
     for (Pair8* current = first; current != last; ++current) {
         Pair8* end = current;
-        Pair8* prev = current - 1;
-        Pair8 value = *current;
-        while (value.key > prev->key) {
+        Pair8* prev = current;
+        const Pair8 value = *current;
+        for (--prev; cmp(value, *prev); --end, --prev)
             *end = *prev;
-            --end;
-            --prev;
-        }
         *end = value;
-    }
-}
+    }}
 
 // @ 0x00743cb0
 void SortAscGuarded(Pair8* first, Pair8* last)
@@ -4005,18 +4005,16 @@ AutoRef* AutoRef::Release()
 
 // @ 0x00745520
 int SlotVec::next(int idx)
-{
-    uint32_t* p = (uint32_t*)(mp + idx * 5);
-    uint32_t v = *p;
-    do {
-        if ((v >> 0x1e) & 1)
-            return 0x3fffffff;
-        v = p[5];
-        p += 5;
+{    bool bEnd = ((uint32_t)mp[idx * 5] >> 0x1e) & 1;
+    while (!bEnd) {
         ++idx;
-    } while ((int)v < 0);
-    return idx;
-}
+        uint32_t v = (uint32_t)mp[idx * 5];
+        bool bFree = (v >> 0x1f) & 1;
+        if (!bFree)
+            return idx;
+        bEnd = (v >> 0x1e) & 1;
+    }
+    return 0x3fffffff;}
 
 // @ 0x00745560
 void ChunkFind(uint32_t* out, int* cur, int* start, int* end, int** seg, int key)

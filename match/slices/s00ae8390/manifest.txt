@@ -4,3 +4,4 @@ slices/s00ae8390/s00ae8390.cpp  ?FUN_00ae9170@Host@@QAEXPAH@Z  00ae9170  /O2 /MD
 slices/s00ae8390/s00ae8390.cpp  ?FUN_00ae90d0@Host@@QAEXXZ  00ae90d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 slices/s00ae8390/s00ae8390.cpp  ?FUN_00ae9330@Host@@QAEXH@Z  00ae9330  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 slices/s00ae8390/s00ae8390.cpp  ?FUN_00ae9000@Host@@QAEXH@Z  00ae9000  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+slices/s00ae8390/s00ae8390.cpp  ?FUN_00ae9390@Host@@QAEHXZ  00ae9390  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

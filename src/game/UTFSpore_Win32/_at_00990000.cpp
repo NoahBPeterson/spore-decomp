@@ -105,6 +105,7 @@ struct KeySet {           // eastl::hashtable<Key, ...> member at SerAutoUpdate+
     unsigned count;
     HashPolicy policy;
     HIter* __thiscall insert(HIter* out, const Key3* k, char flag);   // 0x8dfcd0
+    HIter* __thiscall insert(HIter* out, const Key3* k, false_type);  // 0x8dfcd0
     void __thiscall DoFreeNodes(HNode** b, unsigned n);               // 0x93dc70
 };
 struct Mutex {
@@ -483,22 +484,23 @@ void __cdecl ReloadChangedLayouts(void* iface)
 
 // @ 0x00998d70
 void __cdecl OnResourceChanged(int a, Key3* key, SerAutoUpdate* self)
-{
-    (void)a;
+{    (void)a;
     self->mMutex.Lock(g_mutexName_1446a78);
-    HNode* endNode = self->mFiles.buckets[self->mFiles.bcount];
-    HIter tmp;
-    HIter* f = self->mFiles.find(&tmp, key);
-    if (f->node != endNode) {
-        if (self->mChanged.count == 0) {
-            void* o = self->mOwner;
-            VF(o, 0x1c, void(__thiscall*)(void*, void*, void*))(o, (void*)ReloadChangedLayouts, self);
+    {
+        struct HInsRes { HIter it; bool ok; };
+        KeyHT* files = &self->mFiles;
+        HNode* endNode = files->buckets[files->bcount];
+        HInsRes res;
+        HIter* f = files->find(&res.it, key);
+        if (f->node != endNode) {
+            if (self->mChanged.count == 0) {
+                void* o = self->mOwner;
+                VF(o, 0x1c, void(__thiscall*)(void*, void*, void*))(o, (void*)ReloadChangedLayouts, self);
+            }
+            self->mChanged.insert(&res.it, key, false_type());
         }
-        char flag = 0;
-        self->mChanged.insert(&tmp, key, flag);
     }
-    self->mMutex.Unlock();
-}
+    self->mMutex.Unlock();}
 
 // @ 0x00998df0
 SerAutoUpdate* SerAutoUpdate::ctor(void* owner)

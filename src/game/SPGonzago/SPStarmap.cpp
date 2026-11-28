@@ -157,6 +157,7 @@ struct Deque64 {
   uint32_t mPad2c;             // +0x2c
 
   void clear();                // eastl::deque<T>::clear (thiscall)
+  void FUN_01045370(T** value);  // 0x01045370 (eastl::deque<T>::DoPushBack, thiscall)
 };
 class cStarRecord {
  public:
@@ -1588,8 +1589,7 @@ RBTree::iterator RBTree::DoInsertValueImpl(const uint32_t* value, bool force)
 
 // @ 0x01045500
 void cStarMap::SetInitialVisuals()
-{
-  int i = 0;
+{  int i = 0;
   do {
     uint32_t* p = (uint32_t*)((uint8_t*)this + 4 + i * 4);
     if ((i == 0) || (i > 4 && i <= 6))
@@ -1597,7 +1597,7 @@ void cStarMap::SetInitialVisuals()
     else
       *p = 0;
     ++i;
-  } while (i < 7);
+  } while ((unsigned int)i < 7);
 
   Deque64<cStarRecord*>* dq = &mTravelTrail;
   if (dq->mItBegin.mpCurrent == dq->mItEnd.mpCurrent) {
@@ -1605,19 +1605,19 @@ void cStarMap::SetInitialVisuals()
     if (empire != 0) {
       cStarRecord* rec = (cStarRecord*)((EmpireContext*)empire)->GetSelectedRecord();
       if (rec != 0) {
-        if (dq->mItEnd.mpCurrent + 1 != dq->mItEnd.mpEnd) {
-          cStarRecord** slot = dq->mItEnd.mpCurrent;
-          dq->mItEnd.mpCurrent = slot + 1;
+        cStarRecord** slot = dq->mItEnd.mpCurrent;
+        cStarRecord** next = slot + 1;
+        if (next != dq->mItEnd.mpEnd) {
+          dq->mItEnd.mpCurrent = next;
           if (slot != 0)
             *slot = rec;
         } else {
-          FUN_01045370(dq, &rec);
+          dq->FUN_01045370((cStarRecord***)&rec);
         }
       }
     }
   }
-  Init();
-}
+  Init();}
 
 // @ 0x01045590
 void MultiMapErase(RBTree* tree, RBNode** out, RBNode* node)

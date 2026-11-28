@@ -3697,11 +3697,11 @@ void SPObject::FUN_00c48ae0(WStr* out)
 
 // @ 0x00c48ba0
 void SPObject::FUN_00c48ba0(int arg)
-{
-    u32* p = mVec1D0.mpBegin;
+{    u32* p = mVec1D0.mpBegin;
     while (p != mVec1D0.mpEnd) {
         if ((int)*p == arg) {
-            VT_2C(MessageServer(), (char*)this + 0x34, arg, -10000);
+            void* handler = this ? (char*)this + 0x34 : 0;
+            VT_2C(MessageServer(), handler, arg, -9999);
             u32* next = p + 1;
             if (next < mVec1D0.mpEnd)
                 memcpy(p, next, (char*)mVec1D0.mpEnd - (char*)next);
@@ -3709,8 +3709,7 @@ void SPObject::FUN_00c48ba0(int arg)
         } else {
             p++;
         }
-    }
-}
+    }}
 
 // @ 0x00c48c20
 void SPObject::GetRewardsNames(WStr* out)

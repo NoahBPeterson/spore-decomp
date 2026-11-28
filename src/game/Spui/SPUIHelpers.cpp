@@ -2528,15 +2528,14 @@ unsigned char FUN_00807cb0(W_s0080_7840* w, void* res, int idx)
 
 // @ 0x00807d30
 bool VisitWindowTreeDepthFirst(W_s0080_7840* w, bool (*fn)(W_s0080_7840*, void*), void* ctx)
-{
-    if (!fn(w, ctx)) return 0;
+{    if (!fn(w, ctx)) return 0;
     ChildNode* cur;
     ChildNode* end;
     w->mCc(&cur);
     while (cur != *(ChildNode**)w->vD0(&end)) {
-        ChildNode* next = cur->mpNext;
-        W_s0080_7840* child = (W_s0080_7840*)((char*)cur + DAT_1440aec);
-        cur = next;
+        ChildNode* prev = cur;
+        cur = cur->mpNext;
+        W_s0080_7840* child = (W_s0080_7840*)((char*)prev + DAT_1440aec);
         if (!VisitWindowTreeDepthFirst(child, fn, ctx))
             return 0;
     }

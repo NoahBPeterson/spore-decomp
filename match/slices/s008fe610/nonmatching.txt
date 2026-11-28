@@ -1,4 +1,3 @@
-008fe6d0  54  list splice: original keeps the node copy in edi and reloads args; scheduling differs; difftest PASS (after moving __declspec(noinline) off the definition line so the "// @" marker resolves)
 008fe930  58  global provider assign: refcount inc/dec addressed-mode fold differs (no separate load)
 008fe610  52  intrusive_hashtable DoInsertValue: original keeps &key in ebp and reloads node from the arg slot; ours keeps node in ebp
 008fe830  16  ResourceCache ctor: store order/register use differs (edi=this+0x14 inline memset arg)

@@ -1719,17 +1719,17 @@ void MgrCard::Add(void** out, int p)
 
 // @ 0x00e30dc0
 void MgrCard::Destroy()
-{
-    ((TC*)((char*)this + 0x10))->f_d73090(*(void**)((char*)this + 0x10), *(void**)((char*)this + 0x14));
-    ((NodeList*)((char*)this + 0x24))->destroy(*(void***)((char*)this + 0x28), *(int*)((char*)this + 0x2c));
-    *(uint32_t*)((char*)this + 0x30) = 0;
+{    TC* v = (TC*)((char*)this + 0x10);
+    v->f_d73090(*(void**)v, *(void**)((char*)v + 4));
+    NodeList* nl = (NodeList*)((char*)this + 0x24);
+    nl->destroy(nl->array, nl->count);
+    nl->cap = 0;
     int h = *(int*)((char*)this + 0x44);
     if (h) {
         *(uint32_t*)((char*)this + 0x44) = 0;
         EA_RemoveHandler(h, *(int*)((char*)this + 0x48), *(int*)((char*)this + 0x4c),
                         *(int*)((char*)this + 0x50), *(int*)((char*)this + 0x54));
-    }
-}
+    }}
 
 // @ 0x00e30e20
 void MgrCard::AddOrUpdate(int a, void* p, unsigned c, uint8_t flag, int e)

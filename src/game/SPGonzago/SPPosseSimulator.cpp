@@ -513,18 +513,25 @@ void introsort(void** first, void** last, int depth, char (__cdecl* pred)(int, i
 
 // @ 0x00d539d0
 void* PosseSim_Instance()
-{
-    void* inst = *(void**)0x169e5b8;
-    if (inst == 0) {
-        PosseSim* raw = new ("Simulator/cPosseSimulator") PosseSim;
-        if (raw) {
-            raw->Init();
-        }
-        *(PosseSim**)0x169e5b8 = raw;
-        ((Inst*)raw)->slot();
-        inst = raw;
+{    void* inst = *(void**)g_169e5b8;
+    if (inst != 0) {
+        return inst;
     }
-    return inst;
+    struct LocalInst {
+        virtual void v0() {}
+        virtual void v1() {}
+        virtual void v2() {}
+        virtual void v3() {}
+        virtual void v4() {}
+        virtual void v5() {}
+        virtual void v6() {}
+        virtual void slot() {}
+    };
+    PosseSim* raw = new ("Simulator/cPosseSimulator") PosseSim;
+    PosseSim* inited = raw ? raw->Init() : 0;
+    *(PosseSim**)g_169e5b8 = inited;
+    ((LocalInst*)inited)->slot();
+    return *(void**)g_169e5b8;
 }
 
 // @ 0x00d53a80

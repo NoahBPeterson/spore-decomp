@@ -2,3 +2,4 @@
 slices/s011f8bc0/s011f8bc0.cpp  ?f011f94a0@@YAII@Z  011f94a0  /O2 /MD /Gy /TP /GS-
 slices/s011f8bc0/s011f8bc0.cpp  ?f96b0@SASDesc@@QAEXH@Z  011f96b0  /O2 /MD /Gy /TP /GS-
 slices/s011f8bc0/s011f8bc0.cpp  ?f9ae0@SASDesc@@QAEXPAHH@Z  011f9ae0  /O2 /MD /Gy /TP /GS-
+slices/s011f8bc0/s011f8bc0.cpp  ?f011f8d60@@YAXPAHH@Z  011f8d60  /vc71 /O2 /MD /Gy /TP

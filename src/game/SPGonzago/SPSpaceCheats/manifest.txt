@@ -6,3 +6,4 @@
 ../src/game/SPGonzago/SPSpaceCheats.cpp  ?Matches@cObjectKey@@QAEHPAV1@@Z  010229b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCheats.cpp  ?FUN_01024920@nSpaceCheats@SP@@YAXPAPAH0HP6AHHH@Z@Z  01024920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCheats.cpp  ?SortPlanetArray@@YAXPAVcAutoRef@@0P6AHPAX1@Z@Z  01022cb0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCheats.cpp  ?TravelToStar@@YAXH@Z  010229d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

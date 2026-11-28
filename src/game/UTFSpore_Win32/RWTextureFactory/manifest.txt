@@ -6,3 +6,4 @@
 ../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?CanConvert@RWTextureFactory@UTFWinTools@EA@@UBE_NII@Z  009981b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?FUN_009986e0@@YIPAXPAX@Z  009986e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?FUN_00998820@@YIPAXPAX@Z  00998820  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?InitTextureResources@RWTexResource@@QAEXXZ  00998250  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

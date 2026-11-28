@@ -27,3 +27,4 @@
 ../src/game/SPGonzago/SPToolManager.cpp  ?TryDeselectAfterUse@cSPToolManager@@QAEXPAVcSPSpaceToolData_s0104_e060@@@Z  0104e260  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ?IsDeselectedAfterUse@cSPSpaceToolData_s0104_bcc0@SP@@QAEIXZ  0104cc40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ?Erase@cEffectTree@@QAEXPAUcEffectNode@@@Z  0104ef30  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104cdb0@cSPSpaceToolData_s0104_bcc0@SP@@QAEEPAUcIface@@@Z  0104cdb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

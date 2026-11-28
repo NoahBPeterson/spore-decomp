@@ -140,16 +140,23 @@ void Host::FUN_00ae90d0() {
   }
 }
 // @ 0x00ae9390
-int Host::FUN_00ae9390() {
-  if (PI(this, 0x20) != 0) return 1;
-  int g = FUN_0102bd0();
-  if (g != 0 && PI(FUN_0102bd0(), 0x18) != 0) {
-    FUN_0102bd0();
-    if (FUN_01075500(0) != 0) return 1;
-  }
-  int q = FUN_010666a0();
-  if (q != 0 && FUN_01068350((void*)FUN_010666a0()) != 0) return 1;
-  return 0;
+int Host::FUN_00ae9390() {    struct Ref18 {
+        void* mp;
+        bool has() const { return mp != 0; }
+        void* get() const { return mp; }
+    };
+    struct GameObj {
+        char pad[0x18];
+        Ref18 m18;
+    };
+    if (PI(this, 0x20) != 0 ||
+        (FUN_0102bd0() != 0 &&
+         ((GameObj*)FUN_0102bd0())->m18.has() &&
+         ((bool(__thiscall*)(void*))FUN_01075500)(((GameObj*)FUN_0102bd0())->m18.get())) ||
+        (FUN_010666a0() != 0 &&
+         ((bool(__thiscall*)(void*))FUN_01068350)((void*)FUN_010666a0())))
+        return 1;
+    return 0;
 }
 // @ 0x00ae9330
 struct HostHandle20 {

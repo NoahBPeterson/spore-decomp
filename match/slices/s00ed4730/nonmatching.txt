@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
 00ed4c70 308  UTFWin input-capture window create/show: heavy virtual-call schedule differs; equiv: WEAK (6.5% coverage)
-00ed4e30 51   uint64 vtable compare: 64-bit return handling differs; equiv: WEAK (50% coverage)

@@ -95,7 +95,7 @@ void  WriteRec(IOStream* s, void* v);                          // 0x00a84510
 void* WriteRecList(IOStream* s, void* v);                      // 0x00a846c0
 void* WriteDescRec(IOStream* s, void* v);                      // 0x00a84720
 void* ReadLODScales(IOStream* s, void* v);                     // 0x00a84850
-void* ReadDescRec(IOStream* s, void* v);                       // 0x00a848d0
+void  ReadDescRec(IOStream* s, void* v);                       // 0x00a848d0
 void  ResizeDescRecs(void* self, u32 n, const void* val, void* out); // 0x00a84a80
 struct StreamW { virtual void v0();virtual void v1();virtual void v2();virtual void v3();
 virtual void v4();
@@ -869,16 +869,14 @@ void* ReadLODScales(IOStream* s, void* v)
 }
 
 // @ 0x00a848d0
-void* ReadDescRec(IOStream* s, void* v)
-{
-    char* p = (char*)v;
-    char* q = p + 8;                                           // cached base (ebx)
-    uint8_t b;
+void ReadDescRec(IOStream* s, void* v)
+{    uint8_t b;
     ReadUint8(s, &b, 1);
+    char* p = (char*)v;
     *(uint32_t*)p = b & 0xff;
-    u32 w;
-    ReadInt32(s, &w, 1, 0);
-    *(uint32_t*)(p + 4) = w & 0x1ff;
+    ReadInt32(s, &v, 1, 0);
+    *(uint32_t*)(p + 4) = (u32)v & 0x1ff;
+    char* q = p + 8;                                           // cached base (ebx)
     ReadUint16(s, q, 1, 0);
     ReadInt32(s, q + 0x10, 1, 0);
     ((StreamR*)s)->read(q + 0x14, 0x24);
@@ -897,9 +895,7 @@ void* ReadDescRec(IOStream* s, void* v)
     ReadUint16(s, p + 0x78, 1, 0);
     ReadUint16(s, p + 0x7a, 1, 0);
     ReadInt32(s, p + 0x7c, 1, 0);
-    ReadInt32(s, p + 0x80, 1, 0);
-    return s;
-}
+    ReadInt32(s, p + 0x80, 1, 0);}
 
 // @ 0x00a84a80
 void ResizeDescRecs(void* self, u32 n, const void* val, void* out)

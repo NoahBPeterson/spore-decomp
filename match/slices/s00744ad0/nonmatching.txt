@@ -3,7 +3,6 @@
 00745010  19  CheckFlag: field loaded via cmp instead of mov+test [equiv: UNSUPPORTED (0/1200 valid inputs)]
 00745050  29  SelectMesh: branch block ordering of the 0x9c/0xac selection differs [equiv: UNSUPPORTED (0/1200 valid inputs)]
 00745140  271 FillColor: 327-byte body vs the original's 387; the original materialises `add ecx,0x850`/`add eax,4` for the case 2/3 colour copy (so eax=out+4 at ret), keeps a 0x10 frame with x/y/z/w slots and inlines the store tail for case 0 [equiv: FAIL (eax: orig leaves out+4)]
-00745520  55  slot_vector::next: bit-extraction lowering (test mem vs shr/test) differs [equiv: PASS equiv]
 00745560  85  load-queue chunk find: the original compares cur against its 5th stack argument and loads the key from the 10th dword ([esp+0x28]), so its real parameter list is longer than this 6-arg helper; ebx/esi/edi schedule and the out-pointer in eax differ [equiv: FAIL (eax: orig leaves out)]
 00745660  44  slot_vector count: bit-extraction lowering differs [equiv: WEAK (34.8% cov)]
 007456a0  111 slot assign: the original keeps `this` in eax (`mov eax,ecx`), masks both sign words with shr/and cl|dl and copies four floats (fld/fstp) in the dst<0 branch; every source shape tried leaves `this` in ecx and stores ints [equiv: FAIL (eax: orig leaves the cell pointer)]

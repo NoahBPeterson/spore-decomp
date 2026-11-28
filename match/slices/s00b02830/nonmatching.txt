@@ -22,4 +22,3 @@
 00b034f0 85 sim_rbtree_run_length: __stdcall run-length helper; the count loop and tail layout are scheduled differently (orig 88 vs 93 emitted) ; equiv PASS 377 valid inputs, 71.1% coverage
 00b035b0 166 cTreeData::SerializeFruitTree: fruit-tree serialize walk; complete object-heavy code, but the original faults on every synthetic input, so the gate cannot run (orig 196 vs 183 emitted) ; equiv UNSUPPORTED only 0/400 inputs valid (discards: fault(read)=400)
 00b03740 42 cTreeData::operator=: copy-assign; the intrusive-pointer assign (AddRef/Release) branch and the copy sequence are scheduled differently (orig 148 vs 148 emitted) ; equiv PASS 275 valid inputs, 100.0% coverage
-00b037e0 52 sim_fill_range: fill-range helper; the fill loop's register allocation differs (orig 57 vs 60 emitted) ; equiv WEAK 170 valid inputs (need 200), 47.6% coverage (need 60%)

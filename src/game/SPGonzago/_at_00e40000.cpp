@@ -512,8 +512,8 @@ struct cSPUITimeline_s00e4_5760 {
 
     bool  DoMessage(int cmd, int* msg);                     // 0x00e45760
     float FUN_00e460d0();                                   // 0x00e460d0
-    void  FUN_00e46140(void* out);                          // 0x00e46140
-    void  FUN_00e46180(void* out);                          // 0x00e46180
+    char  FUN_00e46140(void* out);                          // 0x00e46140
+    char  FUN_00e46180(void* out);                          // 0x00e46180
     ColorRGB_s00e4_61c0 GetItemColor(uint32_t idx);         // 0x00e461c0
     void  SetItemColor(uint32_t idx, unsigned char on);    // 0x00e46210
 };
@@ -2377,30 +2377,28 @@ float cSPUITimeline_s00e4_5760::FUN_00e460d0()
 }
 
 // @ 0x00e46140
-void cSPUITimeline_s00e4_5760::FUN_00e46140(void* out)
-{
+char cSPUITimeline_s00e4_5760::FUN_00e46140(void* out)
+{    char res = 0;
     int obj = *(int*)((char*)this + 0x64);
     if (obj != 0) {
-        if (mb108 != 0) {
-            SP_GetPropertyAsText((void*)obj, 0xd5624e29, out);
-            return;
-        }
-        SP_GetPropertyAsText((void*)obj, 0x66e8f2d2, out);
+        if (mb108 != 0)
+            res = SP_GetPropertyAsText((void*)obj, 0xd5624e29, out);
+        else
+            res = SP_GetPropertyAsText((void*)obj, 0x66e8f2d2, out);
     }
-}
+    return res;}
 
 // @ 0x00e46180
-void cSPUITimeline_s00e4_5760::FUN_00e46180(void* out)
-{
+char cSPUITimeline_s00e4_5760::FUN_00e46180(void* out)
+{    char res = 0;
     int obj = *(int*)((char*)this + 0x64);
     if (obj != 0) {
-        if (mb108 != 0) {
-            SP_GetPropertyAsText((void*)obj, 0xd5624e2a, out);
-            return;
-        }
-        SP_GetPropertyAsText((void*)obj, 0x74f7a11b, out);
+        if (mb108 != 0)
+            res = SP_GetPropertyAsText((void*)obj, 0xd5624e2a, out);
+        else
+            res = SP_GetPropertyAsText((void*)obj, 0x74f7a11b, out);
     }
-}
+    return res;}
 
 // @ 0x00e461c0
 ColorRGB_s00e4_61c0 cSPUITimeline_s00e4_5760::GetItemColor(uint32_t idx)

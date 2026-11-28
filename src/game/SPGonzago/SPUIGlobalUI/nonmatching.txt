@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00e00a40 40 game-mode predicate scheduling differs. equiv WEAK flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e00b00 134 pie-menu predicate: virtual dispatch scheduling differs. equiv UNSUPPORTED (0/400 valid inputs, fault(read)) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00e00c40 44 menu-allowed predicate scheduling differs. equiv WEAK flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e00d20 40 menu predicate scheduling differs. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e00db0 142 stopwatch UI update: same inline fcos/SSE shape, diff in scheduling. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e00ec0 34 options ctor: cString ctor arg order differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read)) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 esp]

@@ -138,15 +138,19 @@ public:
     void* mvExtra[4];
 };
 namespace UI {
-class TextZoomName : public IRefCounted {
+class TextZoomName {
 public:
+    virtual void v00();
+    virtual void AddRef();
+    virtual void Release();
+
     TextZoomName(const wchar_t* pName);
     void Shutdown();
     void Activate(bool bActivate);
     void Deactivate(bool bDeactivate);
     void Init(IWindow* pWindow, uint32_t textId, int a, int b, int c, int d, int e);
 
-    uint8_t mPad08[0x74];
+    uint8_t mPad04[0x78];
 };  // namespace UI
 }
 template <class T>
@@ -203,18 +207,14 @@ public:
     EA::RectT_s00e1_4a30<float> mDescriptionInitialArea;  // 0x88
 };
 typedef AutoRefCount<cUICard> CardRef;
-class cUIMissionCardPanel {
+struct cUIMissionCardPanelBase {
+    uint8_t mPad00[0x28];
+    ~cUIMissionCardPanelBase();                           // 0x00e132c0
+};
+class cUIMissionCardPanel : public cUIMissionCardPanelBase {
 public:
-    virtual void v00();
-    virtual void v04();
-    virtual void v08();
-    virtual void v0c();
-    virtual void v10();
-    virtual void v14();
-    virtual void v18();
-    virtual void v1c();
-    virtual void Expand();     // 0x20
-    virtual void Collapse();   // 0x24
+    void Expand();     // 0x20
+    void Collapse();   // 0x24
 
     bool OnEvent(int bUnused, EventMsg* pMsg);            // 0x00e14a30
     void UpdateCardPositions();                           // 0x00e14b70
@@ -3479,11 +3479,10 @@ bool cUIMissionCardPanel::OnEvent(int bUnused, EventMsg* pMsg)
 
 // @ 0x00e14b30
 cUIMissionCardPanel::~cUIMissionCardPanel()
-{
-    UI::TextZoomName* pTextZoom = mpTextZoom;
-    if (pTextZoom != nullptr) {
-        pTextZoom->Shutdown();
-        if (mpTextZoom != nullptr) {
+{    if (mpTextZoom != nullptr) {
+        mpTextZoom->Shutdown();
+        UI::TextZoomName* pTextZoom = mpTextZoom;
+        if (pTextZoom != nullptr) {
             mpTextZoom = nullptr;
             pTextZoom->Release();
         }

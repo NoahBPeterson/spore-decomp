@@ -1197,16 +1197,20 @@ int32_t cPlanetModel_s00b8_d190::FUN_00b8def0(int32_t index)
 
 // @ 0x00b8df20
 void cPlanetModel_s00b8_d190::FUN_00b8df20()
-{
-    while (mField170 != mField174) {
-        void* element = *(void**)(mField174 - 4);
-        mField174 -= 4;
+{    struct OwnedVec {
+        cOwnedElem2** mpBegin; cOwnedElem2** mpEnd;
+        bool empty() const { return mpBegin == mpEnd; }
+        cOwnedElem2*& back() { return *(mpEnd - 1); }
+        void pop_back() { --mpEnd; }
+    };
+    while (!((OwnedVec*)&mField170)->empty()) {
+        cOwnedElem2* element = ((OwnedVec*)&mField170)->back();
+        ((OwnedVec*)&mField170)->pop_back();
         if (element != 0) {
-            ((cOwnedElem2*)element)->FUN_00c2e4e0();
+            element->FUN_00c2e4e0();
             FUN_00f47380(element);
         }
-    }
-}
+    }}
 
 struct OwnedVec2_b8dfe0 {
     cOwnedElem2** mpBegin; cOwnedElem2** mpEnd;

@@ -5916,14 +5916,21 @@ cTreeData& cTreeData::operator=(cTreeData const& rhs)
     return *this;
 }
 
+struct S_00b037e0 { char d[0x80]; };
+struct R_00b037e0 { S_00b037e0* p; };
+struct I_00b037e0 {
+    S_00b037e0* p;
+    S_00b037e0& operator*() const { return *p; }
+    I_00b037e0& operator++() { ++p; return *this; }
+    bool operator!=(const I_00b037e0& o) const { return p != o.p; }
+};
+
 // @ 0x00b037e0
-void* __cdecl FUN_00b037e0(void* out, uint32 begin, uint32 end, uint32 value)
-{
-    *(uint32*)out = value;
-    for (; begin != end; begin += 0x80) {
-        if (*(uint32*)out != 0)
-            ((cTreeData*)*(uint32*)out)->cTreeData::cTreeData((void*)begin);
-        *(uint32*)out += 0x80;
+R_00b037e0* __cdecl FUN_00b037e0(R_00b037e0* out, I_00b037e0 begin, I_00b037e0 end, S_00b037e0* value)
+{    out->p = value;
+    for (; begin != end; ++begin, ++out->p) {
+        if (out->p != 0)
+            ((cTreeData*)out->p)->cTreeData::cTreeData((void*)&*begin);
     }
     return out;
 }
@@ -6898,18 +6905,24 @@ void FUN_00b055c0(int param_1, int param_2, int param_3, int param_4, float px, 
         FUN_00b047b0((void**)param_1, (void**)param_2, (void**)param_2, px, py, pz);
 }
 
+struct S_00b056e0 { char d[0x24]; };
+struct R_00b056e0 { S_00b056e0* p; };
+struct I_00b056e0 {
+    S_00b056e0* p;
+    S_00b056e0& operator*() const { return *p; }
+    I_00b056e0& operator++() { ++p; return *this; }
+    bool operator!=(const I_00b056e0& o) const { return p != o.p; }
+};
+
 // @ 0x00b056e0
-int** FUN_00b056e0(int** out, int* first, int* last, int* obj)
-{
-    *out = obj;
-    while (first != last) {
-        int* p = *out;
+R_00b056e0* FUN_00b056e0(R_00b056e0* out, I_00b056e0 first, I_00b056e0 last, S_00b056e0* obj)
+{    out->p = obj;
+    for (; first != last; ++first, ++out->p) {
+        int* p = (int*)out->p;
         if (p) {
-            ((PoolOwner_s00b0_47b0*)p)->rbcontainer_copy(first);
-            *p = 0x145c660;
+            ((PoolOwner_s00b0_47b0*)p)->rbcontainer_copy(&*first);
+            *p = (int)g_145c660;
         }
-        first = (int*)((char*)first + 0x24);
-        *out  = (int*)((char*)*out + 0x24);
     }
     return out;
 }

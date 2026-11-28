@@ -4325,18 +4325,18 @@ void SP::cActionCircle_s00af_9aa0::SetRelative(const cSPVector3_s00af_9aa0* cent
 
 // @ 0x00af9dd0
 long double FUN_00af9dd0(float param_1, int param_2)
-{
-  param_2 = param_2 - 1;
+{  float f = param_1;
   float step = param_1 * 2.0f;
+  param_2 = param_2 - 1;
   if (0 < param_2) {
     int i = 6;
     do {
       param_2 = param_2 - i;
-      param_1 = step + param_1;
+      f = step + f;
       i = i + 6;
     } while (0 < param_2);
   }
-  return (long double)param_1;
+  return (long double)f;
 }
 
 // @ 0x00af9e20

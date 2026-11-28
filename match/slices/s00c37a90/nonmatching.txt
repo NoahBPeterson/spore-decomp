@@ -87,7 +87,6 @@
 #                (FUN_00b7e4d0) by mf010, clamped to [0,1] with maxss/minss, then lerped with mf090.
 #                Size-close (134 vs 130 bytes); the x87 length schedule differs.
 #                equiv PASS: 336/400 inputs valid, 100% coverage.
-00c38840  46   GetStandardSpeedForAltitude(): per-type base speed (mf068/mf078/mf070/mf08c/mf074, default
 #                mf06c) times PlanetDistanceScale(mNextPosition) times mf6b4.  Complete reconstruction
 #                (176 vs 180 bytes); the switch tail and the multiply order differ.
 #                equiv FAIL: one input yields -0.0 where the original yields +0.0 (the final tuning

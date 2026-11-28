@@ -48,3 +48,4 @@
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e2eba0@@YAPADPAVcSimNoun@@@Z  00e2eba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ??0cSPUIRelationshipStrip@@QAE@XZ  00e2ec40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?SetSlot@cUIMissionCardPanel_s00e1_d020@@QAEXPAX@Z  00e1d610  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ??1cUIMissionCardPanel@@QAE@XZ  00e14b30  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
