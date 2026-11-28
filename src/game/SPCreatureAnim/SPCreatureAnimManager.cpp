@@ -5025,27 +5025,26 @@ bool cAnimatingCreature_s00a0_3da0::FUN_00a04990(int id)
 
 // @ 0x00a049f0
 float cAnimatingCreature_s00a0_3da0::FUN_00a049f0(int id)
-{
-	float out = 0.0f;
+{	float out = 0.0f;
 	LookupEntry* e = id ? (LookupEntry*)FUN_009ff6f0(m_lookup184, id)
 	                    : (LookupEntry*)FUN_009ff750(m_lookup184);
 	if (e && e->m_obj)
 	{
 		void* obj = e->m_obj;
-		double f = *(double*)((char*)obj + 0xb0) / *(double*)((char*)obj + 0xb8);
+		float f = (float)(*(double*)((char*)obj + 0xb0) / *(double*)((char*)obj + 0xb8));
 		double ipart;
 		double frac = modf(f, &ipart);
-		if ((float)f < 0.0f)
+		if (f >= 0.0f)
+		{
+		}
+		else
+		{
 			frac = 1.0 - frac;
-		int whole = *(int*)((char*)e + 0xb0);
-		double sum = (double)whole;
-		if (whole < 0)
-			sum += g_uintToFloat;
-		sum += frac;
+		}
+		double sum = (float)*(uint32_t*)((char*)e + 0xb0) + frac;
 		out = (float)sum;
 	}
-	return out;
-}
+	return out;}
 
 // @ 0x00a04ab0
 void cAnimatingCreature_s00a0_3da0::FUN_00a04ab0(unsigned char value)

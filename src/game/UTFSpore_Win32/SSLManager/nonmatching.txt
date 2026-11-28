@@ -5,6 +5,5 @@
 0094f870 135 SessionOwner::FindAndRelease: complete (rbtree find on FNV hash key, optional erase, calls DoNukeSubtree); rbtree walk/regalloc differ; difftest WEAK (375 valid, 51.6% coverage)
 0094f910 109 SSLManager::GetSession: complete (mutex lock, FNV-1 hash of name, rbtree find, refcount inc / SSL_SESSION_new+insert, unlock); regalloc differs; difftest PASS (264 valid, 85.1% coverage)
 0094fb80  121  THREAD_cleanup: complete (clear 5 CRYPTO callbacks, destroy+free each mutex in manager vector, vector clear, return 1); regalloc/order differ; difftest PASS (217 valid, 73.0% coverage)
-0094fd20 49 COMPLETE SSLManager::RestoreClientSession; third arg of map insert is the dead name arg slot with low byte cleared (bool temp over it), original stores byte 0 + dword reload [equiv: WEAK 184 valid inputs, 100% coverage, no mismatch]
 0094fed0 202 SSLManager_Init: complete (register SSL mem funcs, THREAD_setup, RAND_seed, build SSL_CTX, set ciphers/verify/purpose/tmp_dh); large OpenSSL control flow, regalloc differ; difftest WEAK (269 valid, 7.6% coverage)
 0094f0e0  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py

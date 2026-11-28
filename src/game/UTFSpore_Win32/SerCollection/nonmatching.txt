@@ -1,3 +1,2 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-00998fc0  53   FUN_00998fc0: AddRef vcall and grow-path schedule differ flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00999250 423 complete SerCollection::Reload; schedule/register allocation differs; difftest WEAK (37% coverage: the ResourceMan singleton 0x1667aa0 is a fixed global, not an input)

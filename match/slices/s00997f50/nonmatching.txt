@@ -3,7 +3,6 @@
 00998050  -    HitMaskFactory::CreateResource: vcall/arg-block schedule differs
 00998200  34   Release: lock/dec and refcount branch layout differ
 00998770  126  RWTextureFactory::CreateResource: ctor inline and vcall schedule differs; difftest FAIL is a checker artifact: the only difference is a free-list link written by the game allocator (0x92701f) when Release frees the object; allocator state carries over from the first-run side, and swapping run order moves the difference to the original (identical instruction trace otherwise)
-00998fc0  53   FUN_00998fc0: AddRef vcall and grow-path schedule differ
 009983d0  -    RWTextureFactory::ReadResource: complete; vtable-fetch schedule and info struct copy differ
 00998530  -    RWTextureFactory::WriteResource: complete; local layout differs
 00998920  175  KeyHT::equal_range: complete; returns `out` in eax on both exits like the original; difftest PASS (219 valid inputs, 86.8% coverage, no mismatch)

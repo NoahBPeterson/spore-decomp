@@ -16,5 +16,4 @@
 00a66ec0  64  SymbolManager::BindX: equal_range walk; result/iterator frame differs, not selected as best-size symbol ; difftest FAIL (execution)
 00a66f10  80  SymbolManager::FindByClass: equal_range walk with class filter; register schedule differs ; difftest FAIL (execution)
 00a66f70  45  SymbolManager::SendBang: bucket-walk bang dispatch; original keeps the key/iterator in a larger frame (0x14 vs 0xc) ; difftest FAIL (execution)
-00a66fd0  49  SymbolManager::SendFloat: bucket-walk float dispatch; argument order (key,a2,f) and float push schedule differ ; difftest FAIL (execution)
 00a67040  67  SymbolManager::SendSymbol: bucket-walk symbol dispatch; frame layout and outline-call shape differ ; difftest FAIL (execution)

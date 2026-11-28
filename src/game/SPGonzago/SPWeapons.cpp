@@ -4573,19 +4573,17 @@ GameObject* GameObject::_virtual_dtor(unsigned char flags)
 
 // @ 0x00cb7040
 void GameObject::SetBallistic(const uint32_t* src)
-{
-    uint32_t* p = (uint32_t*)
+{    Float3* p = (Float3*)
         ((void*(__thiscall*)(void*)) (*(void***)((char*)this + 0x34))[0x2c / 4])((char*)this + 0x34);
 
-    mp518 = (void*)p[0];
-    mp51c = (void*)p[1];
-    mp520 = (void*)p[2];
+    *(Float3*)&mp518 = *p;
     m224  = 4;
 
     BallisticLocomotion* o = (BallisticLocomotion*)
         FUN_00f473a0(0x10, "Simulator/cBallisticLocomotion", 0, 0, 0, 0);
     if (o != 0) {
         o->mpVt8 = (void*)g_vft_13ec458;
+        _ReadWriteBarrier();
         o->m0c   = 0;
         o->mpVt0 = (void*)g_vft_1475164;
         o->mpVt8 = (void*)g_vft_1475114;
@@ -4597,8 +4595,7 @@ void GameObject::SetBallistic(const uint32_t* src)
 
     mp1fc = (void*)src[0];
     mp200 = (void*)src[1];
-    mp204 = (void*)src[2];
-}
+    mp204 = (void*)src[2];}
 
 // @ 0x00cb7110
 bool ProjSub::Update()

@@ -1007,8 +1007,7 @@ char __fastcall SSLManager_Shutdown(void* self)
 
 // @ 0x0094fd20
 char SSLManager_s0094_fb80::RestoreClientSession(void* ssl, unsigned char* name)
-{
-    void* self = this;
+{    void* self = this;
     ((Ext*)(B(self) + 0x18))->Lock(&g_lockArg);
     GetSession((const char*)name);
     CRYPTO_add_lock((int*)(B(ssl) + 0x9c), 1, 0xe, g_szFileName, 0x581);
@@ -1024,11 +1023,11 @@ char SSLManager_s0094_fb80::RestoreClientSession(void* ssl, unsigned char* name)
     v.key = h;
     v.ssl = ssl;
     void* result[2];
-    // the original pushes the dead `name` argument slot with its low byte cleared (a bool temp stored over it)
-    ((Ext*)(B(self) + 0x48))->faf0(result, &v, (void*)((unsigned)name & 0xffffff00u));
+    void* arg3;
+    *(char*)&arg3 = 0;
+    ((Ext*)(B(self) + 0x48))->faf0(result, &v, arg3);
     Mutex_Unlock(B(self) + 0x18);
-    return 1;
-}
+    return 1;}
 
 // @ 0x0094fdc0
 int __cdecl THREAD_setup()

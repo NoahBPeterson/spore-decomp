@@ -24,3 +24,4 @@
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?DeletingDtor@SSLManager_s0094_fb80@@QAEPAXD@Z  0094fe70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?Ctor@SSLManager_s0094_fb80@@QAEPAU1@PAUICoreAllocator@@@Z  0094fc40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?Fn0094ee70@@YAHPAUBIO94@@@Z  0094ee70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLManager.cpp  ?RestoreClientSession@SSLManager_s0094_fb80@@QAEDPAXPAE@Z  0094fd20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
