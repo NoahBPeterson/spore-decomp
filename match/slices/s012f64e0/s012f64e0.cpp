@@ -484,21 +484,46 @@ void init_16679d0()
     atexit(&FUN_013c0c50);
 }
 
-// 0x01300010 (byte-exact lifted version: match/slices/s01300010/s01300010.cpp)
+// The global at 0x01549834 that init_1549834 constructs (layout from the stores; 0x388 bytes).
+struct TextHolderPart { void Ctor(); };                 // ctor 0x0089a570
+struct TextHolder_1549834 {
+    char           pad00[0x0c];
+    int            m0c;                                   // +0x0c
+    int            m10;                                   // +0x10
+    int            m14;                                   // +0x14
+    char           pad18[0x08];
+    TextHolderPart mPart;                                 // +0x20
+    char           pad21[0xdf];
+    bool           mb100;                                 // +0x100
+    char           pad101[3];
+    TextStyle      mStyle;                                // +0x104
+    char           pad105[0x277];
+    bool           mb37c;                                 // +0x37c
+    bool           mb37d;                                 // +0x37d
+    char           pad37e[2];
+    float          mf380;                                 // +0x380
+    bool           mb384;                                 // +0x384
+    bool           mb385;                                 // +0x385
+    bool           mb386;                                 // +0x386
+};
+extern TextHolder_1549834 g_1549834;                      // 0x01549834
+
+// @ 0x01300010
 void init_1549834()
 {
-    FUN_0089a570();
-    *(char*)0x1549934 = 1;
-    ((TextStyle*)0x1549938)->ctor();
-    *(char*)0x1549bb0 = 0;
-    *(char*)0x1549bb1 = 1;
-    *(float*)0x1549bb4 = 1.0f;
-    *(char*)0x1549bb8 = 0;
-    *(char*)0x1549bb9 = 0;
-    *(char*)0x1549bba = 0;
-    *(int*)0x1549840 = 0;
-    *(int*)0x1549844 = 0;
-    *(int*)0x1549848 = 0;
+    TextHolder_1549834& h = g_1549834;
+    h.mPart.Ctor();
+    h.mb100 = true;
+    h.mStyle.ctor();
+    h.mb37c = false;
+    h.mb37d = true;
+    h.mf380 = 1.0f;
+    h.mb384 = false;
+    h.mb385 = false;
+    h.mb386 = false;
+    h.m0c = 0;
+    h.m10 = 0;
+    h.m14 = 0;
     atexit(&FUN_013c0cc0);
 }
 
