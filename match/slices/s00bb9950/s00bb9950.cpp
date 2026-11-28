@@ -499,16 +499,22 @@ bool cPlanetRecord::HasPlanetObjectFlag_10()
 // @ 0x00bb9d90
 // ===========================================================================
 bool cPlanetRecord::HasPlanetObjectFlag_09Tech2()
-{
+{    bool found = false;
     int count = (int)((char*)mPlanetObjects.mpEnd - (char*)mPlanetObjects.mpBegin)
               / (int)sizeof(PlanetObjectData);
-    PlanetObjectData* p = (PlanetObjectData*)mPlanetObjects.mpBegin;
-    for (int i = 0; i < count; ++i, ++p) {
-        if ((p->mFlags & 9) != 0 && p->mArtifactType == 2)
-            return true;
+    int i = 0;
+    if (i < count) {
+        _ReadWriteBarrier();
+        uint8_t* pFlags = &((PlanetObjectData*)mPlanetObjects.mpBegin)->mFlags;
+        do {
+            if ((*pFlags & 9) != 0 && *(pFlags - (offsetof(PlanetObjectData, mFlags) - offsetof(PlanetObjectData, mArtifactType))) == 2) {
+                found = true;
+                break;
+            }
+            pFlags += sizeof(PlanetObjectData);
+        } while (++i < count);
     }
-    return false;
-}
+    return found;}
 
 // ===========================================================================
 // @ 0x00bb9de0

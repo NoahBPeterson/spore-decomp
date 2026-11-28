@@ -1728,16 +1728,20 @@ void __thiscall SP::cSimPlanetLowLOD_s00c7_ff90::FUN_00c80780()
 
 // @ 0x00c809d0
 bool __thiscall SP::cSimPlanetLowLOD_s00c7_ff90::AddPlantSpecies(tSpeciesKey* pKey)
-{
-    cSpeciesList* pList = mpPlanet->mpSpeciesList;
+{    cSpeciesList* pList = mpPlanet->mpSpeciesList;
     int32_t count = (int32_t)(pList->mpEnd - pList->mpBegin);
-    tSpeciesKey* pEntry = pList->mpBegin;
-    for (int32_t i = 0; i < count; ++i) {
-        if (pEntry->mField0 == pKey->mField0 &&
-            pEntry->mField4 == pKey->mField4 &&
-            pEntry->mField8 == pKey->mField8)
-            return false;
-        ++pEntry;
+    int32_t i = 0;
+    if (count > 0) {
+        uint32_t key0 = pKey->mField0;
+        tSpeciesKey* pEntry = *(tSpeciesKey* volatile*)&pList->mpBegin;
+        do {
+            if (pEntry->mField0 == key0 &&
+                pEntry->mField4 == pKey->mField4 &&
+                pEntry->mField8 == pKey->mField8)
+                return false;
+            ++pEntry;
+            ++i;
+        } while (i < count);
     }
     if (!FUN_00b3d420()->GetSpeciesFromID(pKey))
         return false;

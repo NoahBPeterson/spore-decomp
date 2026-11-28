@@ -5,6 +5,8 @@
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_1687348[];
 extern "C" char g_16c7aa4[];
+extern "C" char g_146494c[];
+extern "C" char g_14613b8[];
 
 #include "game/types.h"
 #include "SP/cSPTimer.h"
@@ -3153,15 +3155,22 @@ void __cdecl FUN_00b672e0(u32 ray, u32 obj, u32 world, C103* out)
 // @ 0x00b67360
 void* __fastcall Collector_DeletingDtor(void* self, int, char flag)
 {
-    *(void**)self = (void*)0x146494c;
+    struct HkCollector {
+        void* mVtbl;
+        u32   mPad04[3];
+        void* mData;
+        u32   mPad14;
+        u32   mCap;
+    };
+    HkCollector* col = (HkCollector*)self;
+    col->mVtbl = (void*)g_146494c;
     _ReadWriteBarrier();
-    u32 n = *(u32*)((char*)self + 0x18);
-    if ((int)n >= 0) {
-        n &= 0x3fffffff;
-        void* tls = TlsGetValue(*(u32*)0x16e4174);
-        ((HkT*)tls)->FUN_0107db10(*(void**)((char*)self + 0x10), n * 0x30, 0x14);
+    if ((col->mCap & 0x80000000) == 0) {
+        int cap = col->mCap & 0x3fffffff;
+        HkT* tm = (HkT*)TlsGetValue(g_hkThreadMemoryTls);
+        tm->FUN_0107db10(col->mData, cap * 0x30, 0x14);
     }
-    *(void**)self = (void*)0x14613b8;
+    col->mVtbl = (void*)g_14613b8;
     if (flag & 1)
         operator delete(self);
     return self;

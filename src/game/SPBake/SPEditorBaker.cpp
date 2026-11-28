@@ -7470,18 +7470,32 @@ void AssignBakeEntry(BakeEntry& dst, const BakeEntry& src)
 
 // @ 0x004055b0
 void Baker_s0040_5000::Shutdown()
-{
+{    struct LocalHelper {
+        static __forceinline int AddRef(DefaultRefCounted_s0040_5000* p) {
+            return p->mnRefCount++ + 1;
+        }
+        static __forceinline void ClearRef(intrusive_ptr_s0040_5000<DefaultRefCounted_s0040_5000>* self, DefaultRefCounted_s0040_5000* pObject) {
+            if (pObject != self->mpObject) {
+                DefaultRefCounted_s0040_5000* const pTemp = self->mpObject;
+                unsigned int scratch[3];
+                if (pObject)
+                    AddRef(pObject);
+                self->mpObject = pObject;
+                if (pTemp)
+                    pTemp->Release();
+            }
+        }
+    };
     ICheatManager::Get()->RemoveCheat("baker");
     mpWindow = 0;
     mpLayout = 0;
     IMessageManager_s0040_5000::Get()->RemoveListener(0x227d899);
     IMessageManager_s0040_5000::Get()->RemoveListener(0x227d89a);
-    mpModelRes = 0;
-    mpRigRes = 0;
+    LocalHelper::ClearRef(&mpModelRes, 0);
+    LocalHelper::ClearRef(&mpRigRes, 0);
     mBatch.Flush();
     mArena.Reset(0);
-    mBakedKeys.clear();
-}
+    mBakedKeys.clear();}
 
 // @ 0x004063d0
 EditorLoadRequest* CloneLoadRequest(const EditorLoadRequest& request)

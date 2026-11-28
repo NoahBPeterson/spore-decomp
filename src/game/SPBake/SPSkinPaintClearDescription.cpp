@@ -7,6 +7,8 @@
 #include "EA/ArgScript/cIBlockCommand.h"
 #include "EA/ArgScript/cICommand.h"
 #include <stdarg.h>
+extern "C" unsigned int __cdecl strlen(const char*);
+#pragma intrinsic(strlen)
 
 // unnamed retail callees and globals (address in the comment)
 extern float kDefaultHairAngle;     // 0x015e0574
@@ -256,7 +258,12 @@ void WriteClearDescriptionCommand(cSPSkinPaintClearDescription* params, IStream*
 
 // @ 0x0052df30
 int* ErrorStringCtor(int* out, const char* fmt, ...)
-{
+{    struct LocalStr {
+        __forceinline static void Assign(EastlString* self, const char* p) {
+            unsigned int scratch[1];
+            self->Assign(p, p + strlen(p));
+        }
+    };
     out[0] = 0;
     out[1] = 0;
     out[2] = 0;
@@ -266,13 +273,8 @@ int* ErrorStringCtor(int* out, const char* fmt, ...)
     va_list ap;
     va_start(ap, fmt);
     Vsnprintf8((char*)DAT_015dfa30, 0x800, fmt, ap);
-    va_end(ap);
-    char* p = (char*)DAT_015dfa30;
-    while (*p)
-        p++;
-    ((EastlString*)out)->Assign((const char*)DAT_015dfa30, p);
-    return out;
-}
+    LocalStr::Assign((EastlString*)out, (const char*)DAT_015dfa30);
+    return out;}
 
 // @ 0x0052e030
 void ReadSkinPaintData(IStream_s0052_d460* self, int version, int data)

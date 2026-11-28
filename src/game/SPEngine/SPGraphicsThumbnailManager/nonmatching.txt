@@ -7,7 +7,6 @@
 007b6010 263 RtJobA::Run: complete; only lock-xadd register choice differs
 007b6160 202 FrameJob::FitAspect: complete; member reload/lea shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS after fixing the build flags (the slice was scored with /arch:SSE /fp:fast but the flags were not recorded, so the checker compiled x87 code with different rounding/overflow)
 007b63b0 254 RtJobB::Run: complete; only lock-xadd register choice differs
-007b64f0 50 RefHolder_Reset: complete; lock-xadd Release register shape and double member load differ
 007b6a90 33 complete dispatch loop + trailing call; register scheduling/push order differs (cmp uses memory vs loaded end)
 007b6d50 865 complete (frustum fit step); float global copies use x87/rep movs instead of movss, block layout differs; difftest PASS (fixed: pos update was a fused x87 mul+add, now rounded per op via Vector3 ops; frame size matched so callee stack junk lines up)
 007b7270 508 complete (camera pull-back driver); XForm/Vector3 float scheduling and frame layout differ; difftest WEAK (189 valid, 27% coverage: SP::App() singleton reads fault on random inputs)

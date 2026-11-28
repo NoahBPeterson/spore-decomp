@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 0047e4b0 121 SetModelFlags: bitset div-based set and /Od local slots differ; equiv PASS (297 valid, 100% cov) now returns hidden eax (this with low byte = highlight when a model exists) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0047ebe0  52   GetZeroVector: zero-init aggregate uses integer stores in original; the zero vector local was declared `Vector3 v = {0.0f,0.0f,0.0f}` and copied with float movss stores, which writes xmm0 (a register the original never touches) - it is now an `int v[3] = {0,0,0}` copied as three dwords, matching the original's `xor eax,eax`/immediate zeroing and integer `mov` copies. equiv PASS (300 valid, 100% cov, 0 mismatches) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047ec40  643  SetState: complete (guard, alpha+colour transitions for model and overdraw model, animate vs direct); /Od local slot layout differs (holes after SetFlag pairs) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047f290  286  IsFlagSet: bitset test and local slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00483f10 1110 Update: complete; Vec3 member copies use lea/lea inline operator= in original, frame temps differ

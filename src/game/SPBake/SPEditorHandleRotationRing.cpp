@@ -595,13 +595,10 @@ uint32_t cSPEditorHandle::SetModelFlags(bool flag, uint8_t highlight)
 
 // @ 0x0047ebe0
 void* cSPEditorHandle::GetZeroVector(void* out)
-{
-    int v[3] = { 0, 0, 0 };
-    ((int*)out)[0] = v[0];
-    ((int*)out)[1] = v[1];
-    ((int*)out)[2] = v[2];
-    return out;
-}
+{    struct V3 { struct { int a; } x; int y, z; };
+    V3 v = { {}, 0, 0 };
+    *(V3*)out = v;
+    return out;}
 
 // @ 0x0047ec40
 void cSPEditorHandle::SetState(int state, bool animate)

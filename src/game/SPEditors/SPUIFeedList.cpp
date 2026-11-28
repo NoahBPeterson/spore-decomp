@@ -335,10 +335,17 @@ void* FeedList::FUN_00662a20(uint32_t idx)
 
 // @ 0x00662a40
 void* FeedList::FUN_00662a40(int id)
-{
-    ElemA** begin = m38;
-    for (uint32_t i = 0; i < (uint32_t)(((int)(*(ElemA** volatile*)&m3c) - (int)begin) >> 2); ++i)
-        if (*(int*)((char*)begin[i] + 0xb4) == id) return begin[i];
+{    uint32_t i = 0;
+    if ((uint32_t)(((int)m3c - (int)m38) >> 2) > 0) {
+        ElemA** begin = *(ElemA** volatile*)&m38;
+        ElemA** p = begin;
+        do {
+            if (*(int*)((char*)*p + 0xb4) == id)
+                return begin[i];
+            ++i;
+            ++p;
+        } while (i < (uint32_t)(((int)(*(ElemA** volatile*)&m3c) - (int)begin) >> 2));
+    }
     return 0;
 }
 

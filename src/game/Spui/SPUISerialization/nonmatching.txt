@@ -12,4 +12,3 @@
 0082cd30 1652 ProcessStream: complete (header, bindings, hit masks, objects, property blocks, trailer); frame layout/register allocation and exit-path merging differ
 0082d480 282 ParseProp: complete; this/token register assignment (ebx/edi swapped) and spill order differ; difftest WEAK (7.8% coverage: random tokens rarely name <prop>; fixed '// @' markers on the class declarations that made the checker pick ParseObject)
 0082d7b0 249 ParseProps: complete (fixed_vector<Prop*,64> collect + link); cleanup blocks are merged where the original duplicates them; difftest WEAK (42.6% coverage)
-0082d910 58 ParseObject: complete; obj pointer spill timing around vector push_back differs

@@ -865,32 +865,30 @@ void cTransform::PreRotate(const Matrix3_s005b_5110& m)
 
 // @ 0x005b53c0
 RotationHandle_s005b_5110* RotationHandle_s005b_5110::Init()
-{
-    BaseManipCtor();
+{    BaseManipCtor();
     *(void* volatile*)&vtbl14 = vtbl_13ec458;
-    d18 = 0;
+    *(volatile uint32_t*)&d18 = 0;
     *(void* volatile*)&vtbl0 = vtbl_13f7634;
     *(void* volatile*)&vtbl14 = vtbl_13f7624;
-    mRotationHandle.mpObject = 0;
-    mBlock.mpObject = 0;
-    mPileList.mpBegin = 0;
-    mPileList.mpEnd = 0;
-    mPileList.mpCapacity = 0;
-    mMouseOffset.x = 0.0f;
-    mMouseOffset.y = 0.0f;
-    mMouseOffset.z = 0.0f;
-    mOutsideInitialSnapRange = 0;
-    d154 = 0;
-    bFlag04 = 0;
+    *(void* volatile*)&mRotationHandle.mpObject = 0;
+    *(void* volatile*)&mBlock.mpObject = 0;
+    *(void* volatile*)&mPileList.mpBegin = 0;
+    *(void* volatile*)&mPileList.mpEnd = 0;
+    *(void* volatile*)&mPileList.mpCapacity = 0;
+    *(volatile float*)&mMouseOffset.x = 0.0f;
+    *(volatile float*)&mMouseOffset.y = 0.0f;
+    *(volatile float*)&mMouseOffset.z = 0.0f;
+    *(volatile uint8_t*)&mOutsideInitialSnapRange = 0;
+    *(volatile uint32_t*)&d154 = 0;
+    *(volatile uint8_t*)&bFlag04 = 0;
     mHistoryAppliedRoll = 0.0f;
     mTimeSpentSnapped = 0.0f;
     mTargetRoll = 0.0f;
     mActualRoll = 0.0f;
-    mSymmetryModifier = kOneConst;
+    mSymmetryModifier = 1.0f;
     mX = 0.0f;
     mY = 0.0f;
-    return this;
-}
+    return this;}
 
 // @ 0x005b5470
 void RotationHandle_s005b_5110::Update(float x, float y)

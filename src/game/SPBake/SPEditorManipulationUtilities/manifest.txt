@@ -120,3 +120,4 @@
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00641fa0@cTimelineSporepediaCardData@@QAE_NXZ  00641fa0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?PushFront@DequeBase@@QAEXPAX@Z  004ab130  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetHavokTransformFromMatrix@EditorUtils@SP@@YIPAUHavokTransform@@PAU3@@Z  00453250  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_4a2350@@YA_NPAUcSPEditorBlock_s004a_1a70@@0PAUrwVec3@@PAM@Z  004a2350  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

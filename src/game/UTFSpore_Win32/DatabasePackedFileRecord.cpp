@@ -156,16 +156,17 @@ static void InitReadStream(PFRecordRead* self)
 
 // @ 0x008dc380
 int PFRecordReadIstream::GetSize(int mode)
-{
-    char* self = (char*)this;
-    unsigned char flags = *(unsigned char*)(self + 0x48);
+{    char* self = (char*)this;
+    unsigned char flags = *(volatile unsigned char*)(self + 0x48);
     if (flags == 0) {
-        if (mode == 0)
+        switch (mode) {
+        case 0:
             return *(int*)(self + 0x40);
-        if (mode == 1)
+        case 1:
             return 0;
-        if (mode == 2)
+        case 2:
             return *(int*)(self + 0x40) - *(int*)(self + 0x44);
+        }
     }
     MemoryStream* ms = (MemoryStream*)(self + 0xc);
     return ms->GetSize(mode);

@@ -6,4 +6,3 @@
 007b6010  11   RtJobA::Run: complete; only lock-xadd register choice differs
 007b6160  221  FrameJob::FitAspect: complete; member reload/lea shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS after fixing the build flags (the slice was scored with /arch:SSE /fp:fast but the flags were not recorded, so the checker compiled x87 code with different rounding/overflow)
 007b63b0  13   RtJobB::Run: complete; only lock-xadd register choice differs
-007b64f0  58   RefHolder_Reset: complete; lock-xadd Release register shape and double member load differ
