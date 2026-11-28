@@ -138,10 +138,16 @@ into the generator's inputs so they are not lost.
 - Write real, readable C++ that compiles to the original bytes, with the class and member names the headers give you.
   Use members, not byte offsets: `mpOSData = new (mem) Win32Clipboard(this);`, not
   `*(void**)((char*)this + 8) = ...`. If the struct lacks the member, add it to the struct. A pull request that only
-  makes matched code readable this way (no new match) is welcome. A new match matters more than fewer offsets, so the
-  check only warns when a file gains byte offsets (`*(T*)(p + N)`, `((T*)p)[N]`, `(char*)this`); run
-  `python3 tools/ci/offsets.py origin/main HEAD` to see them. A pull request that lowers their count and adds none
-  passes without a new match, as a cleanup, and the site credits each such function as "made readable". For a cleanup
+  makes matched code readable this way (no new match) is welcome. The check counts what still reads like machine
+  code: byte offsets (`*(T*)(p + N)`, `((T*)p)[N]`, `(char*)this`), casts to built-in and pointer types, placeholder
+  names by address or by tool (`FUN_00abcdef`, `DAT_0141b654`, `C_0083eb00`, `VObject`, `Foo_s0052_88f0`), machine
+  variable names (`t1001`, `param_1`, `iVar1`) and declarations without parameter types (`f(...)`). A new match matters
+  more than these, so the check only warns when a function's count rises; run
+  `python3 tools/ci/readability.py origin/main HEAD` to see them (`--count <file>` for one file). A pull request that
+  lowers the total and raises no function passes without a new match, as a cleanup, and the site credits each function
+  it lowers as "made readable". Byte-exact C++ lifted by a tool (`match/slices/*` files that say so in their first
+  line) is the main place to do this: give it the real class, members and names, or make the hand-written version of
+  the same function match and delete the lifted file. For a cleanup
   the counter cannot see (a rename, a wrong type), say so in the description and a maintainer adds `cleanup-approved`.
 - A function's note goes in `nonmatching.txt` only when its body is a real decompilation of the whole function. A
   placeholder (`{}`, `{ return a; }`, a stub that skips calls the original makes) goes in `partial.txt`: it needs

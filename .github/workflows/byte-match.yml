@@ -204,7 +204,7 @@ jobs:
           python3 - "$RUNNER_TEMP/keep.txt" byte-match.json "$RUNNER_TEMP/changed.txt" "$RUNNER_TEMP/keep_where.txt" <<'EOF2' | tee -a "$GITHUB_STEP_SUMMARY"
           import collections, json, os, sys
           sys.path[:0] = ["tools/ci", "tools/matching"]
-          import gate, run_all, offsets
+          import gate, run_all, readability
           keep = {l.split()[0].lower() for l in open(sys.argv[1]) if l.strip()}
           rows = json.load(open(sys.argv[2])) if os.path.exists(sys.argv[2]) else []
           changed = [l.strip() for l in open(sys.argv[3]) if l.strip()]
@@ -274,10 +274,11 @@ jobs:
               pass
           elif changed and all(os.path.basename(p) in ("nonmatching.txt", "partial.txt") for p in changed):
               print("Notes only (nonmatching.txt / partial.txt): no new match needed.")
-          elif offsets.compare(os.environ["BASE"], os.environ["HEAD"])["cleanup"]:
-              o = offsets.compare(os.environ["BASE"], os.environ["HEAD"])
-              print("Cleanup: byte offsets in the changed files go from %d to %d and no file gains any"
-                    " (tools/ci/offsets.py), so no new match is needed; every function that matched before still has to."
+          elif readability.compare(os.environ["BASE"], os.environ["HEAD"])["cleanup"]:
+              o = readability.compare(os.environ["BASE"], os.environ["HEAD"])
+              print("Cleanup: the readability counters (byte offsets, casts, placeholder names, machine variable names,"
+                    " untyped declarations) in the changed files go from %d to %d and no function gains any"
+                    " (tools/ci/readability.py), so no new match is needed; every function that matched before still has to."
                     % (o["before"], o["after"]))
           elif os.environ.get("CLEANUP") == "true":
               print("Cleanup approved by a maintainer (`cleanup-approved`): no new match needed; every function that")
@@ -374,21 +375,19 @@ jobs:
             exit 1
           fi
 
-      # Readable source names members instead of casting and adding byte offsets. More matching functions matter far
-      # more than fewer offsets, so this only warns (decision 2026-11-20): each file that gains some, and each new file
-      # that has some, gets a warning annotation. A pull request that lowers them passes as a cleanup (step above).
-      - name: Byte offsets (warnings only)
+      # Readable source names members and types instead of casting, adding byte offsets and naming things by address.
+      # More matching functions matter far more than readability, so this only warns (decision 2026-11-20): each function
+      # whose counters rise gets a warning annotation. A pull request that lowers them passes as a cleanup (step above).
+      - name: Readability counters (warnings only)
         if: always() && steps.refs.outcome == 'success'
         run: |
-          python3 tools/ci/offsets.py "${{ steps.refs.outputs.base }}" "${{ steps.refs.outputs.head }}" --json "$RUNNER_TEMP/offsets.json" > "$RUNNER_TEMP/offsets.txt" || true
-          sed 's/^/    /' "$RUNNER_TEMP/offsets.txt" | tee -a "$GITHUB_STEP_SUMMARY"
-          [ -f "$RUNNER_TEMP/offsets.json" ] && python3 - "$RUNNER_TEMP/offsets.json" <<'EOF2'
+          python3 tools/ci/readability.py "${{ steps.refs.outputs.base }}" "${{ steps.refs.outputs.head }}" --json "$RUNNER_TEMP/readability.json" > "$RUNNER_TEMP/readability.txt" || true
+          sed 's/^/    /' "$RUNNER_TEMP/readability.txt" | tee -a "$GITHUB_STEP_SUMMARY"
+          [ -f "$RUNNER_TEMP/readability.json" ] && python3 - "$RUNNER_TEMP/readability.json" <<'EOF2'
           import json, sys
           r = json.load(open(sys.argv[1]))
           for f in r["increased"]:
-              print("::warning file=%s::byte offsets (like *(T*)(p + N) or (char*)this) %d -> %d: naming the members reads better (AGENTS.md, Rules)" % (f["path"], f["before"], f["after"]))
-          for f in r["new_with"]:
-              print("::warning file=%s::%d byte offsets (like *(T*)(p + N) or (char*)this) in a new file: naming the members reads better (AGENTS.md, Rules)" % (f["path"], f["after"]))
+              print("::warning::%s: readability counters %d -> %d (byte offsets, casts, placeholder names, machine variable names; tools/ci/readability.py --count <file>): members and real types read better (AGENTS.md, Rules)" % (f["key"], f["before"], f["after"]))
           EOF2
           true
 
