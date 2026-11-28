@@ -5378,12 +5378,17 @@ void RtJobB::Run()
 
 // @ 0x007b64f0
 void __fastcall RefHolder_Reset(RefHolder* h)
-{
-    if (h->p) {
+{    if (h->p) {
+        _ReadWriteBarrier();
         TargetObj* o = h->p;
         if (o) {
+            volatile long* rc = &static_cast<RcBase*>(o)->rc;
             h->p = 0;
-            static_cast<RcBase*>(o)->Release();
+            _InterlockedDecrement(rc);
+            if (_InterlockedExchangeAdd(rc, 0) < 1)
+                _InterlockedExchangeAdd(rc, 1);
+            else
+                _InterlockedExchangeAdd(rc, 0);
         }
     }
 }

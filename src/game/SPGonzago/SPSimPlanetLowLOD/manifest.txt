@@ -23,3 +23,4 @@
 ../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7e8f0@CS@@QAE_NPAX@Z  00c7e8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7ea30@@YAPAHPAH00@Z  00c7ea30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7f390@@YAXXZ  00c7f390  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?AddPlantSpecies@cSimPlanetLowLOD_s00c7_ff90@SP@@QAE_NPAUtSpeciesKey@@@Z  00c809d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

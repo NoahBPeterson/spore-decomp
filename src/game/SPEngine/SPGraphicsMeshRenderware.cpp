@@ -1723,8 +1723,7 @@ int BspNode::Build(Box* const* items, unsigned* idx, unsigned n, int depth)
 
 // @ 0x0072aa80
 EAArray* EAArray::Init(int n, int reserved)
-{
-    (void)reserved;
+{    (void)reserved;
     Scratch48 local_30;
     void* buf;
     if (n != 0)
@@ -1733,10 +1732,10 @@ EAArray* EAArray::Init(int n, int reserved)
             0xd1);
     else
         buf = 0;
+    mpCap   = (char*)buf + n * 0x30;
     mpBegin = buf;
     mpEnd   = buf;
-    mpCap   = (char*)buf + n * 0x30;
-    FUN_0042f0a0(buf, n, &local_30, n);
+    FUN_0042f0a0(buf, n, &local_30, *(const volatile int*)&n);
     mpEnd = (char*)mpBegin + n * 0x30;
     return this;
 }

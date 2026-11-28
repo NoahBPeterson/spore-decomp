@@ -1,6 +1,5 @@
 00bb9950  73   complete: star-manager cached inventory-item scan; equiv PASS, register-allocation differences
 00bb99e0 158   complete: eastl::map lookup + banner pick; equiv PASS, register/scheduling differences
-00bb9d90  55   complete: planet-object flag/artifact scan; equiv PASS, loop register allocation differs
 00bb9eb0 166   complete: UpdateSETI monolith/species-key update; equiv WEAK, property-chain codegen differs
 00bb9ff0 223   complete: ProtectFromBio property/flag decision tree; equiv WEAK, property-chain codegen differs
 00bba130 123   complete: cStarRecord ctor; equiv PASS, unscheduled stores/order differ

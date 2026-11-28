@@ -11134,38 +11134,42 @@ rwVec3* FUN_4a2180(rwVec3* ret, cSPEditorBlock_s004a_1a70* a, cSPEditorBlock_s00
 
 // @ 0x004a2350
 bool FUN_4a2350(cSPEditorBlock_s004a_1a70* editor, cSPEditorBlock_s004a_1a70* src, rwVec3* outPos, float* outMat)
-{
-    bool result = false;
-    if (src != 0) {
-        *(Vector3T_s004a_1a70*)outPos = src->mPosition;
-        *(Mat9*)outMat = *(Mat9*)src->mBaseOrientation;
-        cSPEditorBlock_s004a_1a70* parent = src->GetParent();
-        if (editor->mParent != parent) {
-            if (editor->mParent) {
-                editor->mParent->FUN_438a40(editor);
-            }
-            if (parent) {
-                parent->FUN_438700(editor);
-                editor->SetRef(src->GetA());
+{    bool result = false;
+    {
+        cSPEditorBlock_s004a_1a70* parent;
+        {
+            bool changed;
+            if (src != 0) {
+                *(Vector3T_s004a_1a70*)outPos = src->mPosition;
+                *(Mat9*)outMat = *(Mat9*)src->mBaseOrientation;
+                parent = src->GetParent();
+                if (editor->mParent != parent) {
+                    if (editor->mParent) {
+                        editor->mParent->FUN_438a40(editor);
+                    }
+                    if (parent) {
+                        parent->FUN_438700(editor);
+                        editor->SetRef(src->GetA());
+                    }
+                }
+                editor->SetBooleanAttribute(0xf, src->GetBooleanAttribute(0xf));
+                if (!src->GetBooleanAttribute(0x2a)) {
+                    MessageManager_s004a_1a70()->Post(0x3f1bf58, 0, editor, 0);
+                    rwVec3 d;
+                    src->FUN_4a1d60((const cSPVector3_s004a_1a70*)FUN_4a2180(&d, editor, src));
+                    FUN_4a1a70(editor, src);
+                }
+                result = true;
+            } else {
+                ScratchSlots<5>();
+                changed = FUN_4a2560(editor->GetModel());
+                if (changed)
+                    MessageManager_s004a_1a70()->Post(0x3f1bf59, 0, editor, 0);
+                MessageServer_s004a_1a70()->Send(0x48e5912, 0, 0);
             }
         }
-        editor->SetBooleanAttribute(0xf, src->GetBooleanAttribute(0xf));
-        if (!src->GetBooleanAttribute(0x2a)) {
-            MessageManager_s004a_1a70()->Post(0x3f1bf58, 0, editor, 0);
-            rwVec3 d;
-            src->FUN_4a1d60((const cSPVector3_s004a_1a70*)FUN_4a2180(&d, editor, src));
-            FUN_4a1a70(editor, src);
-        }
-        result = true;
-    } else {
-        ScratchSlots<5>();
-        bool changed = FUN_4a2560(editor->GetModel());
-        if (changed)
-            MessageManager_s004a_1a70()->Post(0x3f1bf59, 0, editor, 0);
-        MessageServer_s004a_1a70()->Send(0x48e5912, 0, 0);
     }
-    return result;
-}
+    return result;}
 
 // @ 0x004a2560
 bool FUN_4a2560(cSPEditorModel_s004a_1a70* model)

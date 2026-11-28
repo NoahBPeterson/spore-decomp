@@ -1453,9 +1453,13 @@ void __cdecl FUN_00f211f0(int* self)
 
 // @ 0x00f212c0
 int __cdecl FUN_00f212c0(float* a, float r, float* b)
-{
-    if ((r + 1.0f) * 3.0f <
-        sqrtf((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2])))
+{    float dx = a[0] - b[0];
+    float dy = a[1] - b[1];
+    float dz = a[2] - b[2];
+    float x2 = dx * dx;
+    _ReadWriteBarrier();
+    float d2 = x2 + dz * dz;
+    if (sqrt(d2 + dy * dy) > (r + 1.0f) * 3.0f)
         return 1;
     return 0;
 }

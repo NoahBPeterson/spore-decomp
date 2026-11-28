@@ -986,15 +986,22 @@ Prop* SerializeHelper_s0082_cd30::ParseProps(Token* tok)
 
 // @ 0x0082d910
 SerObject* SerializeHelper_s0082_cd30::ParseObject(Token* tok)
-{
-    if (tok->mType == 1 && wcscmp(tok->mpName, L"object") == 0) {
+{    if (tok->mType == 1 && wcscmp(tok->mpName, L"object") == 0) {
         SerObject* obj = NewObject();
+        SerObject* p = obj;
         obj->mpClassId = GetAttribute(tok, L"clsid");
         obj->mpAttr2 = GetAttribute(tok, L"id");
+        _ReadWriteBarrier();
         if (obj->mpClassId == 0)
             return 0;
         obj->mpProps = ParseProps(tok);
-        mAllObjects.push_back(obj);
+        PtrVector<SerObject*>& vec = mAllObjects;
+        if (vec.mpEnd < vec.mpCapacity)
+            ::new((void*)vec.mpEnd++) SerObject*(obj);
+        else {
+            vec.DoInsertValue(vec.mpEnd, p);
+            obj = p;
+        }
         return obj;
     }
     return 0;

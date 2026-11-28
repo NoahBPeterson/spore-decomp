@@ -82,6 +82,9 @@ struct Rbtree {                 // eastl set header
     uint32_t mField18;          // +0x18
     void Nuke() { ((MC*)this)->f_009a9600(mRoot); }
 };
+struct RbIter {
+    void* mpNode;
+};
 struct cCachedEventData {
     void*    mpVtbl;            // +0x00
     void*    mHandler;          // +0x04  (EA::Messaging::AutoHandler)
@@ -104,7 +107,7 @@ struct cCachedEventData {
 
     cCachedEventData();                                  // 0x00fe68a0
     ~cCachedEventData();                                 // 0x00fe6a00
-    void InsertRange(void* first, void* last);           // 0x00fe6ad0
+    void InsertRange(RbIter first, RbIter last);         // 0x00fe6ad0
     void RebuildInactivePlayersCache();                  // 0x00fe6b20
     void RebuildNearbyEmpireStarsCache();                // 0x00fe6bc0
     void RebuildAllyColonyPlanetCache();                 // 0x00fe6dc0
@@ -143,12 +146,13 @@ cCachedEventData::~cCachedEventData()
 }
 
 // @ 0x00fe6ad0
-void cCachedEventData::InsertRange(void* first, void* last)
-{
-    while (first != last) {
-        void* local = 0;
-        ((MC*)this)->f_00a17a70(&local, (char*)first + 0x10, 0);
-        first = FUN_00921580(first);
+void cCachedEventData::InsertRange(RbIter first, RbIter last)
+{    while (first.mpNode != last.mpNode) {
+        char result[8];
+        MC::InsertTag tag;
+        *(volatile char*)&tag.c = 0;
+        ((MC*)this)->f_00a17a70(result, (char*)first.mpNode + 0x10, tag);
+        first.mpNode = FUN_00921580(first.mpNode);
     }
 }
 

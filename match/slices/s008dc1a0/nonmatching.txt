@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 008dc1a0  215  HoleSet::Insert rbtree lower_bound + two DoInsert calls; codegen/regalloc differs (equiv PASS)
 008dc2b0  116  PFIndexModifiable::ReserveRange bucket walk; register allocation differs (equiv PASS)
-008dc380  46  PFRecordReadIstream::GetSize switch(mode) compare-chain; branch/regalloc differs (equiv WEAK)
 008dc3f0  249  PFRecordRead::ReadSpan buffer-copy/ReadFileSpan codegen differs (equiv PASS) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
 008dc510  183  PFRecordRead::EnsureLoaded decompress path; codegen differs (equiv WEAK)
 008dc600  279  PFRecordWrite::OpenTempFile; filename format + CreateTempFile/FileStream codegen differs (equiv UNSUPPORTED: import _time64)

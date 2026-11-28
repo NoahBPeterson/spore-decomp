@@ -5,3 +5,4 @@
 ../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?DoOnMouseDown@RotationHandle_s005b_5110@@QAE_NMMMI@Z  005b5900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?Destroy@RotationHandle_s005b_5110@@QAEPAU1@I@Z  005b59d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?Stub_005b4f20@@YAMM@Z  005b4f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?Init@RotationHandle_s005b_5110@@QAEPAU1@XZ  005b53c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

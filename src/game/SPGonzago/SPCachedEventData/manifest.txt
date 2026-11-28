@@ -7,3 +7,4 @@
 ../src/game/SPGonzago/SPCachedEventData.cpp  ?Init@cCachedEventData@@QAEXXZ  00fe7160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCachedEventData.cpp  ??1cCachedEventData@@QAE@XZ  00fe6a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCachedEventData.cpp  ?RebuildInactivePlayersCache@cCachedEventData@@QAEXXZ  00fe6b20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCachedEventData.cpp  ?InsertRange@cCachedEventData@@QAEXURbIter@@0@Z  00fe6ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -112,3 +112,4 @@
 ../src/game/SPBake/SPEditorBaker.cpp  ?f@CEditorResourceThunk@SP@@UAEHPAX@Z  00561150  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Query@BoundsLibrary@@QAE_NIIPAMHPAUVector3_s0041_4e30@@1@Z  00414e30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Collect@BoundsSampler@@QAEXIHPAUVector3_s0041_4e30@@0@Z  00415310  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Shutdown@Baker_s0040_5000@@QAEXXZ  004055b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
