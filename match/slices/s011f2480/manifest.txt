@@ -1,0 +1,1 @@
+slices/s011f2480/s011f2480.cpp  ?D3D9Initialize@GlobalState@graphics@rw@@SAXXZ  011f2480  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
