@@ -2966,22 +2966,20 @@ MaterialInternal& MatMap2::operator[](const uint32_t& key)
 
 // @ 0x00712b20
 void __stdcall DoFreeNodesStr2(FreeNodeStr** pArray, uint32_t n)
-{
-    for (uint32_t i = 0; i < n; ++i) {
-        FreeNodeStr* node = pArray[i];
-        while (node) {
-            FreeNodeStr* next = node->mpNext;
-            HashStr* h = (HashStr*)((char*)node + 4);
+{    for (uint32_t i = 0; i < n; ++i) {
+        FreeNodeStr* pNode = pArray[i];
+        while (pNode) {
+            FreeNodeStr* const pTempNode = pNode;
+            pNode = pNode->mpNext;
+            HashStr* h = (HashStr*)((char*)pTempNode + 4);
             h->DoFreeNodes(h->mpBucketArray, h->mnBucketCount);
             h->mnElementCount = 0;
             if (h->mnBucketCount > 1)
                 EastlFree(h->mpBucketArray);
-            EastlFree(node);
-            node = next;
+            EastlFree(pTempNode);
         }
         pArray[i] = 0;
-    }
-}
+    }}
 
 // @ 0x00712ba0
 bool MaterialManager3::HasMaterial(uint32_t key)

@@ -335,18 +335,15 @@ extern "C" void  __cdecl    q_swap(anim_query* a, anim_query* b);
 
 // @ 0x00a006f0
 void QueuedBlender::SelectPending(uint32_t handle)
-{
-    extern AnimGoal* __cdecl FindGoalByHandle(QueuedBlender*, uint32_t);   // 0x009ff6f0
+{    extern AnimGoal* __cdecl FindGoalByHandle(QueuedBlender*, uint32_t);   // 0x009ff6f0
     AnimGoal* g = FindGoalByHandle(this, handle);
     if (g == 0)
         return;
     if (mPending < 0x10) {
-        AnimGoal* pg = (AnimGoal*)((char*)this + mPending * 0xf0 + 8);
-        if (g != pg) {
-            pg->field_84 = 0;
-            AnimGoal* pg2 = (AnimGoal*)((char*)this + mPending * 0xf0 + 8);
-            if (pg2->field_c0 == 0 && mPending != mActive[mCurrent]) {
-                pg2->Reset();
+        if (g != &mGoals[mPending]) {
+            mGoals[mPending].field_84 = 0;
+            if (mGoals[mPending].field_c0 == 0 && mPending != mActive[mCurrent]) {
+                mGoals[mPending].Reset();
                 for (int i = 0; i < 16; ++i) {
                     if (mActive[i] == mPending)
                         mActive[i] = 0xffffffff;
@@ -354,7 +351,7 @@ void QueuedBlender::SelectPending(uint32_t handle)
             }
         }
     }
-    if (mPending >= 0x10 || g != (AnimGoal*)((char*)this + mPending * 0xf0 + 8)) {
+    if (mPending >= 0x10 || g != &mGoals[mPending]) {
         g->field_84 = 1;
         for (int i = 0; i < 16; ++i) {
             if (g == &mGoals[i]) {
@@ -362,8 +359,7 @@ void QueuedBlender::SelectPending(uint32_t handle)
                 break;
             }
         }
-    }
-}
+    }}
 
 // @ 0x00a008b0
 void QueuedBlender::ClearPendingGoal()

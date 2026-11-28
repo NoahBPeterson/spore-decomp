@@ -20,8 +20,6 @@
 00618da0 78 cFeedTransactionBase ctor (string arg): same scheduling issue flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00618f60 358 feed-entry asset ConstructRequest: complete; register allocation (this in edi, doc in ebp originally) flags: /O2 /MD /Gy /TP
 00619530 149 eastl::partial_sort<unsigned*, TimeGreater>: complete; comparator register allocation (compare spilled to stack instead of kept in ebp) flags: /O2 /MD /Gy /TP
-006195d0 47 uninitialized_copy_backward for 0x70-byte records: complete; register allocation (dest should occupy the sole callee-saved reg, first reloaded in eax) flags: /O2 /MD /Gy /TP
-00619650 51 copy_backward/reverse copy for 0x70-byte records: complete; same register-allocation difference flags: /O2 /MD /Gy /TP
 006196c0 2815 COMPLETE: all fields/files/paths and calls reproduced (3050 vs 3984 bytes: original duplicates the failure cleanup tails inline; RAII locals share them)
 0061a810 91 cGetAssetFeedTransaction ctor: complete; base + CtorSprintf schedule (extra callee-saved frame, manual strlen)
 0061a8b0 132 cGetAssetFeedTransactionEx ctor: complete; ctor scheduling / 64-bit id assembly differs

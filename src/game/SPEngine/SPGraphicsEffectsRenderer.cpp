@@ -2273,19 +2273,18 @@ void SortPairsA(uint32_t* begin, uint32_t* end)
 // @ 0x006e6cf0
 void SortPairsB(uint32_t* begin, uint32_t* end)
 {
-    for (uint32_t* p = begin; p != end; p += 2) {
-        uint32_t v1 = *p;
-        uint32_t v2 = p[1];
-        uint32_t* q = p;
-        uint32_t prev = q[-2];
-        while (prev < v1) {
-            *q = q[-2];
-            q[1] = q[-1];
-            q -= 2;
-            prev = *q;
+    struct Pair { uint32_t a; uint32_t b; };
+    Pair* e = (Pair*)end;
+    for (Pair* p = (Pair*)begin; p != e; ++p) {
+        Pair val = *p;
+        Pair* q = p;
+        Pair* prev = p - 1;
+        while (val.a > prev->a) {
+            *q = *prev;
+            --prev;
+            --q;
         }
-        *q = v1;
-        q[1] = v2;
+        *q = val;
     }
 }
 

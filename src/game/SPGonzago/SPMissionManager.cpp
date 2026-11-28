@@ -1914,12 +1914,11 @@ tTimerValue* tTimerValue::CopyFrom(const tTimerValue* pSrc)
 
 // @ 0x00fecbb0
 void cSPMissionManager_s00fe_c590::FUN_00fecbb0(uint32_t nKey)
-{
-    uint32_t key = nKey;
-    cMapIter it = mFeedbackMap.Find(key);
-    if (it.mpNode != (void*)&mFeedbackMap.mpEndNode)
+{    uint32_t key = nKey;
+    if (mFeedbackMap.Find(key).mpNode != (void*)&mFeedbackMap.mpEndNode) {
+        key = nKey;
         mFeedbackMap.Erase(key);
-}
+    }}
 
 // 0x00fecbf0 (byte-exact lifted version: match/slices/s00fecbf0/s00fecbf0.cpp)
 uint32_t cSPMissionManager_s00fe_c590::FUN_00fecbf0()

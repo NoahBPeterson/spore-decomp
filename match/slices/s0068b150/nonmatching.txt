@@ -9,5 +9,4 @@
 0068c040 99 complete; difftest FAIL (5/5 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-)
 0068c140 85 complete; difftest PASS (400 valid inputs, 97.1% coverage; /O2 /MD /Gy /EHsc /TP /GS-)
 0068c1b0 93 complete; difftest PASS (400 valid inputs, 97.3% coverage; /O2 /MD /Gy /EHsc /TP /GS-)
-0068c220 66 complete; difftest FAIL (5/5 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-)
 0068c280 145 complete; difftest FAIL (5/5 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-)

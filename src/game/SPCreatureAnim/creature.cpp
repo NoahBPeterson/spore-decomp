@@ -3210,14 +3210,14 @@ nSPCreatureAnim::Transform30_s009b_3e40* CopyTransform30Guarded(nSPCreatureAnim:
 
 // @ 0x009b4350
 nSPCreatureAnim::wiggle_static_data_s009b_3e40* CopyWigglesGuarded(nSPCreatureAnim::wiggle_static_data_s009b_3e40* first, nSPCreatureAnim::wiggle_static_data_s009b_3e40* last, nSPCreatureAnim::wiggle_static_data_s009b_3e40* result)
-{
-    for (; first != last; ++first, ++result)
+{    for (; first != last; ++first, ++result)
         if (result) {
             result->a0 = first->a0; result->a1 = first->a1;
             result->a2 = first->a2; result->a3 = first->a3;
-            float* d = result->f; float* s = first->f;
-            d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
-            d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8]; d[9] = s[9];
+            result->f[0] = first->f[0]; result->f[1] = first->f[1]; result->f[2] = first->f[2];
+            float* d = result->f + 3; float* s = first->f + 3;
+            d[0] = s[0]; d[1] = s[1]; d[2] = s[2];
+            d[3] = s[3]; d[4] = s[4]; d[5] = s[5]; d[6] = s[6];
             result->c = first->c;
         }
     return result;
@@ -3307,15 +3307,15 @@ nSPCreatureAnim::Transform30_s009b_3e40* CopyTransform30Backward(nSPCreatureAnim
 
 // @ 0x009b4870
 nSPCreatureAnim::wiggle_static_data_s009b_3e40* CopyWigglesBackward(nSPCreatureAnim::wiggle_static_data_s009b_3e40* first, nSPCreatureAnim::wiggle_static_data_s009b_3e40* last, nSPCreatureAnim::wiggle_static_data_s009b_3e40* result)
-{
-    while (last != first) {
+{    while (last != first) {
         --last;
         --result;
         result->a0 = last->a0; result->a1 = last->a1;
         result->a2 = last->a2; result->a3 = last->a3;
-        float* d = result->f; float* s = last->f;
-        d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
-        d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8]; d[9] = s[9];
+        result->f[0] = last->f[0]; result->f[1] = last->f[1]; result->f[2] = last->f[2];
+        float* d = result->f + 3; float* s = last->f + 3;
+        d[0] = s[0]; d[1] = s[1]; d[2] = s[2];
+        d[3] = s[3]; d[4] = s[4]; d[5] = s[5]; d[6] = s[6];
         result->c = last->c;
     }
     return result;

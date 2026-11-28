@@ -1,6 +1,4 @@
-00d652f0 52 FUN_00d652f0: object kept in ecx instead of esi; 60 vs 62 bytes
 00d65330 435 target selection: aim/world state opaque, loop abbreviated; 135 vs 459 bytes
-00d65580 53 surface projection: PlanetModel call cleanup deferred in original; 70 vs 67 bytes
 00d655d0 593 nearest interactable scan abbreviated (inventory/avatar state opaque); 306 vs 625 bytes
 00d65850 361 symbol extent covers the following body too (388 bytes); 32 bytes emitted
 00d659e0 596 combatant decision tree abbreviated; 63 vs 603 bytes

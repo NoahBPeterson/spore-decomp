@@ -1247,15 +1247,19 @@ void cPlanetModel_s00b8_d190::FUN_00b8dfe0(int32_t index)
 
 // @ 0x00b8e040
 bool cPlanetModel_s00b8_d190::FUN_00b8e040(uint32_t id)
-{
-    int32_t count = (int32_t)((mField138 - mField134) / 0x2c);
+{    struct BioVec {
+        cBioElem* mpBegin;
+        cBioElem* mpEnd;
+        int32_t size() const { return (int32_t)(mpEnd - mpBegin); }
+        cBioElem* begin() const { return mpBegin; }
+    };
+    int32_t count = ((const BioVec*)&mField134)->size();
     for (int32_t i = 0; i < count; ++i) {
-        if (((cBioElem*)mField134)[i].m00 == (int32_t)id) {
+        if (((const BioVec*)&mField134)->begin()[i].m00 == (int32_t)id) {
             return true;
         }
     }
-    return false;
-}
+    return false;}
 
 // @ 0x00b8e090
 cKey3* cPlanetModel_s00b8_d190::FUN_00b8e090()

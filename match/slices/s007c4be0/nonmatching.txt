@@ -9,8 +9,6 @@
 007c53d0  77  SetViewAngleY; fptan-based fov path differs [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan)]
 007c5520  41  rw resolve IdToObject (returns 1); fixed 2026-10-24: the manager pointer is arg1 (`[esp+0xc]`), not arg2; loop shape still differs [equiv: PASS 358 valid, 73.7% cov]
 007c5560  86  rw resolve array via ObjectToId; loop shape differs
-007c55d0  52  rw resolve array via IdToObject; loop shape differs
-007c5630  52  rw resolve array via IdToObject2; fixed 2026-10-24: the manager pointer is arg1 (`[esp+0xc]`), not arg2; loop shape still differs [equiv: PASS 280 valid, 89.7% cov]
 007c5740  93  arena type 0xff0001 registration; index range includes orphan 0x7c5760 block
 007c5820  241  static row byte-compare helper (arg in edi); register convention not reproduced
 007c5920  369  FindMatchingRow; fixed 2026-10-24: u32 eax-leftover model, raw (untruncated) n/stride, and the 0x7c5820 row test inlined because that helper takes its index in edi; loop shape still differs [equiv: PASS 980 valid, 97.5% cov]

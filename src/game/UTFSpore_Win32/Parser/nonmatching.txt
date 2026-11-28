@@ -22,7 +22,6 @@
 00844ac0 290 vector<char>::insert(range) 4-arg: complete; structure close but frame/branch layout differs
 00844c40 366 cDefineCommand::Execute: complete; name reloaded from MainArguments in original, inline ctor scheduling
 00844fb0 406 cParser::InstantiateMacro: complete incl. try/catch rethrow; funclet layout/sizes differ
-00845260 51 cParser::PushScope: complete; vector push_back + string append scheduling; difftest FAIL is a checker artifact: rdata-literal resolution maps our ":" to a ':' byte inside a UTF-16 string (0x13f3728) instead of the original's ":" at 0x13fe618, so append's zero-length memcpy gets a different end pointer; with the literal pinned to 0x13fe618 (scratch copy) the checker finds no mismatch (WEAK, 184 valid, 100% coverage)
 00845320 64 cParser::PushMeta: complete; temp cMetaEntry store order
 00845370 144 complete StringMap::operator[] (eastl hash_map<string8,string8>::operator[]): find, compare against the end bucket, else default-construct a string8, PairSS ctor, insert(&pair,0) and return node+0x10; the frame is one slot larger and the insert return value gets a separate slot instead of reusing the find result (size 264 vs 240); flags /O2 /MD /Gy /EHsc /TP /GS-
 00845460 98 complete CommandMap::erase(iterator) (eastl hashtable<string8,AutoRefCount<cICommand>>::erase): advance to the next non-empty bucket, unlink, run ~PairB, operator delete, --mnElementCount; only prologue scheduling and scratch-register choice differ (size 108 vs 114); flags /O2 /MD /Gy /EHsc /TP /GS-

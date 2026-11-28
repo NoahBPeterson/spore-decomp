@@ -5493,10 +5493,9 @@ int SP::cCityVisualizer_s00d5_6c30::ComputeVisualizedPopulation()
 
 // @ 0x00d57a60
 void CCitizenManager::ApplyToAll(CCitizen* pTemplate, CCitizenInfo* pInfo)
-{
-    int nState = pTemplate->GetState();
-    bool bHide = pInfo->mbFlag89;
+{    int nState = pTemplate->GetState();
     CInfoSub* pSub = &pInfo->mSub;
+    bool bHide = pInfo->mbFlag89;
     int nCount = (int)(mpCitizensEnd - mpCitizens);
     for (int i = 0; i < nCount; ++i) {
         CCitizen* pCitizen = mpCitizens[i];
@@ -5511,8 +5510,7 @@ void CCitizenManager::ApplyToAll(CCitizen* pTemplate, CCitizenInfo* pInfo)
             pCitizen->SetFlag(0);
             pCitizen->mpAnim->mpModel->mFlags &= ~0x800;
         }
-    }
-}
+    }}
 
 // @ 0x00d57b50
 void __fastcall FUN_00d57b50(void* self, void* /*edx*/, char flag)

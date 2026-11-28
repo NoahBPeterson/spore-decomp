@@ -185,23 +185,34 @@ void* __cdecl FUN_00a34fd0(void* p1, void* p2, void* p3)
 
 // @ 0x00a35070
 void* __cdecl FUN_00a35070(void* p1, void* p2, void* p3)
-{
+{    struct LocalRef {
+        virtual void AddRef() {}
+        virtual void Release() {}
+    };
+    struct LocalAutoRef {
+        LocalRef* mpObject;
+        LocalAutoRef& operator=(LocalRef* p) {
+            LocalRef* old = mpObject;
+            if (p != old) {
+                if (p)
+                    p->AddRef();
+                mpObject = p;
+                if (old)
+                    old->Release();
+            }
+            return *this;
+        }
+    };
+    struct LocalPair {
+        u32 first;
+        LocalAutoRef second;
+    };
     if (p1 != p2) {
         do {
-            char* q1 = (char*)p1;
-            char* q3 = (char*)p3;
-            *(int*)q3 = *(int*)q1;
-            void* newref = *(void**)(q1 + 4);
-            void* oldref = *(void**)(q3 + 4);
-            if (newref != oldref) {
-                if (newref != 0)
-                    vt0<void>(newref, 0);
-                *(void**)(q3 + 4) = newref;
-                if (oldref != 0)
-                    vt<void>(oldref, 4, 0);
-            }
-            p1 = q1 + 8;
-            p3 = q3 + 8;
+            ((LocalPair*)p3)->first = ((LocalPair*)p1)->first;
+            ((LocalPair*)p3)->second = ((LocalPair*)p1)->second.mpObject;
+            p1 = (LocalPair*)p1 + 1;
+            p3 = (LocalPair*)p3 + 1;
         } while (p1 != p2);
     }
     return p3;

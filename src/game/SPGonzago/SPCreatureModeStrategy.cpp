@@ -5266,19 +5266,18 @@ void cMapBase::InsertNode(void** out, void* parent, const Key* key, char allowDu
 
 // @ 0x00d3b920
 cSPVector3_s00d3_b920** FUN_00d3b920(cSPVector3_s00d3_b920** cursor, cSPVectorRange range, cSPVector3_s00d3_b920* out)
-{
-    *cursor = out;
+{    *cursor = out;
     while (range.mpFirst != range.mpLast) {
         cSPVector3_s00d3_b920* dst = *cursor;
         if (dst) {
-            dst->mX = range.mpFirst->mX;
-            dst->mStore.CopyFrom(range.mpFirst->mStore);
+            cSPVector3_s00d3_b920* src = range.mpFirst;
+            dst->mX = src->mX;
+            dst->mStore.CopyFrom(src->mStore);
         }
         *cursor = *cursor + 1;
         range.mpFirst = range.mpFirst + 1;
     }
-    return cursor;
-}
+    return cursor;}
 
 // @ 0x00d3b970
 void FUN_00d3b970(cSPVector3_s00d3_b920* dst, u32 count, const cSPVector3_s00d3_b920* src)

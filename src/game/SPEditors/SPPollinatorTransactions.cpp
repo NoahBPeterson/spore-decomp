@@ -4600,29 +4600,26 @@ void partial_sort(unsigned int* first, unsigned int* middle, unsigned int* last,
   SortHeap(first, middle, compare);
 }
 
+struct FeedRevIter_s0061_9150 { FeedDescription* mIt; };
+
 // @ 0x006195d0
-FeedDescription** uninitialized_copy_rev(FeedDescription** ppResult, FeedDescription* last, FeedDescription* first, FeedDescription* dest)
-{
-  *ppResult = dest;
-  while (last != first) {
-    --last;
-    if (*ppResult) new (*ppResult) FeedDescription(*last);
+FeedDescription** uninitialized_copy_rev(FeedDescription** ppResult, FeedRevIter_s0061_9150 last, FeedRevIter_s0061_9150 first, FeedDescription* dest)
+{  *ppResult = dest;
+  while (last.mIt != first.mIt) {
+    if (*ppResult) new (*ppResult) FeedDescription(*(last.mIt - 1));
     ++*ppResult;
+    --last.mIt;
   }
-  return ppResult;
-}
+  return ppResult;}
 
 // @ 0x00619650
-FeedDescription* copy_rev(FeedDescription* first, FeedDescription* last, FeedDescription* dest)
-{
-  if (first == last) return dest;
-  do {
-    --first;
-    *dest = *first;
+FeedDescription* copy_rev(FeedRevIter_s0061_9150 first, FeedRevIter_s0061_9150 last, FeedDescription* dest)
+{  while (first.mIt != last.mIt) {
+    *dest = *(first.mIt - 1);
+    --first.mIt;
     ++dest;
-  } while (first != last);
-  return dest;
-}
+  }
+  return dest;}
 
 // @ 0x006196c0
 namespace SP { namespace Pollen {

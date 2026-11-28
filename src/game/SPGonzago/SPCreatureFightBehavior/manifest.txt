@@ -9,3 +9,4 @@
 ../src/game/SPGonzago/SPCreatureFightBehavior.cpp  ?Release@FightMem@SP@@QAEXXZ  00d670e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureFightBehavior.cpp  ?FUN_00d67660@@YAPAUSlotPayload@@XZ  00d67660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureFightBehavior.cpp  ?GetFightSlotBody@SP@@YAPAUSlotBody@1@I@Z  00d66320  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureFightBehavior.cpp  ?FUN_00d65580@@YAHHHH@Z  00d65580  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

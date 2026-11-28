@@ -7025,28 +7025,25 @@ void __cdecl FUN_00b4ead0(char* a1, char* a2, char a3, float* a4)
 
 // @ 0x00b4ec70
 u8 __cdecl FUN_00b4ec70(float* out, float a, float b, float c, const float* in, float scale)
-{
-    float t;
-    if (a <= 0.0f) {
-        return 0;
+{    if (!(a <= 0.0f)) {
+        float t = c - (a - b);
+        if (t > g_eps) {
+            float limit = b * 2.0f;
+            if (t < 0.0f) {
+                t = 0.0f;
+            } else if (t > limit) {
+                t = limit;
+            }
+            float v = -((((((t * t) * b) * g_three - (t * t) * t) *
+                          (g_third * g_pi)) * g_one) * scale);
+            out[0] = in[0] * v;
+            out[1] = in[1] * v;
+            out[2] = in[2] * v;
+            out[3] = in[3] * v;
+            return 1;
+        }
     }
-    t = c - (a - b);
-    if (t <= g_eps) {
-        return 0;
-    }
-    if (0.0f <= t) {
-        if (t > b * g_two) t = b * g_two;
-    } else {
-        t = 0.0f;
-    }
-    float v = -((((((t * t) * b) * g_three - (t * t) * t) *
-                  (g_pi * g_third)) * g_one) * scale);
-    out[0] = in[0] * v;
-    out[1] = in[1] * v;
-    out[2] = in[2] * v;
-    out[3] = in[3] * v;
-    return 1;
-}
+    return 0;}
 
 // @ 0x00b4ed50
 bool __cdecl FUN_00b4ed50(float dt, Loco_s00b4_ed50* obj, GoalHolder* goal, hkEntity_s00b4_ed50* ent, float depthRef, float limit)

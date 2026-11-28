@@ -3,5 +3,4 @@
 00b54890 132 cPoolHolderB::Init; same shape as 00b547b0 with 0x1000-byte arena, FUN_00b51a50 registrar and FUN_00b4fbd0 resize; equiv FAIL (execution)
 00b54970 138 cPoolHolderC::Init; 0x80-byte arena at +0x5c, tag 9; frame/register choices differ; equiv FAIL (execution)
 00b54a40 66 cPairMapInner::Lookup; FUN_00b51bb0 build + flag-cleared FUN_00b52120 insert; slot/value register picks differ (94 vs 101); equiv WEAK (182 valid inputs, 100% coverage)
-00b54b40 52 cPairMap::Insert; min/max of the two ints then float store at slot+8; equiv WEAK (400 valid, 31.2% coverage)
 00b54c40 842 FUN_00b54c40; shape-build switch over the property record (capsule/box/compound), bulk inertia + hkMatrix3 scaling; several record frames not fully reproduced (737 vs 978); equiv FAIL (execution)

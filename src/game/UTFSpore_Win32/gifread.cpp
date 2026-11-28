@@ -11,7 +11,7 @@ extern "C" int   __stdcall gread(void* f, void* buf, unsigned n);     // 0x0087d
 extern "C" int   __stdcall gseek(void* f, long off, int whence);      // 0x0087d540
 extern "C" void* __cdecl   memset(void* dst, int val, size_t n);
 extern "C" char* __cdecl   strcpy(char* dst, const char* src);
-extern "C" int   __cdecl   strncmp(const char* a, const char* b, size_t n);
+extern "C" __declspec(dllimport) int   __cdecl   strncmp(const char* a, const char* b, size_t n);
 
 // ---- items of slice s0084be00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct GifFilePrivate;
@@ -275,14 +275,14 @@ void* __cdecl GIF_about(void)
 
 // @ 0x0084bf30
 int __stdcall GIF_is(void* f)
-{
-    char buf[8];
-    int off = 0;
-    gseek(f, off, off);
+{    char buf[8];
+    int r = 0;
+    gseek(f, r, r);
     if (gread(f, buf, 6) != 0 &&
-        (strncmp(buf, "GIF87a", 6) == 0 || strncmp(buf, "GIF89a", 6) == 0))
-        return 100;
-    return off;
+        (strncmp(buf, "GIF87a", 6) == 0 || strncmp(buf, "GIF89a", 6) == 0)) {
+        r = 100;
+    }
+    return r;
 }
 
 // @ 0x0084bfa0

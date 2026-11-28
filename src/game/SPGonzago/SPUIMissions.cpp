@@ -3515,14 +3515,31 @@ void cUIMissionCardPanel::UpdateCardPositions()
 // @ 0x00e14c10
 void cUIMissionCardPanel::SetCardsVisibility(bool bVisible)
 {
+    struct IWindowVtbl {
+        void* mSlots[0x7c / 4];
+        void (__thiscall* Show)(void*, int, bool);
+    };
+    struct IWindowObj {
+        IWindowVtbl* mpVtbl;
+    };
+    struct CardView_00e14c10 {
+        uint8_t mPad00[0x1c];
+        cSPUILayout_s00e1_4a30* mpLayout;
+        uint32_t mPad20;
+        IWindowObj* mpMainWin;
+    };
     int count = (int)(mpCardsEnd - mpCardsBegin);
     for (int i = 0; i < count; ++i) {
-        cUICard* pCard = mpCardsBegin[i].mpObject;
-        if (pCard == nullptr || pCard->mLayout.mpObject == nullptr)
-            continue;
-        pCard->mLayout.mpObject->SetVisibility(bVisible);
-        if (pCard->mpMainWin.mpObject != nullptr)
-            pCard->mpMainWin.mpObject->Show(1, bVisible);
+        CardView_00e14c10* pCard = (CardView_00e14c10*)mpCardsBegin[i].mpObject;
+        if (pCard != nullptr) {
+            cSPUILayout_s00e1_4a30* pLayout = pCard->mpLayout;
+            if (pLayout != nullptr) {
+                pLayout->SetVisibility(bVisible);
+                IWindowObj* pMain = pCard->mpMainWin;
+                if (pMain != nullptr)
+                    pMain->mpVtbl->Show(pMain, 1, bVisible);
+            }
+        }
     }
 }
 

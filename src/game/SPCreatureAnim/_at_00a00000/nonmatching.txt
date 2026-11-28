@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00a006f0 49 SelectPending: complete; goal pointer/register scheduling and loop shape differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a009e0 222 complete; /O2 register allocation of the scan loop differs (source uses explicit index/pointer locals) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00a00b10 181 complete; list-splice shape and command-ctor call schedule differ from retail flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00a00c40 199 complete; callee-saved register assignment (param/src/dst) differs from retail flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

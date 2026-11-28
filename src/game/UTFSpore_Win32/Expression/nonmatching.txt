@@ -3,7 +3,6 @@
 0083d140 53 hashtable<string, pair<string,AutoRefCount<cExprFunction>>>::insert(value, true_type): complete, EASTL-shaped; div operand form (mov ecx,[esi+8] first) and node-link store scheduling differ [equiv: UNSUPPORTED, 0/400 valid: pointer-chasing inputs fault]
 0083d3d0 1199 complete: cExpression::EvalRealNumber (literal, parens, pi/e, 22 math builtins, user functions); EH frame/stack temps and inline string dtor placement differ; size 1801 vs 1942; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast
 0083dc00 121 complete: EvalString; thiscall ABI and string assign scheduling differ; difftest WEAK (450 valid, 44.4% coverage) after ECX member fix
-0083dd00 51 complete: hashtable<cExprFunction>::DoFreeNodes; node free scheduling differs
 0083dd70 91 complete: EvalSignedRealNumber; x87 sign/register scheduling differs; difftest WEAK (361 valid, 67.9% coverage) after ECX member fix
 0083ddb0 156 frame: R49 (2026-11-17): find result must sit at the lowest frame slot (frame 0x20 vs 0x1c) and state byte store before insert; tried locals reordered | Earlier note: complete: hash_map<string,AutoRefCount<cExprFunction>>::operator[] (find, else insert pair); frame layout differs (original reuses the dead param slot for the null AutoRefCount temp, EH states 0/1) [equiv: UNSUPPORTED 0/400 valid]
 0083e1c0 665 complete: EvalRealTerm; x87 pow/fmod and SSE accumulation scheduling differ

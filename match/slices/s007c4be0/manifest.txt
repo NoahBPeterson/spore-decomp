@@ -12,3 +12,5 @@ slices/s007c4be0/s007c4be0.cpp  ?SerializeArray@@YAHHPAH@Z  007c56a0  /O2 /MD /G
 slices/s007c4be0/s007c4be0.cpp  ?SetViewWindow@cViewer@@QAEXMM@Z  007c5440  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s007c4be0/s007c4be0.cpp  ?ResolveOneToObject@@YAXPAXHPAUResMgr1@@@Z  007c54f0  /O2 /MD /Gy /EHsc /TP
 slices/s007c4be0/s007c4be0.cpp  ?ResolveOne@@YAPAXPAXPAUResourceHolder@@@Z  007c54b0  /O2 /MD /Gy /EHsc /TP
+slices/s007c4be0/s007c4be0.cpp  ?ResolveManyToObject@@YAXPAXHPAUResMgr1@@@Z  007c55d0  /O2 /MD /Gy /EHsc /TP
+slices/s007c4be0/s007c4be0.cpp  ?ResolveManyToObject2@@YAHPAXPAUResMgr1@@@Z  007c5630  /O2 /MD /Gy /EHsc /TP

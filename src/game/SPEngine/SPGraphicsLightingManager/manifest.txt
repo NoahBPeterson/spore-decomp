@@ -39,3 +39,4 @@
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?Release@cLocalLightInfo_s0092_72c0@@QAEXH@Z  009276c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?resize@Vec16@@QAEXI@Z  00708e60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?FUN_00706ab0@@YAPAT__m128@@PAT1@00@Z  00706ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?MsgRegister@MsgRegOwner@@QAEDXZ  0070e280  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

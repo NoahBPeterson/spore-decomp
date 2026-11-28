@@ -2755,17 +2755,16 @@ void* __thiscall VBlk::FindOrAdd2(const WKey* key)
 // @ 0x00ba45a0
 void* __cdecl FUN_00ba45a0(char* begin, char* end, char* dst)
 {
-    char* d = dst;
-    char* e = end;
-    if (e != begin) {
+    if (end != begin) {
         do {
-            e -= 0xb0;
-            d -= 0xb0;
-            *(int*)d = *(int*)(e + 0);
-            ((PPD*)(d + 8))->Assign(*(PPD*)(e + 8));
-        } while (e != begin);
+            end -= 0xb0;
+            dst -= 0xb0;
+            *(int*)dst = *(int*)end;
+            ((PPD*)(dst + 8))->Assign(*(PPD*)(end + 8));
+        } while (end != begin);
+        return dst;
     }
-    return d;
+    return dst;
 }
 
 // @ 0x00ba4600

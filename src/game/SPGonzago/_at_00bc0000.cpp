@@ -2793,37 +2793,31 @@ void CityDisplayOwner::Activate(void* param_2, void* param_3)
 
 // @ 0x00bc20e0
 void CityDisplayOwner::SetSubject(void* param_2)
-{
-    uint32_t cur = mSubject40;
+{    uint32_t cur = mSubject40;
     unsigned p2 = (unsigned)(size_t)param_2;
     if (p2 == cur)
         return;
-    unsigned which;
     if (cur == 0xffffffffu || cur == 0x02ccd1d2u || cur == 0x01654c00u) {
-        switch (p2 - 0x01654c01u) {
-        case 0x0:
-        case 0x1:
-        case 0x3:
-        case 0x5:
-            which = 1;
+        switch (p2) {
+        case 0x01654c01u:
+        case 0x01654c02u:
+        case 0x01654c04u:
+        case 0x01654c06u:
+            Activate(cSPLivingUniverse_GetActivePlanet(), (void*)1);
+            mFlag3c = 1;
             break;
-        default:
-            goto store;
+        case 0x01654c05u:
+        case 0x01654c10u:
+            mSubject40 = p2;
+            return;
         }
-    } else {
-        if (cur != 0x01654c08u)
-            goto store;
-        if ((int)p2 < 0x01654c01)
-            goto store;
-        if ((int)p2 > 0x01654c02 && p2 != 0x01654c04)
-            goto store;
-        which = 0;
+    } else if (cur == 0x01654c08u) {
+        if ((int)p2 >= 0x01654c01 && ((int)p2 <= 0x01654c02 || p2 == 0x01654c04)) {
+            Activate(cSPLivingUniverse_GetActivePlanet(), (void*)0);
+            mFlag3c = 1;
+        }
     }
-    Activate(cSPLivingUniverse_GetActivePlanet(), (void*)which);
-    mFlag3c = 1;
-store:
-    mSubject40 = p2;
-}
+    mSubject40 = p2;}
 
 // @ 0x00bc2180
 void __fastcall FUN_00bc2180(SoundSlots* self, int, int i)
@@ -4521,19 +4515,19 @@ Rec_s00bc_74d0* Rec_s00bc_74d0::FUN_00bc7850(Rec_s00bc_74d0* param_2)
 
 // @ 0x00bc78d0
 void __stdcall FUN_00bc78d0(Rec_s00bc_74d0* param_1, Rec_s00bc_74d0* param_2)
-{
-    if (param_1 < param_2) {
+{    if (param_1 < param_2) {
+        char* p = (char*)param_1 + 0x24;
         do {
-            if ((param_1->flags >> 0x1f & 1) == 0) {
-                void* piVar1 = *(void**)((char*)param_1 + 0x28);
+            if (!(bool)((param_1->flags >> 31) & 1)) {
+                void* piVar1 = *(void**)(p + 4);
                 if (piVar1 != 0) ((RefObj*)piVar1)->Release();
-                void* piVar2 = *(void**)((char*)param_1 + 0x24);
+                void* piVar2 = *(void**)p;
                 if (piVar2 != 0) ((RefObj*)piVar2)->Release();
             }
             param_1 = (Rec_s00bc_74d0*)((char*)param_1 + 0x3c);
+            p += 0x3c;
         } while (param_1 < param_2);
-    }
-}
+    }}
 
 // @ 0x00bc7920
 Rec_s00bc_74d0* Rec_s00bc_74d0::FUN_00bc7920(Rec_s00bc_74d0* param_2)

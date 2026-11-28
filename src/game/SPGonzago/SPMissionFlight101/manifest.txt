@@ -12,3 +12,5 @@
 ../src/game/SPGonzago/SPMissionFlight101.cpp  ?Update@cSPMissionFlight101@@QAEHPAX@Z  00c55d90  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFlight101.cpp  ?OnReject@cSPMissionFlight101@@QAEXXZ  00c55920  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFlight101.cpp  ?OnAccept@cSPMissionFlight101@@QAEXXZ  00c55970  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionFlight101.cpp  ?GetEradicateSubMission@cSPMissionFlight101@@QAEPAVcSubMission@@XZ  00c559e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionFlight101.cpp  ?GetHerdSubMission@cSPMissionFlight101@@QAEPAVcSubMission@@XZ  00c55a30  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

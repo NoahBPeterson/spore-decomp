@@ -48,14 +48,14 @@ struct GameObject {
 };
 typedef int (__thiscall* FnI)(void*);
 typedef int (__thiscall* FnIi)(void*, int);
-void   FUN_00d99e20(int value);                        // 0x00d99e20
+void   FUN_00d99e20(int a, int b);                     // 0x00d99e20
 void*  FUN_00d99500(uint32_t handle);                  // 0x00d99500
 void*  FUN_00c13c60(int a, int b, int c);              // 0x00c13c60
 int    FUN_00c0f8f0(int x);                            // 0x00c0f8f0
 int    FUN_00bc97f0(int a, int b, int c, void* d);     // 0x00bc97f0
 char   FUN_00c0c0e0();                                 // 0x00c0c0e0
 void*  SP_NounManager();                               // SP::NounManager
-void*  SP_PlanetModel(int a, int b);                   // 0xb3d350
+void*  SP_PlanetModel();                               // 0xb3d350
 int    FUN_00c30c60(void* x);                          // 0x00c30c60
 CreatureStrategy* __stdcall CreatureStrategy_Instance(uint32_t id, StrategyCtx* ctx); // 0xd38840
 // ---- items of slice s00d65250 end
@@ -1558,18 +1558,13 @@ long double FUN_00d65530(float base, char doubled)
 
 // @ 0x00d65580
 int FUN_00d65580(int param1, int param2, int param3)
-{
-  PlanetModel_s00d6_5250* pm = (PlanetModel_s00d6_5250*)SP_PlanetModel(param1, param3);
-  pm->DirectionToSurfacePosition(param1, param3);
+{  ((PlanetModel_s00d6_5250*)SP_PlanetModel())->DirectionToSurfacePosition(param1, param3);
 
   GameObject* go = (GameObject*)param2;
   if (go->mFlagF90 != 0) {
-    void** vt = go->mpVtable;
-    int r = ((FnIi)vt[0x2c / 4])(&go->mpVtable, param1);
-    FUN_00d99e20(r);
+    FUN_00d99e20(((FnI)go->mpVtable[0x2c / 4])(&go->mpVtable), param1);
   }
-  return param1;
-}
+  return param1;}
 
 // @ 0x00d655d0
 int FUN_00d655d0(int* self, void* target, uint32_t arg3, uint32_t arg4)

@@ -12,7 +12,6 @@
 00d3a960 163 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b5d0 64 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b620 86 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
-00d3b920 53 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00d3b9b0 191 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 ecx, call#1 ecx, call#2 ecx, ret#3 eax]
 00d3bb10 229 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00d3bdb0 136 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-

@@ -20,7 +20,6 @@
 00ba3f90 708 goal-state resolver; large multi-branch fn, register pressure and branch layout diverge flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ba43b0 105 regalloc: vector lower_bound+insert; WKeyLess is inlined twice on both sides. The `at` choice is now a ternary so cl materialises the begin/pos update on the two paths like retail, and self->end/self->flag are read through `this` (retail reloads [edi+0x14] per path). 120 vs 128 bytes: retail duplicates the whole LowerBound16 argument setup once per path (`push eax` + `mov eax,[edi]` before a shared jmp) where cl shares one block after joining with `je`, and the second WKeyLess reads key/at in the opposite register order. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE fix1: quick check DIFFERS
 00ba4430 160 PlayerPlanetData assign; same inlining/order issues as copy ctor flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00ba45a0 49 backward range copy of 0xb0-byte elements; MSVC strength-reduced the dual decrement induction flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ba4600 121 object post-spawn hookup; equivalence-WEAK, inlined accessors and vector walk diverge flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ba47b0 125 mode-vector rebuild (CModeObj::Update): EASTL temp vector construction/cleanup not recovered; 165 vs 246 bytes; equiv UNSUPPORTED 0/400 valid. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ba4c70 230 vector grow/insert: operator_new EASTL allocator args not reconstructed; equiv UNSUPPORTED (0/400 valid) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

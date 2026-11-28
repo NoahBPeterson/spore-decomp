@@ -4315,19 +4315,15 @@ void LightingMgr::Reload()
 
 // @ 0x0070e280
 char MsgRegOwner::MsgRegister()
-{
-    void* self = this;
+{    void* self = this;
     ((LightingMgr*)self)->Reload();
     void* ms = MessageServer_s0070_de90();
     if (ms != 0)
     {
-        if (self != 0)
-            ((MsgReg*)ms)->a8((char*)self + 4, 0xf62def);
-        else
-            ((MsgReg*)ms)->a8(0, 0xf62def);
+        void* handler = (self != 0) ? ((char*)self + 4) : 0;
+        ((MsgReg*)ms)->a8(handler, 0xf62def);
     }
-    return 1;
-}
+    return 1;}
 
 // @ 0x007831d0
 void FUN_007831d0(float x, float* out)
