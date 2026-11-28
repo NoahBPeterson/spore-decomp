@@ -1,111 +1,92 @@
-// 0x00802890: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: src/game/Spui/_at_00800000.cpp, match/slices/s008019f0/s008019f0.cpp.
+// 0x00802890: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: src/game/Spui/_at_00800000.cpp, match/slices/s008019f0/s008019f0.cpp.
 
-struct il2c_vc0 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual int s7();
+struct VObject {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06();
+    virtual int Unk_07();
 };
-struct il2c_vc1 {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual void s11();
-    virtual void s12();
-    virtual void s13();
-    virtual void s14();
-    virtual void s15();
-    virtual void s16();
-    virtual void s17();
-    virtual void s18();
-    virtual void s19();
-    virtual void s20();
-    virtual void s21();
-    virtual void s22();
-    virtual void s23();
-    virtual void s24();
-    virtual void s25();
-    virtual void s26();
-    virtual void s27();
-    virtual void s28();
-    virtual void s29();
-    virtual void s30();
-    virtual void s31();
-    virtual void s32();
-    virtual void s33();
-    virtual void s34();
-    virtual void s35();
-    virtual void s36();
-    virtual void s37();
-    virtual void s38();
-    virtual void s39();
-    virtual void s40();
-    virtual void s41();
-    virtual void s42();
-    virtual void s43();
-    virtual void s44();
-    virtual void s45();
-    virtual void s46();
-    virtual void s47();
-    virtual void s48();
-    virtual void s49();
-    virtual void s50();
-    virtual void s51();
-    virtual void s52();
-    virtual void s53();
-    virtual void s54();
-    virtual void s55();
-    virtual void s56();
-    virtual void s57();
-    virtual void s58();
-    virtual void s59();
-    virtual int s60(int, int);
+struct VObject2 {
+    virtual void Unk_00();
+    virtual void Unk_01();
+    virtual void Unk_02();
+    virtual void Unk_03();
+    virtual void Unk_04();
+    virtual void Unk_05();
+    virtual void Unk_06();
+    virtual void Unk_07();
+    virtual void Unk_08();
+    virtual void Unk_09();
+    virtual void Unk_0A();
+    virtual void Unk_0B();
+    virtual void Unk_0C();
+    virtual void Unk_0D();
+    virtual void Unk_0E();
+    virtual void Unk_0F();
+    virtual void Unk_10();
+    virtual void Unk_11();
+    virtual void Unk_12();
+    virtual void Unk_13();
+    virtual void Unk_14();
+    virtual void Unk_15();
+    virtual void Unk_16();
+    virtual void Unk_17();
+    virtual void Unk_18();
+    virtual void Unk_19();
+    virtual void Unk_1A();
+    virtual void Unk_1B();
+    virtual void Unk_1C();
+    virtual void Unk_1D();
+    virtual void Unk_1E();
+    virtual void Unk_1F();
+    virtual void Unk_20();
+    virtual void Unk_21();
+    virtual void Unk_22();
+    virtual void Unk_23();
+    virtual void Unk_24();
+    virtual void Unk_25();
+    virtual void Unk_26();
+    virtual void Unk_27();
+    virtual void Unk_28();
+    virtual void Unk_29();
+    virtual void Unk_2A();
+    virtual void Unk_2B();
+    virtual void Unk_2C();
+    virtual void Unk_2D();
+    virtual void Unk_2E();
+    virtual void Unk_2F();
+    virtual void Unk_30();
+    virtual void Unk_31();
+    virtual void Unk_32();
+    virtual void Unk_33();
+    virtual void Unk_34();
+    virtual void Unk_35();
+    virtual void Unk_36();
+    virtual void Unk_37();
+    virtual void Unk_38();
+    virtual void Unk_39();
+    virtual void Unk_3A();
+    virtual void Unk_3B();
+    virtual int Unk_3C(int, int);
 };
 
-extern "C" unsigned char g_014a4606[];
+extern "C" unsigned char DAT_014a4606[];
 struct C_008105b0 { int FUN_008105b0(unsigned int, unsigned int); };
 
 // @ 0x00802890
-extern "C" int __fastcall FUN_00802890(char* self, int edx_unused, int a4)
+extern "C" int __fastcall FUN_00802890(char* value, int unused, int value2)
 {
-    int t1002;
-    int t1003;
-    int t1006;
-    int t1009;
-    int t1010;
-    int t1013;
-    int t1014;
-    int t1018;
-    int t1019;
-    int t1023;
-    t1002 = (int)((int)(self) + (int)16);
-    t1003 = (int)((C_008105b0*)(t1002))->FUN_008105b0((unsigned int)((int)g_014a4606), (unsigned int)((int)1));
-    t1006 = (int)(t1003);
-    if (t1006 != (int)0) {
-        t1009 = (int)(t1006);
-        t1010 = (int)((il2c_vc0*)(t1009))->s7();
-        t1013 = (int)((int)(a4));
-        if (t1010 == t1013) {
-            t1014 = (int)(t1006);
-            return (int)(t1014);
+    int result = (int)((C_008105b0*)((int)value + 16))->FUN_008105b0((unsigned int)(int)DAT_014a4606, (unsigned int)1);
+    if (result != 0) {
+        if (((VObject*)result)->Unk_07() == value2) {
+            return result;
         }
-        t1018 = (int)(t1006);
-        t1019 = (int)((il2c_vc1*)(t1018))->s60((int)(t1013), (int)((int)1));
-        return (int)(t1019);
+        return ((VObject2*)result)->Unk_3C(value2, 1);
     }
-    t1023 = (int)((int)0);
-    return (int)(t1023);
+    return 0;
 }

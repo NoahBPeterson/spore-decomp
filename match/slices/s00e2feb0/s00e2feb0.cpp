@@ -1,70 +1,54 @@
-// 0x00e2feb0: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: src/game/SPGonzago/_at_00e20000.cpp, match/slices/s00e2f6e0/s00e2f6e0.cpp.
+// 0x00e2feb0: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: src/game/SPGonzago/_at_00e20000.cpp, match/slices/s00e2f6e0/s00e2f6e0.cpp.
 
 extern "C" void __cdecl FUN_00f62def(...);
 struct C_00594410 { void FUN_00594410(unsigned int); };
 struct C_00e2fcb0 { int FUN_00e2fcb0(unsigned int); };
 
 // @ 0x00e2feb0
-extern "C" bool __fastcall FUN_00e2feb0(char* self, int edx_unused, int a4, int a8)
+extern "C" bool __fastcall FUN_00e2feb0(char* value, int unused, int value2, int obj)
 {
-    int t1002;
-    int t1003;
-    int t1004;
-    int t1007;
     int v_l8[2];
-    int t1008;
-    int t1009;
-    int t1013;
-    int t1014;
-    int t1015;
-    int t1016;
-    int t1018;
-    int t1019;
-    int t1020;
-    int t1021;
-    bool t1029;
-    bool t1033;
-    bool t1035;
-    t1002 = (int)((int)(self));
-    if ((int)(a4) == (int)&FUN_00f62def) {
-        t1003 = (int)((int)(a8));
-        if ((int)*(int*)((char*)(t1003) + 16) == (int)109705754) {
-            t1004 = (int)(*(int*)((char*)(t1003) + 24));
-            t1007 = (int)((int)&v_l8);
-            t1008 = (int)(t1002 + (int)28);
-            t1009 = (int)(t1008);
-            *(int*)&(a4) = (int)(t1004);
-            ((C_00594410*)(t1009))->FUN_00594410((unsigned int)(t1007));
-            t1013 = (int)(*(int*)((char*)(t1008) + 8));
-            t1014 = (int)(*(int*)((char*)(t1008) + 4));
-            t1015 = (int)(*(int*)((char*)(t1014) + (t1013)*4));
-            t1016 = (int)((*(int*)&v_l8[0]));
-            if (t1016 != t1015) {
-                t1018 = (int)((*(int*)&v_l8[1]));
+    int value3;
+    int value4;
+    int ptr;
+    int ptr2;
+    int value5;
+    int ptr3;
+    int value6;
+    int ptr4;
+    int cursor;
+    if (value2 == (int)&FUN_00f62def) {
+        if (*(int*)((char*)obj + 0x10) == 109705754) {
+            value3 = *(int*)((char*)obj + 0x18);
+            value4 = (int)&v_l8;
+            ptr = (int)value + 28;
+            ptr2 = ptr;
+            value2 = value3;
+            ((C_00594410*)ptr2)->FUN_00594410((unsigned int)value4);
+            value5 = *(int*)((char*)ptr + 8);
+            ptr3 = *(int*)((char*)ptr + 4);
+            value6 = *(int*)((char*)ptr3 + value5 * 4);
+            ptr4 = *(int*)&v_l8[0];
+            if (ptr4 != value6) {
+                cursor = *(int*)&v_l8[1];
                 do {
-                    t1019 = (int)((int)(a4));
-                    if ((int)*(int*)((char*)(t1016)) == t1019) {
-                        t1020 = (int)(t1016 + (int)4);
-                        t1021 = (int)(t1002 + (int)(-8));
-                        t1014 = (int)((C_00e2fcb0*)(t1021))->FUN_00e2fcb0((unsigned int)(t1020));
+                    if (*(int*)ptr4 == value2) {
+                        ptr3 = (int)((C_00e2fcb0*)((int)value + -8))->FUN_00e2fcb0((unsigned int)(ptr4 + 4));
                     }
-                    t1016 = (int)(*(int*)((char*)(t1016) + 20));
-                    if (t1016 == (int)0) {
-                        goto Le2ff20;
-                        Le2ff20:;
-                        t1016 = (int)(*(int*)((char*)(t1018) + 4));
-                        t1018 = (int)(t1018 + (int)4);
-                        if (t1016 == (int)0) goto Le2ff20;
+                    ptr4 = *(int*)((char*)ptr4 + 0x14);
+                    if (ptr4 == 0) {
+                        goto again;
+                        again:
+                        ptr4 = *(int*)((char*)cursor + 4);
+                        cursor += 4;
+                        if (ptr4 == 0) goto again;
                     }
-                } while (t1016 != t1015);
-                t1029 = true;
-                return (bool)(t1029);
+                } while (ptr4 != value6);
+                return (bool)true;
             }
-            t1033 = true;
-            return (bool)(t1033);
+            return (bool)true;
         }
     }
-    t1035 = true;
-    return (bool)(t1035);
+    return (bool)true;
 }

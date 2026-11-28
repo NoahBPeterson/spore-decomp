@@ -1,50 +1,25 @@
-// 0x00e2c290: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
-// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: src/game/SPGonzago/SPUIRolloverCivCity.cpp, match/slices/s00e2b9d0/s00e2b9d0.cpp.
+// 0x00e2c290: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone), then tidied by tidy64 (casts C++ adds anyway dropped, copies propagated, single-use temporaries folded, variables named by role); byte-exact.
+// Still machine-shaped: byte offsets instead of members, and FUN_/DAT_ names by address. Hand-written source: src/game/SPGonzago/SPUIRolloverCivCity.cpp, match/slices/s00e2b9d0/s00e2b9d0.cpp.
 
 struct C_006b5240 { void FUN_006b5240(); };
 extern "C" int __cdecl FUN_00e2a6f0(...);
 
 // @ 0x00e2c290
-extern "C" int __fastcall FUN_00e2c290(char* self, int edx_unused, int a4, int a8)
+extern "C" int __fastcall FUN_00e2c290(char* value, int unused, int value2, int value3)
 {
-    int t1001;
-    int t1005;
-    int t1006;
-    int t1007;
-    int t1009;
-    int t1012;
-    int t1013;
-    int t1014;
-    int t1018;
-    int t1019;
-    int t1026;
-    int t7;
-    int t1027;
-    int t1028;
-    int t1030;
-    int t1033;
-    t1001 = (int)((int)(a8));
-    t1005 = (int)((int)(self));
-    t1006 = (int)((int)(a4));
-    t1007 = (int)(*(int*)((char*)(t1005) + 4));
-    t1009 = (int)FUN_00e2a6f0((unsigned int)(t1001), (unsigned int)(t1007), (unsigned int)(t1006));
-    t1012 = (int)(*(int*)((char*)(t1005) + 4));
-    t1013 = (int)(t1009);
-    if ((unsigned int)(t1009) < (unsigned int)(t1012)) {
+    int value4 = *(int*)((char*)(int)value + 4);
+    int ptr = (int)FUN_00e2a6f0((unsigned int)value3, (unsigned int)value4, (unsigned int)value2);
+    int value5 = *(int*)((char*)(int)value + 4);
+    int cursor = ptr;
+    if ((unsigned int)ptr < (unsigned int)value5) {
         do {
-            t1014 = (int)(t1013);
-            ((C_006b5240*)(t1014))->FUN_006b5240();
-            t1013 = (int)(t1013 + (int)20);
-        } while ((unsigned int)(t1013) < (unsigned int)(t1012));
+            ((C_006b5240*)cursor)->FUN_006b5240();
+            cursor += 20;
+        } while ((unsigned int)cursor < (unsigned int)value5);
     }
-    t1018 = (int)((int)(a4));
-    t1019 = (int)(t1001 - t1018);
-    t1026 = (int)(t1019 / (int)(-20));
-    t7 = (int)(t1026 << (int)2);
-    t1027 = (int)(t1026 + t7);
-    t1028 = (int)(t1027 + t1027);
-    t1030 = (int)(t1028 + t1028);
-    *(int*)((char*)(t1005) + 4) += t1030;
-    t1033 = (int)(t1018);
-    return (int)(t1033);
+    int value6 = (value3 - value2) / -20;
+    int value7 = value6 + (value6 << 2);
+    int value8 = value7 + value7;
+    *(int*)((char*)(int)value + 4) += value8 + value8;
+    return value2;
 }
