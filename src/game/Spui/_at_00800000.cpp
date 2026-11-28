@@ -760,7 +760,7 @@ void* __stdcall f_801100(int unused, void* alloc)
   return 0;
 }
 
-// @ 0x00802890
+// 0x00802890 (byte-exact lifted version: match/slices/s00802890/s00802890.cpp)
 void* C_802890::f(void* want)
 {
   void* w = ((CursorLayout*)((char*)this + 0x10))->FindWindowByID(0x14a4606, 1);

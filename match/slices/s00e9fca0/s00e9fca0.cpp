@@ -384,7 +384,7 @@ void __fastcall FUN_00e9ffb0(cCityMusicEditor* self, void* edx, void* music)
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00ea0010
+// 0x00ea0010 (byte-exact lifted version: match/slices/s00ea0010/s00ea0010.cpp)
 // ---------------------------------------------------------------------------------------------
 void __fastcall FUN_00ea0010(cCityMusicEditor* self, void* edx, uint param_2)
 {

@@ -2,7 +2,6 @@
 # Format: <va> <difftest-verdict> <reason>
 00c368c0 UNSUPPORTED 0/400 valid inputs (fake EASTL hashtable globals fault on read/write); 387/530 bytes differ: inline hash-bucket walk and WStr format/pick paths rebuilt from decompile, different inlining and register choices
 00c36ae0 UNSUPPORTED 1 unresolved reference (?GetGameDataVector@NounMgr is declaration-only); 727/918 bytes differ: attractor scan loop body rebuilt from partial decompile
-00c36e80 PASS 400 valid inputs, 100% coverage; only 13/63 bytes differ: MSVC puts the key in esi and this in edi, original uses key=edi/this=esi; identical instruction sequence otherwise
 00c37180 FAIL faked vtable callee address differs: original fetches [vt]+0x18 in two steps, ours folds to [vt+0x18]; same slot/args, semantics identical; 95/135 bytes differ
 00c375d0 PASS 212 valid inputs, 100% coverage; 154/211 bytes differ: x87/SSE scheduling and register allocation of the radius/water blend
 00c37740 WEAK 89 valid inputs, 10.2% coverage; 295/328 bytes differ: gate predicates and vtable-slot fetches rebuilt from decompile

@@ -3,7 +3,6 @@
 00dfeaa0  66  uninitialized_copy stride 0x238: element ctor flags differ
 00dfeb00  292  vector assign stride 0x188: growth path/scheduling differ difftest WEAK after ecx fix (467 valid, 44% cov).
 00dfec50  269  vector assign stride 0x4e0: growth path/scheduling differ difftest WEAK after ecx fix (296 valid, 53% cov).
-00dff130  90  0x27e8-element init: SBO/vector init differs difftest UNSUPPORTED after ecx fix (0/1200 valid: faults).
 00dff4e0  77  uninitialized_copy stride 0x27e8 scheduling differs
 00dff330  101  vector assign stride 0x238: grow/medium branches match; initialised-copy call block keeps pre-pushed args (register/scheduling order only); complete, equiv WEAK (178 valid, 53.8% cov, no mismatch)
 00dff650  101  vector assign stride 0x534: same shape as 0x238 version, initialised-copy call block scheduling differs; complete, equiv WEAK (165 valid, 52.9% cov, no mismatch)

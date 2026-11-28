@@ -156,7 +156,7 @@ float EA::ArgScript::cExpression::EvalRealNumber(const char** p) {
 // ===========================================================================
 // 0x0083db70  EA::ArgScript::cExpression::EvalIntParentheses
 // ===========================================================================
-// @ 0x0083db70
+// 0x0083db70 (byte-exact lifted version: match/slices/s0083db70/s0083db70.cpp)
 int EA::ArgScript::cExpression::EvalIntParentheses(const char** p) {
     DiscardWhiteSpace(p);
     if (**p != '(') {

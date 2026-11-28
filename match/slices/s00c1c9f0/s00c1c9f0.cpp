@@ -766,7 +766,7 @@ cVObj* cSPCreatureBase::FUN_00c1d460(u32 a, u32 b)
 // ---------------------------------------------------------------------------
 // 00c1d5e0  - thiscall, ret 0xc
 // ---------------------------------------------------------------------------
-// @ 0x00c1d5e0
+// 0x00c1d5e0 (byte-exact lifted version: match/slices/s00c1d5e0/s00c1d5e0.cpp)
 i32 cSPCreatureBase::FUN_00c1d5e0(char a, u32 b, u32 c)
 {
     if (a != 0) {

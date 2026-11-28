@@ -204,7 +204,7 @@ Elem16* __cdecl CopyElem16(Elem16* first, Elem16* last, Elem16* dest);  // 0x007
 inline void DestructElem16(Elem16* first, Elem16* last) {
     for (; first < last; ++first) first->~Elem16();
 }
-// @ 0x006130e0
+// 0x006130e0 (byte-exact lifted version: match/slices/s006130e0/s006130e0.cpp)
 Elem16* Elem16Vector::erase(Elem16* first, Elem16* last) {
     Elem16* const pNewEnd = CopyElem16(last, mpEnd, first);
     DestructElem16(pNewEnd, mpEnd);

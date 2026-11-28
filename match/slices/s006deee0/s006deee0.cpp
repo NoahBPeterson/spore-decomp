@@ -520,7 +520,7 @@ void ClusterMapAdder::AddCluster(int* rect) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006dfca0  erase a range from an Elem16 vector (returns the insert point)
+// 0x006dfca0 (byte-exact lifted version: match/slices/s006dfca0/s006dfca0.cpp)  erase a range from an Elem16 vector (returns the insert point)
 // ---------------------------------------------------------------------------
 int Elem16Vector::Elem16VecEraseRange(int dest, int from) {
     int* self = (int*)this;

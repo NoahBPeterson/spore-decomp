@@ -5285,7 +5285,7 @@ void Int64ListVector::AssignFromList(ListIterator first, ListIterator last, int 
     }
 }
 
-// @ 0x00f16330
+// 0x00f16330 (byte-exact lifted version: match/slices/s00f16330/s00f16330.cpp)
 Element* ElementVector::EraseRange(Element* last, Element* pos)
 {
     Element* p = MoveElements(pos, mpEnd, last);

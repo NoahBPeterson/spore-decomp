@@ -4772,7 +4772,7 @@ bool cTribe::Write(void* pStream)
     return false;
 }
 
-// @ 0x00c8fa60
+// 0x00c8fa60 (byte-exact lifted version: match/slices/s00c8fa60/s00c8fa60.cpp)
 bool cTribe::FUN_00c8fa60()
 {
     cSpeciesManager* pManager = (cSpeciesManager*)GetSetting9();

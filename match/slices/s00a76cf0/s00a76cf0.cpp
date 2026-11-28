@@ -254,7 +254,7 @@ void MapInfo::GetRect(float* out)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00a77020
+// 0x00a77020 (byte-exact lifted version: match/slices/s00a77020/s00a77020.cpp)
 // ---------------------------------------------------------------------------
 bool MapInfo::ContainsPoint(float* p)
 {

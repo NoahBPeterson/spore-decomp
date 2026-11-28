@@ -6997,7 +6997,7 @@ void FUN_01066720(int* key)
     SetWindowImage(w, local, -1);
 }
 
-// @ 0x01066780
+// 0x01066780 (byte-exact lifted version: match/slices/s01066780/s01066780.cpp)
 bool SpaceZoom::FUN_01066780(int unused, InputEvent* ev)
 {
     (void)unused;
@@ -7619,7 +7619,7 @@ u8 cSPUISpace_s0106_78e0::FUN_01067b60()
     return 1;
 }
 
-// @ 0x01067c50
+// 0x01067c50 (byte-exact lifted version: match/slices/s01067c50/s01067c50.cpp)
 void cSPUISpace_s0106_78e0::SetToolTip(void* a1, void* a2, void* a3, void* a4, void* a5)
 {
     cLayoutHolder* h = mpLayoutHolder;

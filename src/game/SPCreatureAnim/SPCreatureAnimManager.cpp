@@ -5513,7 +5513,7 @@ void* RBTreeHead::FindRaw(void** outNode, uint32_t* key)
     return outNode;
 }
 
-// @ 0x00a05830
+// 0x00a05830 (byte-exact lifted version: match/slices/s00a05830/s00a05830.cpp)
 Vec28* Vec28::Construct(int count, int unused)
 {
     (void)unused;
@@ -9638,7 +9638,7 @@ bool AnimMgr::Init(bool flag)
     return true;
 }
 
-// @ 0x00a0f610
+// 0x00a0f610 (byte-exact lifted version: match/slices/s00a0f610/s00a0f610.cpp)
 bool AnimHandler::HandleMessage(u32 id, Msg* m)
 {
     switch (id) {

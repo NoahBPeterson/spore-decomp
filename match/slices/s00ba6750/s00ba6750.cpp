@@ -228,7 +228,7 @@ int FUN_00ba6ab0(unsigned* flags) {
   return (f & 8) ? 3 : 0;
 }
 
-// @ 0x00ba6b40
+// 0x00ba6b40 (byte-exact lifted version: match/slices/s00ba6b40/s00ba6b40.cpp)
 int FUN_00ba6b40(int* vec, int start, void* civ, float threshold) {
   int n = (vec[1] - vec[0]) >> 2;
   int w = start;

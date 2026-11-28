@@ -171,7 +171,7 @@ struct ShadowSub {
     void TryApply(int other);
 };
 
-// @ 0x007819d0
+// 0x007819d0 (byte-exact lifted version: match/slices/s007819d0/s007819d0_lifted.cpp)
 void ShadowSub::TryApply(int other)
 {
     ShadowSub* self = this;
@@ -608,7 +608,7 @@ void __fastcall Func_007827C0(int param_1)
 // ============================================================================
 // 0x00782800 : insert a range of E36 into the vector
 // ============================================================================
-// @ 0x00782800
+// 0x00782800 (byte-exact lifted version: match/slices/s00782800/s00782800.cpp)
 char* Func_00782800(char* self, char* first, char* last)
 {
     char* dst = (char*)Func_00782420((E36*)last, *(E36**)(self + 4), (E36*)first);

@@ -649,7 +649,7 @@ BigC* __fastcall FUN_00d47380(BigC* self, void* dummy, void* p2, void* p3) {
 // ======================================================================
 // 0x00d473e0 - BigC pool allocation / construction
 // ======================================================================
-// @ 0x00d473e0
+// 0x00d473e0 (byte-exact lifted version: match/slices/s00d473e0/s00d473e0.cpp)
 void* __fastcall FUN_00d473e0(void* self, void* dummy, u32 arg) {
   (void)dummy;
   BigC* obj = *(BigC**)((char*)self + 0x1c);

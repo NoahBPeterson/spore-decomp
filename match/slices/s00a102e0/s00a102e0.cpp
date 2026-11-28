@@ -89,7 +89,7 @@ struct Serializer {
     void WriteArr9(int, const uint32_t*);                   // 0xa10670
 };
 
-// @ 0x00A102E0
+// 0x00a102e0 (byte-exact lifted version: match/slices/s00a102e0/s00a102e0_lifted.cpp)
 void Serializer::BeginTree(uint32_t id) {
     if (mpMark1 != 0 && mpMark0 != 0) {
         mpWrite = mpMark0;

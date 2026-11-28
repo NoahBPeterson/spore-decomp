@@ -101,7 +101,7 @@ struct RenderObj {                          // object stored in the mpPrimary/mp
     virtual void          Slot24(void* p, float v);          // +0x24
 };
 
-// @ 0x00ae7e10
+// 0x00ae7e10 (byte-exact lifted version: match/slices/s00ae7e10/s00ae7e10.cpp)
 void SlotHolder::FUN_00ae7e10(void* a, void* b, int slot, char flag)
 {
     RenderObj* ro = (RenderObj*)mpCreature[slot];

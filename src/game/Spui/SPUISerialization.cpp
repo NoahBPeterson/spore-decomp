@@ -528,7 +528,7 @@ void SerializeHelper::ReadProperty()
 {
 }
 
-// @ 0x0082b7f0
+// 0x0082b7f0 (byte-exact lifted version: match/slices/s0082b7f0/s0082b7f0.cpp)
 void* SerAlloc::Allocate(uint32_t align, uint32_t size)
 {
   if (size > 8) {

@@ -459,7 +459,7 @@ void cUIMissionCardPanel::SetCardsVisibility(bool bVisible)
 // ---------------------------------------------------------------------------
 // 0x00e14c70  cUIMissionCardPanel::GetPanelLayout
 // ---------------------------------------------------------------------------
-// @ 0x00e14c70
+// 0x00e14c70 (byte-exact lifted version: match/slices/s00e14c70/s00e14c70.cpp)
 cSPUILayout* cUIMissionCardPanel::GetPanelLayout()
 {
     if (mPanelLayout.mpObject == nullptr) {

@@ -196,7 +196,7 @@ void SP::SLEEP_Deactivate(SP::cSPCreatureBase_s00d7_0080* self, int, int, int, i
     self->FUN_00c14750(0);
 }
 
-// @ 0x00d705b0
+// 0x00d705b0 (byte-exact lifted version: match/slices/s00d705b0/s00d705b0.cpp)
 float FUN_00d705b0(SP::cSPCreatureBase_s00d7_0080* self)
 {
     SP::cSPCreatureBase_s00d7_0080* c = self->GetHomeInfo()->m164;

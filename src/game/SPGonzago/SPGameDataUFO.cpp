@@ -2169,7 +2169,7 @@ __forceinline float Distance(const Vector3_s0105_c8d0& a, const Vector3_s0105_c8
 }
 // ---- items of slice s0105c8d0 end
 
-// @ 0x00c36e80
+// 0x00c36e80 (byte-exact lifted version: match/slices/s00c36e80/s00c36e80.cpp)
 void* __fastcall FUN_00c36e80(Ufo* self, void* dummy, u32 key)
 {
   (void)dummy;

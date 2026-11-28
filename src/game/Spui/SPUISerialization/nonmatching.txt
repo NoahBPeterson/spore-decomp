@@ -5,7 +5,6 @@
 0082abd0 190 complete translation; allocator register allocation differs (retail spills `this` via push ecx and restores it on every return, so entry ecx survives; cl keeps `this` in esi, so equiv reports a benign ecx-clobber FAIL under the standard ABI) flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 0082afe0 189 complete translation; inlined wide-string compare not identical
 0082b060 58 complete translation; EASTL array zero-fill schedule differs
-0082b7f0 68 complete translation; allocator fast-path register allocation differs
 0082b920 66 complete translation; nested allocator subobject register allocation differs
 0082b970 56 complete translation; nested allocator subobject register allocation differs
 0082cc60 102 complete translation; vector(n) zero-fill schedule differs

@@ -31,7 +31,6 @@
 011fda60  179  Ctl::Alloc: complete; the stride/align computation is exact, the slot-linking loop
                 and the `(baseOff+3)&~3` rounding use different registers
 011fdba0   26  Ctl::SetFrame: complete; the memcpy inlining and the -1.0f path order differ
-011fdc00   33  Ctl::Advance: complete; the float clamp `if (t > m_len) m_len = 0` compares
                 against a register copy of 0.0f instead of fs:[0]
 011fdc30   20  Ctl::SetFormat: complete; the format test ((u8)fmt==1 && (u8)(fmt>>8)==3 &&
                 byte2==0) is 3 compares in both, registers differ

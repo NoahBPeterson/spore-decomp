@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00adb1b0/s00adb1b0.cpp  @FUN_00adb1b0@16  00adb1b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

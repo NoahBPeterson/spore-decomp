@@ -513,7 +513,7 @@ void cUIMissionCard::DoExpand()
     ((void (__thiscall *)(void *, u32, void *))(*(void ***)ms)[0x14 / 4])(ms, 0xf46092d0, m_mission);
 }
 
-// @ 0x00e188b0
+// 0x00e188b0 (byte-exact lifted version: match/slices/s00e188b0/s00e188b0.cpp)
 void *cUIMissionCardPanel::InitHints(void *param)
 {
     void *raw = operator_new(0x18, 0x13f6b3c, 0, 0, 0, 0);

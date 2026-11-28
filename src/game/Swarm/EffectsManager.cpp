@@ -1187,7 +1187,7 @@ const char* cEffectsManager_s00a6_d020::GetStatsString()
 }
 }}  // namespace EA::Swarm
 
-// @ 0x00a6d730
+// 0x00a6d730 (byte-exact lifted version: match/slices/s00a6d730/s00a6d730.cpp)
 namespace EA { namespace Swarm {
 bool cEffectsManager_s00a6_d020::GetEffectInfo(int a, const char* name)
 {

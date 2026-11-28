@@ -369,7 +369,7 @@ InsertResult* cSpawnTable::Insert(InsertResult* out, const Entry* e)
 // Takes a node from the free list (or allocates one) and copies the source
 // key and child vector into it.
 // ---------------------------------------------------------------------------
-// @ 0x00b98270
+// 0x00b98270 (byte-exact lifted version: match/slices/s00b98270/s00b98270.cpp)
 Node* cSpawnTable::AllocNode(const NodeSource* src)
 {
     Node* node = mpFreeList;

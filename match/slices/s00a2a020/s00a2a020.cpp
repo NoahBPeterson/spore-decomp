@@ -403,7 +403,7 @@ void SmallStubs::DestroyBuckets(int param_2, u32 param_3)
 // ---------------------------------------------------------------------------
 void* ARCopy(void* a, void* b, void* c);   // 0x00a22730
 
-// @ 0x00a2ae90
+// 0x00a2ae90 (byte-exact lifted version: match/slices/s00a2ae90/s00a2ae90.cpp)
 int SmallStubs::EraseRange(int param_2, int param_3)
 {
     u32 u = (u32)(size_t)ARCopy((void*)param_3,

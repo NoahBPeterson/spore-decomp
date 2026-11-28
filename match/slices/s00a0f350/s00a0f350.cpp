@@ -232,7 +232,7 @@ struct AnimHandler {
     bool HandleMessage(u32 id, Msg* m);
 };
 
-// @ 0xa0f610
+// 0x00a0f610 (byte-exact lifted version: match/slices/s00a0f610/s00a0f610.cpp)
 bool AnimHandler::HandleMessage(u32 id, Msg* m)
 {
     switch (id) {

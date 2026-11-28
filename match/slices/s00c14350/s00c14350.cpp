@@ -373,7 +373,7 @@ cContentValidationSummarizer* GetContentValidationSummarizer()
 }
 
 // ===========================================================================
-// @ 0x00c144e0  PoolAlloc  (__thiscall: ecx = pool, one stack arg -> out[2])
+// 0x00c144e0 (byte-exact lifted version: match/slices/s00c144e0/s00c144e0.cpp)  PoolAlloc  (__thiscall: ecx = pool, one stack arg -> out[2])
 // ===========================================================================
 struct PoolNode {
     uint32_t mNext;     // +0x00  (free-list link, = node[0] when free)
@@ -770,7 +770,7 @@ void CreatureBase::NotifySummarizer()
 }
 
 // ===========================================================================
-// @ 0x00c14e70
+// 0x00c14e70 (byte-exact lifted version: match/slices/s00c14e70/s00c14e70.cpp)
 // ===========================================================================
 void* __fastcall LookupTextStyle(void* self, void* /*edx*/, uint32_t* key)
 {

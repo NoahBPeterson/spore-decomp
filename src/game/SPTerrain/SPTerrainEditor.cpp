@@ -3234,7 +3234,7 @@ void QuadMgr::Destroy()
     mp208 = 0;
 }
 
-// @ 0x00f6bc10
+// 0x00f6bc10 (byte-exact lifted version: match/slices/s00f6bc10/s00f6bc10.cpp)
 namespace TE {
 void cTerrainEditor::ResetEditor()
 {

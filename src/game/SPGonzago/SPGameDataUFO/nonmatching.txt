@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00c36e80 13 400 valid inputs, 100% coverage; only 13/63 bytes differ: MSVC puts the key in esi and this in edi, original uses key=edi/this=esi; identical instruction sequence otherwise
 00c37180 91 faked vtable callee address differs: original fetches [vt]+0x18 in two steps, ours folds to [vt+0x18]; same slot/args, semantics identical; 95/135 bytes differ
 00c375d0 145 212 valid inputs, 100% coverage; 154/211 bytes differ: x87/SSE scheduling and register allocation of the radius/water blend
 00c37740 294 89 valid inputs, 10.2% coverage; 295/328 bytes differ: gate predicates and vtable-slot fetches rebuilt from decompile

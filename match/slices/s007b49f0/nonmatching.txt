@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-007b4b10  257  SetTerrainFilterRects: complete (writes the three terrain-filter rects and calls filter vtbl+0xc); only scheduling differs - cl reloads this->mp10d4 after every field store while retail reloads after each pair, and cl hoists the first filter load above the setup init, so mine carries 36 extra bytes of filter-pointer reloads [equiv: WEAK 337/400 valid, 9.8% coverage]

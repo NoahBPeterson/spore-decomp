@@ -93,7 +93,6 @@
 00df3be0 141 (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete HandleEvent switch; same size (2032), frame and registers identical; only the three Unk_de5d00 call sites differ (original takes &zeros before the zero stores and loads b0 into ecx before the this load)
 00df47b0 2313 (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete SetupForGame (game-info reset, flow-order rebuild via local hash_map<string16,uint> + property string16 array, star/key resets, dialog centering, state reset, stopwatch restart, window flags, level-button loop); same size (2944) and identical call/vcall sequence; not byte-exact: frame 0x80 vs 0x78 (tag temp and one more slot not shared), so every esp offset differs; find-loop/push_back register choice
 00df5940 60 flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS
-00df59c0 132 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage)
 00df5f50 160 flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS
 00df6040 184 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage)
 00df6140 408 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage)
@@ -153,7 +152,6 @@
 00dfeaa0 68 uninitialized_copy stride 0x238: element ctor flags differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dfeb00 264 vector assign stride 0x188: growth path/scheduling differ difftest WEAK after ecx fix (467 valid, 44% cov). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dfec50 205 vector assign stride 0x4e0: growth path/scheduling differ difftest WEAK after ecx fix (296 valid, 53% cov). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00dff130 45 0x27e8-element init: SBO/vector init differs difftest UNSUPPORTED after ecx fix (0/1200 valid: faults). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dff330 93 vector assign stride 0x238: grow/medium branches match; initialised-copy call block keeps pre-pushed args (register/scheduling order only); complete, equiv WEAK (178 valid, 53.8% cov, no mismatch) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dff4e0 64 uninitialized_copy stride 0x27e8 scheduling differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dff650 93 vector assign stride 0x534: same shape as 0x238 version, initialised-copy call block scheduling differs; complete, equiv WEAK (165 valid, 52.9% cov, no mismatch) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

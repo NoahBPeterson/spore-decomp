@@ -528,7 +528,7 @@ void GetBehaviorFlags(uint8_t* pFlags, void* pKey)
 // ---------------------------------------------------------------------------
 // 0x00aeef00  SP::CountBehaviorSubRecords
 // ---------------------------------------------------------------------------
-// @ 0x00aeef00
+// 0x00aeef00 (byte-exact lifted version: match/slices/s00aeef00/s00aeef00.cpp)
 int CountBehaviorSubRecords(void* pKey)
 {
     int nCount = 0;
@@ -550,7 +550,7 @@ int CountBehaviorSubRecords(void* pKey)
 // ---------------------------------------------------------------------------
 // 0x00aeefc0  SP::GetBehaviorSubRecordValues
 // ---------------------------------------------------------------------------
-// @ 0x00aeefc0
+// 0x00aeefc0 (byte-exact lifted version: match/slices/s00aeefc0/s00aeefc0.cpp)
 uint32_t* GetBehaviorSubRecordValues(uint32_t* pOut, void* pKey, int nWanted, int a)
 {
     int nIndex = 0;

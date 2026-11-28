@@ -12,5 +12,4 @@
 00c2fc10 85 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); frame uses push ecx vs sub esp,0x10; this not kept in ebp flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00c2fea0 245 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (unresolved _SP_RelationshipManager); call-via-absolute-address not inlined to direct calls flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00c2ffb0 204 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (unresolved _SP_RelationshipManager); GameMode checks not shared, size 233 vs 203 flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
-00c301c0 11 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); src parameter allocated to eax instead of ecx flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00c30630 221 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); ResKey build and resource-manager path differ, size 307 vs 328 flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

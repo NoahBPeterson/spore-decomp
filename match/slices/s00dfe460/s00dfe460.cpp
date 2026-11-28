@@ -592,7 +592,7 @@ void cUISpaceRes::Destroy() {
 // ===========================================================================
 //  0x00dff130  element-wise assign for the 0x27e8 class (from a fresh object)
 // ===========================================================================
-// @ 0x00dff130
+// 0x00dff130 (byte-exact lifted version: match/slices/s00dff130/s00dff130.cpp)
 void* ElemB::Init(void* o) {
     void* s = this;
     ((Buf3c*)s)->Copy(o);

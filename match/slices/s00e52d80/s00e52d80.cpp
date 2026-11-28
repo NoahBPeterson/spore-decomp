@@ -179,7 +179,7 @@ static void GfxVis(void* o, int v) {
   (*(void(__thiscall**)(void*, int))((char*)Vt(o) + 0xc))(o, v);
 }
 
-// @ 0x00e530e0
+// 0x00e530e0 (byte-exact lifted version: match/slices/s00e530e0/s00e530e0.cpp)
 int FUN_00e530e0() {
   char local[16];
   int n = FUN_00e4fd30(local);
@@ -332,7 +332,7 @@ void FUN_00e53340() {
   if (x) { *(char*)((char*)x + 0x17c) = 1; *(char*)((char*)x + 0x17b) = 1; }
 }
 
-// @ 0x00e53580
+// 0x00e53580 (byte-exact lifted version: match/slices/s00e53580/s00e53580.cpp)
 void FUN_00e53580() {
   void* w = FindWin(0xd305ca84);
   w = SubWindow(w);

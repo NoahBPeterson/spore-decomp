@@ -639,7 +639,7 @@ void FUN_00663680(char* p, int layout, char reload)
     ((cSPUIFeedList*)p)->FUN_006634d0();
 }
 
-// @ 0x00663860
+// 0x00663860 (byte-exact lifted version: match/slices/s00663860/s00663860.cpp)
 void cSPUIFeedList::ReloadCallback(void* parent, int a, int b, void* cfg)
 {
     char* p = (char*)this;

@@ -4241,7 +4241,7 @@ void tRefVec::insert(tAutoRef* pPos, uint32_t n, tAutoRef* pValue)
     }
 }
 
-// @ 0x00c798a0
+// 0x00c798a0 (byte-exact lifted version: match/slices/s00c798a0/s00c798a0.cpp)
 tPair28* tPairVec::erase(tPair28* pFirst, tPair28* pLast)
 {
     tPair28* pNewEnd = (tPair28*)FUN_00c771e0(pLast, mpEnd, pFirst);

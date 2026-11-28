@@ -329,7 +329,7 @@ hkBool MoppAssembler::needsExtraProperty(const void* a, const int* b) const
 	return hkBool(false);
 }
 
-// @ 0x0111cf00
+// 0x0111cf00 (byte-exact lifted version: match/slices/s0111cf00/s0111cf00.cpp)
 // Chooses between the child's own "level" (+0x34 of the parent) and this assembler's (+0x24 of a1) for the
 // property level of a1; the odd condition is a size check on the three operand magnitudes (all unsigned).
 void __stdcall chooseLevelForProperty(const void* a1, const void* a2, void* a3)

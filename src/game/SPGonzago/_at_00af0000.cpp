@@ -1597,7 +1597,7 @@ void __thiscall RBTree::FindBounds(HIter* out, const int* key)
     }
     *out = res;}
 
-// @ 0x00af09a0
+// 0x00af09a0 (byte-exact lifted version: match/slices/s00af09a0/s00af09a0.cpp)
 Node* __thiscall RBTree::Clone(Node* src, void* parent)
 {
     Node* head = NewNode(src, parent);
@@ -4642,7 +4642,7 @@ SP::cActionCircle_s00af_ab70::tSlot* SP::cActionCircle_s00af_ab70::FindClosestFr
   return &mSlots.mpBegin[index];
 }
 
-// @ 0x00afc0d0
+// 0x00afc0d0 (byte-exact lifted version: match/slices/s00afc0d0/s00afc0d0.cpp)
 tSlot* cSlotVec::EraseRange(tSlot* pFirst, tSlot* pLast)
 {
     tSlot* pNewEnd = (tSlot*)FUN_00afa430(pLast, mpEnd, pFirst);

@@ -587,7 +587,7 @@ void StrTree::NukeSub(Node* n)
 }
 
 // ===========================================================================
-// @ 0x0067F710  SP::cCheatManager::FindMatches (wildcard match over the names)
+// 0x0067f710 (byte-exact lifted version: match/slices/s0067f710/s0067f710.cpp)  SP::cCheatManager::FindMatches (wildcard match over the names)
 // ===========================================================================
 int CheatMgr::FindMatches(const char* pat, PtrVec* out)
 {

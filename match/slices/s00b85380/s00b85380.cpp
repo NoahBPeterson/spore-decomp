@@ -600,7 +600,7 @@ void *SpVector20B::AssignN(u32 n, u32 unused)
 
 extern "C" void FUN_00b84ba0(void *p);   // 0x00b84ba0
 
-// @ 0x00b85f30
+// 0x00b85f30 (byte-exact lifted version: match/slices/s00b85f30/s00b85f30.cpp)
 // resize(n) for a 0x18-byte vertex vector: fills new slots with the default value.
 void Vertex2DVec_Resize(void *pThis, u32 n)
 {

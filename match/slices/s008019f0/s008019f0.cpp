@@ -156,7 +156,7 @@ bool CurMgr::FindGlobal(uint32_t k) {
   return found != 0;
 }
 
-// @ 0x008027e0
+// 0x008027e0 (byte-exact lifted version: match/slices/s008027e0/s008027e0.cpp)
 void CurMgr::Refresh() {
   if (!*(uint8_t*)((char*)this + 0x40))
     return;
@@ -261,7 +261,7 @@ bool __fastcall Sub_8028e0(void* self) {
   return true;
 }
 
-// @ 0x00802890
+// 0x00802890 (byte-exact lifted version: match/slices/s00802890/s00802890.cpp)
 struct C_802890 { void* f(void* want); };
 void* C_802890::f(void* want) {
   void* w = ((CursorLayout*)((char*)this + 0x10))->FindWindowByID(0x14a4606, 1);

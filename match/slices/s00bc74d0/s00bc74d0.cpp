@@ -447,7 +447,7 @@ void WE::FUN_00bc7b70(uint param_2)
 }
 
 // ===========================================================================
-// @ 0x00bc7c40 — erase the range [first,last); returns `first`.
+// 0x00bc7c40 (byte-exact lifted version: match/slices/s00bc7c40/s00bc7c40.cpp) — erase the range [first,last); returns `first`.
 // ===========================================================================
 int WE::FUN_00bc7c40(int param_2, int param_3)
 {

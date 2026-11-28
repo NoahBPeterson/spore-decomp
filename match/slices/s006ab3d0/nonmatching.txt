@@ -1,5 +1,4 @@
 006ab800  59  WString sub-range assign; destination is implicit __fastcall this; equiv PASS: 274 valid (--inputs 800), 100.0% coverage
-006abe50  60  FixedAllocatorBase::AllocateChunk: complete; register/frame differences; equiv PASS (881 valid, 100% cov) after making it a FixedAlloc member
 006ac0a0  38  cache-type setter via vtable+0xc; returns bool so SetCachingType tail-jumps; equiv PASS: 399 valid, 100.0% coverage
 006ac0d0  35  cache-type getter: complete; division/compare schedule differs
 006ab3d0  486  FixedAllocator size-class init ctor: complete (584 bytes vs 600); retail ctor SEH frame and different member init ordering; equiv PASS (400 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

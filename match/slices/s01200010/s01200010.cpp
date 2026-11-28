@@ -310,7 +310,7 @@ WorldCtx* FixupToIds(Fixup4* rec, WorldCtx* ctx)
 	return ctx;
 }
 
-// @ 0x012009c0
+// 0x012009c0 (byte-exact lifted version: match/slices/s012009c0/s012009c0.cpp)
 void FixupToPointers(Fixup4* rec, int unknown, ArenaCtx* ctx)
 {
 	rec->mpLink = ctx->mpArena->IdToObject((int)rec->mpLink);
@@ -319,7 +319,7 @@ void FixupToPointers(Fixup4* rec, int unknown, ArenaCtx* ctx)
 	rec->mpData10 = ctx->mpArena->IdToObject((int)rec->mpData10);
 }
 
-// @ 0x01200a10
+// 0x01200a10 (byte-exact lifted version: match/slices/s01200a10/s01200a10.cpp)
 int InitFixup4(Fixup4* rec, ArenaCtx* ctx)
 {
 	rec->mpFn = (void*)FixupCallback;

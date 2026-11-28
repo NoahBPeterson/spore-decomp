@@ -984,7 +984,7 @@ void ClusterMapAdder::AddCluster(int* rect)
     }
 }
 
-// @ 0x006dfca0
+// 0x006dfca0 (byte-exact lifted version: match/slices/s006dfca0/s006dfca0.cpp)
 int Elem16Vector::Elem16VecEraseRange(int dest, int from)
 {
     int* self = (int*)this;

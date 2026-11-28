@@ -254,7 +254,7 @@ class vector { public:   // stub for vector<ControlDrawable>; receiver arrives i
 };
 }
 
-// @ 0x00621f50  vector<ControlDrawable>::erase(first,last) -- this = &vector
+// 0x00621f50 (byte-exact lifted version: match/slices/s00621f50/s00621f50.cpp)  vector<ControlDrawable>::erase(first,last) -- this = &vector
 ControlDrawable* eastl::vector::erase(ControlDrawable* first, ControlDrawable* last) {
   void* self = this;
   ControlDrawable** pEnd = (ControlDrawable**)((char*)self + 4);

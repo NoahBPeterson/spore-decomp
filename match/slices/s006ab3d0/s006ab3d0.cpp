@@ -90,7 +90,7 @@ struct FixedAlloc {
     FixedAlloc* InitDefaults(int unused);                                                     // @ 0x006ac140
 };
 
-// @ 0x006abe50
+// 0x006abe50 (byte-exact lifted version: match/slices/s006abe50/s006abe50.cpp)
 void* FixedAlloc::AllocateChunk(uint32_t size, int flags)
 {
     FixedAlloc* self = this;

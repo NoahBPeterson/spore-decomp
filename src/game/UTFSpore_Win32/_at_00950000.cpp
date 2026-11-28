@@ -803,7 +803,7 @@ UIImage* UIImage::Image(void* obj, int a, int b, float c, float d, float e, floa
     return this;
 }
 
-// @ 0x00957a60
+// 0x00957a60 (byte-exact lifted version: match/slices/s00957a60/s00957a60.cpp)
 void** __cdecl Fn00957a60(int a, int b)
 {
     unsigned* g = (unsigned*)0x166b138;

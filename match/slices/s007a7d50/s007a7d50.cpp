@@ -303,7 +303,7 @@ bool cTextRenderer::FreeDevice(void* obj)
     return false;
 }
 
-// @ 0x007a8790
+// 0x007a8790 (byte-exact lifted version: match/slices/s007a8790/s007a8790.cpp)
 cTextRenderer::~cTextRenderer()
 {
     if (this->mInitialized) {

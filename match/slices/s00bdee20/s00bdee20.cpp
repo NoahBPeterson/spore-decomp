@@ -557,7 +557,7 @@ struct CityFlatten {
     void Flatten5dc(PairVec* dst);
 };
 
-// @ 0x00bdf750
+// 0x00bdf750 (byte-exact lifted version: match/slices/s00bdf750/s00bdf750.cpp)
 void CityFlatten::Flatten5a4(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5b4));
@@ -615,7 +615,7 @@ void CityFlatten::Flatten5c0(PairVec* dst)
 // ===========================================================================
 // 0x00bdf880 -- same flatten for tree at +0x5dc.
 // ===========================================================================
-// @ 0x00bdf880
+// 0x00bdf880 (byte-exact lifted version: match/slices/s00bdf880/s00bdf880.cpp)
 void CityFlatten::Flatten5dc(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5ec));

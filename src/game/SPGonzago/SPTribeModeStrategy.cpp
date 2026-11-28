@@ -6577,7 +6577,7 @@ uint8_t __fastcall FUN_00cd92f0(void** self, void* range, const uint32_t* str)
 }
 }  // namespace SP
 
-// @ 0x00cd9440
+// 0x00cd9440 (byte-exact lifted version: match/slices/s00cd9440/s00cd9440.cpp)
 namespace SP {
 void Vec16::DestroyRange(Elem16_s00cd_8e70* first, Elem16_s00cd_8e70* last)
 {

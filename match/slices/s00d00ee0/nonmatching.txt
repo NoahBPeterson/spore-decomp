@@ -1,7 +1,6 @@
 00d01110 168 Complete map<uint,float> writer; residual is call-argument scheduling and register assignment
 00d01410  76  Complete relationship lookup; original keeps the null result in edi across NormalizePair; difftest FAIL is a checker artifact: the find out-pointer is a dead parameter slot on both sides (original reuses a's slot, ours t's), so only the pointer value differs; same calls, result and memory
 00d015d0 290 Complete scaled feedback strength (power-ratio adjusted); residual is x87/SSE mix and register assignment
-00d01820 139 Complete rbtree DoCopySubtree over a pair-key set; residual is loop register assignment
 00d018d0  60  Complete erase-range over 8-byte elements (shift then shrink end); residual is register/scheduling; difftest WEAK after fixing end pointer shrink (element count *8, not raw byte count)
 00d01ab0 79 Complete per-key relationship tree lookup; residual is shrink-wrapped ebx and key kept in a register
 00d01bb0 400 Complete cRelationshipManager::GetDebugString; residual is String temp/EH layout and register assignment

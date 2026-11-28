@@ -416,7 +416,7 @@ uint8_t __fastcall FUN_00cd92f0(void** self, void* range, const uint32_t* str)
 
 // =================================================================================================
 // 0x00cd9440 -- destroy the tail of a 0x10-byte-element vector after moving [first,last) out.
-// @ 0x00cd9440
+// 0x00cd9440 (byte-exact lifted version: match/slices/s00cd9440/s00cd9440.cpp)
 void Vec16::DestroyRange(Elem16* first, Elem16* last)
 {
     Elem16* it = (Elem16*)FUN_00cd5a90(last, mpEnd, first);

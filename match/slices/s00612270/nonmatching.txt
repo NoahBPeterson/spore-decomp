@@ -1,6 +1,5 @@
 00612980  52  complete; priority constant is -9999 (not -10000), vptr/this-cast scheduling differs; equiv PASS 595 valid, 100% coverage (slice and src/game/SPEditors/SPPollinator.cpp) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 target, ret#3 ebx, ret#3 esi]
 00612e00  64  Variant copy-ctor zero stores share one reg in original; equiv WEAK (703 valid, 64.3% cov)
 00612f50  116  complete; failed auth/disabled-pollinator paths return false (not true); reg allocation differs; equiv PASS 434 valid, 90.8% coverage
-006130e0  84  destroy loop is a counted loop in original; equiv WEAK (311 valid, 56.8% cov)
 00613140  200  reg allocation (first in ebp, begin cached in ebx)
 00612270  1420  ProcessTransactionTick complete: iterator/AutoRef register allocation and block layout of the 3 queue loops differ

@@ -5,4 +5,3 @@
 00ec0270  87  complete; difftest UNSUPPORTED (all inputs discarded: fault-read). Distance-between-objects predicate; pointer/float mix makes the harness fault on every generated input.
 00ec0430  255  complete; difftest UNSUPPORTED (all inputs discarded: fault-read). Victim-selection predicate walking several object pointers; every generated input dereferences an invalid address.
 00ec0530  436  complete; difftest UNSUPPORTED (all inputs discarded: fault-read). Nearest-eligible-combatant search arming the multistage attraction; multi-level pointer chase faults on all inputs.
-00ec08d0  72  complete; difftest WEAK. Inspect-object decider creating the stimulus; stimuli call layout differs.

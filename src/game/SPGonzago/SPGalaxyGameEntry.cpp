@@ -15891,7 +15891,7 @@ cDownloadDialog* __fastcall cDownloadDialog_ctor_5940(cDownloadDialog* self)
     return self;
 }
 
-// @ 0x00df59c0
+// 0x00df59c0 (byte-exact lifted version: match/slices/s00df59c0/s00df59c0.cpp)
 bool cDownloadDialog::FUN_00df59c0(void* p)
 {
     uint key[3];
@@ -19569,7 +19569,7 @@ void cUISpaceRes::Destroy()
     mpVtbl00 = (void*)g_13eb938;
 }
 
-// @ 0x00dff130
+// 0x00dff130 (byte-exact lifted version: match/slices/s00dff130/s00dff130.cpp)
 void* ElemB::Init(void* o)
 {
     void* s = this;

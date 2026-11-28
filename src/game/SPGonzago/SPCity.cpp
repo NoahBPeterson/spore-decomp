@@ -8298,7 +8298,7 @@ bool IdHost::AddUniqueId(uint32_t id)
     return result;
 }
 
-// @ 0x00bdf750
+// 0x00bdf750 (byte-exact lifted version: match/slices/s00bdf750/s00bdf750.cpp)
 void CityFlatten::Flatten5a4(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5b4));
@@ -8350,7 +8350,7 @@ void CityFlatten::Flatten5c0(PairVec* dst)
     }
 }
 
-// @ 0x00bdf880
+// 0x00bdf880 (byte-exact lifted version: match/slices/s00bdf880/s00bdf880.cpp)
 void CityFlatten::Flatten5dc(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5ec));
@@ -8754,7 +8754,7 @@ int* IntMap::GetOrInsert(const int* key)
     return (int*)((char*)out + 0x14);
 }
 
-// @ 0x00be0b90
+// 0x00be0b90 (byte-exact lifted version: match/slices/s00be0b90/s00be0b90.cpp)
 void RebuildAnalysisFromStream(IStreamProvider* owner, AnalysisVec* vec)
 {
     vec->erase(vec->mpBegin, vec->mpEnd);

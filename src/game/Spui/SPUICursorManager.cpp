@@ -722,7 +722,7 @@ bool CurMgr::DestroyEntry(void* it)
   return r;
 }
 
-// @ 0x008027e0
+// 0x008027e0 (byte-exact lifted version: match/slices/s008027e0/s008027e0.cpp)
 void CurMgr::Refresh()
 {
   if (!*(uint8_t*)((char*)this + 0x40))

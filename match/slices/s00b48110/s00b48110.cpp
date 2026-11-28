@@ -437,7 +437,7 @@ struct cSpatialVec {
     void erase(cGameObject** pFirst, cGameObject** pLast);       // 0x00b48e40
 };
 
-// @ 0x00b48e40
+// 0x00b48e40 (byte-exact lifted version: match/slices/s00b48e40/s00b48e40.cpp)
 void cSpatialVec::erase(cGameObject** pFirst, cGameObject** pLast)
 {
     cGameObject** pLastArg = pLast;

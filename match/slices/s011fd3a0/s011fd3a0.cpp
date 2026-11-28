@@ -688,7 +688,7 @@ void Ctl::SetFrame(u32 handle, float frame)
 }
 
 // 011fdc00 -- clamp the loop length and advance
-// @ 0x011fdc00
+// 0x011fdc00 (byte-exact lifted version: match/slices/s011fdc00/s011fdc00.cpp)
 void Ctl::Advance(float dt)
 {
     u8* s = (u8*)this;

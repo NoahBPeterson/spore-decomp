@@ -4,7 +4,6 @@
 0111cd10 0 havok-equivalent
 0111cdb0 0 havok-equivalent
 0111ce00 0 havok-equivalent
-0111cf00 0 havok-equivalent
 0111d060 0 havok-equivalent
 0111d140 0 havok-equivalent
 0111d190 0 havok-equivalent

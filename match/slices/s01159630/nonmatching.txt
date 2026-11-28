@@ -1,4 +1,3 @@
-01159760  20  ReaderTable_Init1 (/O2 /MD /Gy /TP /arch:SSE /fp:fast): size-exact; original hoists the 0x3c/0x30 stores through edx/eax registers, cl emits immediate stores; semantics equivalent (equiv PASS)
 01159860  32  HELPER_CMpegBase::LoadBitRegister (/O2 /MD /Gy /TP /arch:SSE /fp:fast): size-exact; register allocation/scheduling only (cl uses edi/esi where retail keeps edx); semantics equivalent (equiv PASS)
 011598a0  61  HELPER_CMpegBase::GetBits (/O2 /MD /Gy /TP /arch:SSE /fp:fast): size-exact; register allocation plus tail shift/store order; semantics equivalent (equiv PASS)
 01159950  780  HELPER_CEALayer3::GetSideInfo (/O2 /MD /Gy /TP /arch:SSE /fp:fast): 873 vs 878 bytes; retail inlines both LoadBitRegister refill loops and shares the 0x18 compare, ours calls the helper; full LSF/non-LSF bit layout reproduced; semantics equivalent (equiv PASS, 100% coverage)

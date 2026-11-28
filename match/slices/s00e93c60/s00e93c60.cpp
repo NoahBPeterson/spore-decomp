@@ -785,7 +785,7 @@ void cVehicleView::ToggleShowPaths()
 }
 
 // ===================================================================== 0x00e94a10
-// @ 0x00e94a10
+// 0x00e94a10 (byte-exact lifted version: match/slices/s00e94a10/s00e94a10.cpp)
 void cEffectToggle::Update(int a2, float t, float f2, cEmitter* emitter, cEffectTarget* target)
 {
     (void)a2;
@@ -814,7 +814,7 @@ void cEffectToggle::Update(int a2, float t, float f2, cEmitter* emitter, cEffect
 }
 
 // ===================================================================== 0x00e94ad0
-// @ 0x00e94ad0
+// 0x00e94ad0 (byte-exact lifted version: match/slices/s00e94ad0/s00e94ad0.cpp)
 void __stdcall FUN_00e94ad0(cEmitter* self, cEffectTarget* target, int i)
 {
     if (self == 0)

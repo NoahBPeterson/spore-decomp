@@ -360,7 +360,7 @@ void MpegList_Unlink(void** head, MpegListNode* node)
 
 // ------------------------------------------------------------------ @ 0x01159760
 
-// @ 0x01159760
+// 0x01159760 (byte-exact lifted version: match/slices/s01159760/s01159760.cpp)
 void ReaderTable_Init1()
 {
     *(ReaderInitFn*)0x016e80a0 = &Reader_Init_116b7c0;

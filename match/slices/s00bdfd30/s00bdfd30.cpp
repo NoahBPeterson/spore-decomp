@@ -435,7 +435,7 @@ struct cVarListSerializer {
     void Read(void* owner);                                          // 0x00693e10
 };
 
-// @ 0x00be0b90
+// 0x00be0b90 (byte-exact lifted version: match/slices/s00be0b90/s00be0b90.cpp)
 void RebuildAnalysisFromStream(IStreamProvider* owner, AnalysisVec* vec)
 {
     vec->erase(vec->mpBegin, vec->mpEnd);

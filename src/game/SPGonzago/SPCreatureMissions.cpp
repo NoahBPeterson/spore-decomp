@@ -1588,7 +1588,7 @@ char Mission::FUN_00c30150(int param)
     return 1;
 }
 
-// @ 0x00c301c0
+// 0x00c301c0 (byte-exact lifted version: match/slices/s00c301c0/s00c301c0.cpp)
 void Mission::FUN_00c301c0(int src)
 {
     int* self = (int*)this;

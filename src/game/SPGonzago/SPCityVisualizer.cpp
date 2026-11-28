@@ -8159,7 +8159,7 @@ void Elem1CVec::push_back()
     }
 }
 
-// @ 0x00d5edc0
+// 0x00d5edc0 (byte-exact lifted version: match/slices/s00d5edc0/s00d5edc0.cpp)
 cActionCircle_s00d5_e730* ActionCircleVec::erase(cActionCircle_s00d5_e730* first, cActionCircle_s00d5_e730* last)
 {
     cActionCircle_s00d5_e730* newEnd = FUN_00d5d530(last, mEnd, first);
