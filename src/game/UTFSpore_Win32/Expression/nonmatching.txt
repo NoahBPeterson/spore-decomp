@@ -6,7 +6,6 @@
 0083dd00 51 complete: hashtable<cExprFunction>::DoFreeNodes; node free scheduling differs
 0083dd70 91 complete: EvalSignedRealNumber; x87 sign/register scheduling differs; difftest WEAK (361 valid, 67.9% coverage) after ECX member fix
 0083ddb0 156 frame: R49 (2026-11-17): find result must sit at the lowest frame slot (frame 0x20 vs 0x1c) and state byte store before insert; tried locals reordered | Earlier note: complete: hash_map<string,AutoRefCount<cExprFunction>>::operator[] (find, else insert pair); frame layout differs (original reuses the dead param slot for the null AutoRefCount temp, EH states 0/1) [equiv: UNSUPPORTED 0/400 valid]
-0083e160 48 complete: EvalRealFactor; long-double pow call sequence differs; difftest WEAK (358 valid, 57.6% coverage) after ECX member fix
 0083e1c0 665 complete: EvalRealTerm; x87 pow/fmod and SSE accumulation scheduling differ
 0083e5f0 587 complete: EvalIntNumber; identifier string build + hashtable dispatch + EH frame differ (845 vs 986 bytes)
 0083eb70 322 complete: EvalBool; identifier string build + hashtable dispatch + EH frame differ (458 vs 579 bytes)

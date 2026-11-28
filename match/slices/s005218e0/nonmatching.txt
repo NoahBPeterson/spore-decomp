@@ -1,4 +1,3 @@
 # <va>  <diff-bytes>  <reason>
 005219d0  187  /Od message handler complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE); instructions match, only the /Od stack-slot layout differs; difftest WEAK after fixing the missing second parameter (ret 8), thiscall AtomicRefCounted::Release and thiscall EASTL erase/assign/ctor/DoFree helpers that were declared cdecl
-00521ba0  457  /Od per-frame update complete; AutoRefCount temp layout differs
 00521d70  2474  nSPSkinner::cPaintSystem::HandleUpdateMessage complete; /Od layout differs

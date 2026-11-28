@@ -15,3 +15,4 @@ slices/s00546f80/s00546f80.cpp  ?DoDestroyValues@?$vector@U?$basic_string@_W  00
 slices/s00546f80/s00546f80.cpp  ??1?$pair@IU?$basic_string  005477e0  /Od /Ob1 /MD /Gy /TP
 slices/s00546f80/s00546f80.cpp  ?find_first_not_of@  00547900  /Od /Ob1 /MD /Gy /TP
 slices/s00546f80/s00546f80.cpp  ?find_last_not_of@  00547970  /Od /Ob1 /MD /Gy /TP
+slices/s00546f80/s00546f80_lifted.cpp  ?FUN_00546f80@D_00546f80@@QAEXXZ  00546f80  /Od /Ob1 /MD /Gy /TP
