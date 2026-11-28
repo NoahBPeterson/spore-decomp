@@ -37,7 +37,6 @@
 010d9470 478 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: box/box processCollision modelled on the reference s010fd4c0 cd; the original fully inlines the aTb/radius/boundary-tolerance setup and the sepDist frame (0x1d4) into one block, ours calls setMulInverseMul/calcManifold from a smaller 0x164 frame; difftest 5/5 valid inputs mismatched (fault in our smaller frame) flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010d97a0 511 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: box/box staticGetClosestPoints, same cd setup gap as 010d9470, block layout/scheduling differs; difftest 2/400 valid inputs mismatched (fault) flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010d9b10 491 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: box/box staticGetPenetrations, same cd setup gap, checkIntersection called from a smaller frame; difftest 5/30 valid inputs mismatched (fault) flags: /vc71 /O2 /MD /Gy /EHsc /TP
-010d9ea0 40 complete UNSUPPORTED /vc71 /O2 /MD /Gy /EHsc /TP: createPredGskfAgent; callee-saved register allocation and the shared-vs-duplicated epilogue differ (esi pushed inside the first branch in the original), vtable slot and size stores reproduced; difftest 0/400 valid inputs (all discarded as faults), no verdict flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010dce40 217 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dd180 33 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dd300 79 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP

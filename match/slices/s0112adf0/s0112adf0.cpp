@@ -501,7 +501,7 @@ void hkPackfileObjectUpdateTracker::objectPointedBy(void* object, void* fromWher
     m_pointersTo.insert((hkUlong32)(uintptr_t)object, &fromWhere);
 }
 
-// @ 0x0112b620
+// 0x0112b620 (byte-exact lifted version: match/slices/s0112b620/s0112b620.cpp)
 void hkPointerMultiMap_insert(hkPointerMultiMap* self, void* key, void** const& value)
 {
     self->insert((hkUlong32)(uintptr_t)key, value);

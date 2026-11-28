@@ -35,7 +35,7 @@ struct hkMemoryAllocator {
 
 extern hkMemoryAllocator* hkMemory_s_instance;                                  // 0x016e4178
 
-// @ 0x010d9ea0
+// 0x010d9ea0 (byte-exact lifted version: match/slices/s010d9ea0/s010d9ea0.cpp)
 hkCollisionAgent* HK_CALL hkPredGskfAgent::createPredGskfAgent(const hkCdBody& bodyA, const hkCdBody& bodyB,
                                                                const hkCollisionInput& input, hkContactMgr* mgr)
 {
