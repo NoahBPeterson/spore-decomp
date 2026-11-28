@@ -341,6 +341,21 @@ jobs:
             exit 1
           fi
 
+      # No goto (decision 2026-11-28, "the closest thing to a red line"): no function may gain one, however it was
+      # written (a lifter's output included). A ratchet until the existing ones are removed; no override label.
+      - name: No new goto
+        if: always() && steps.refs.outcome == 'success'
+        run: |
+          if python3 tools/ci/goto_check.py "${{ steps.refs.outputs.base }}" "${{ steps.refs.outputs.head }}" > "$RUNNER_TEMP/goto.txt"; then
+            echo "No goto added." | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            { echo "This pull request adds goto, which is not merged:"
+              sed 's/^/    /' "$RUNNER_TEMP/goto.txt"
+              echo "Write the control flow as C++ blocks (early return, break/continue, a loop, if/else). If no goto-free"
+              echo "source matches, the function stays non-matching (AGENTS.md, Rules)."; } | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
       # Third-party code (decision 2026-11-20, THIRD_PARTY.md): open-source library source is #included from work/
       # (tools/ci/setup_oss.sh), never copied in, since some of it (OpenSSL 0.9.8g) cannot be combined with GPL-2.0.
       - name: No copied third-party source

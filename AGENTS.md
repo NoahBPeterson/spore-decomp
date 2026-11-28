@@ -152,6 +152,11 @@ into the generator's inputs so they are not lost.
 - A function's note goes in `nonmatching.txt` only when its body is a real decompilation of the whole function. A
   placeholder (`{}`, `{ return a; }`, a stub that skips calls the original makes) goes in `partial.txt`: it needs
   source, not codegen levers. `check.py` prints `STUB:` when it sees one.
+- **No `goto`.** Write control flow as blocks: an early `return`, `break` / `continue`, a loop, `if` / `else`. The
+  check fails any pull request that gives a function more gotos than it had (moving code is fine, removing gotos
+  always passes), whatever wrote the source, a lifter included, and no label overrides it. If no goto-free source
+  matches, the function stays non-matching. Gotos already in the tree are being removed; a pull request that only
+  removes them is a cleanup.
 - **No inline assembly** without a maintainer's approval: no `__asm` / `_asm`, `_emit`, `__declspec(naked)` or raw
   bytes. The check fails any pull request that adds such a line. The exception is the reviewed float helpers in
   `match/include/sse_helpers.h` (`SseRoundToInt`, `SseTruncToInt`, `SseFloorToInt`, `SseCeilToInt`, `SseClamp`,
