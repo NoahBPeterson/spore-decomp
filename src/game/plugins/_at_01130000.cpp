@@ -1047,7 +1047,7 @@ bool FUN_0113b910(uint8_t* p, float* params)
     return true;
 }
 
-// @ 0x0113b9d0
+// 0x0113b9d0 (byte-exact lifted version: match/slices/s0113b9d0/s0113b9d0.cpp)
 void Ctx::FUN_0113b9d0()
 {
     if (B(this, 0x169) != 0)
