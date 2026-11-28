@@ -1698,7 +1698,7 @@ bool cSPUISpaceTrading_s0107_6540::DoMessage(IWindow_s0107_6540* win, Message* m
     return false;
 }
 
-// @ 0x01077470
+// 0x01077470 (byte-exact lifted version: match/slices/s01077470/s01077470_lifted.cpp)
 void SP::cSPUISpaceTrading_s0107_7470::FUN_01077470()
 {
     if (mpOwner18 != 0) {

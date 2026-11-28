@@ -19,10 +19,8 @@
                 VirtualAlloc differs; see scratch_s011fd3a0_papercut.md
                 re-init of the free-list tail) keeps the original's arithmetic but cl hoists
                 the g_maxSize load and reorders the prologue
-011fd6f0   20  vertex shader cache bind: complete; the vtable slot is re-loaded into a register
                 instead of `call dword ptr [edx+0x16c]`, and the active-shader compare uses a
                 different register
-011fd730   20  pixel shader cache bind: same shape as 011fd6f0 (slots +0x1a8/+0x1ac)
 011fd8b0   52  ControllerShiftBlock: same in-place-add shape as 011fd870 plus the two helper
                 calls (FUN_011ffa40/FUN_01200800); see scratch_s011fd3a0_papercut.md
 011fd900   64  ControllerRebind: same as 011fd8b0, base taken from [table+0x7c]

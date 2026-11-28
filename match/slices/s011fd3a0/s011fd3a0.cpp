@@ -353,7 +353,7 @@ char* __cdecl rw__graphics__D3D9TextCopy(char* dst, const char* src)
 // ============================================================ shader cache
 // A shader descriptor cache: {vtable; u32 current; ... desc at +8}.
 // 011fd6f0 -- bind the cached vertex shader (creating it on first use)
-// @ 0x011fd6f0
+// 0x011fd6f0 (byte-exact lifted version: match/slices/s011fd6f0/s011fd6f0.cpp)
 void __fastcall FUN_011fd6f0(void* pself)
 {
     u32* self = (u32*)pself;
@@ -374,7 +374,7 @@ void __fastcall FUN_011fd6f0(void* pself)
 }
 
 // 011fd730 -- bind the cached pixel shader (creating it on first use)
-// @ 0x011fd730
+// 0x011fd730 (byte-exact lifted version: match/slices/s011fd730/s011fd730.cpp)
 void __fastcall FUN_011fd730(void* pself)
 {
     u32* self = (u32*)pself;

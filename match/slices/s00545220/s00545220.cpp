@@ -398,7 +398,7 @@ typedef eastl::vector_map<const wchar_t*, eastl::mem_fun_t<void, AtomParser> > E
 extern StartElementMap sAtomStartElementMap;    // 0x015e2e48
 extern EndElementMap sAtomEndElementMap;        // 0x015e2da8
 
-// @ 0x00545220
+// 0x00545220 (byte-exact lifted version: match/slices/s00545220/s00545220_lifted.cpp)
 void AtomParser::StartElementHandler(void* pUserData, const wchar_t* name, const wchar_t** attrs) {
     AtomParser* pThis = (AtomParser*)pUserData;
     if (pThis->mpDocument) {

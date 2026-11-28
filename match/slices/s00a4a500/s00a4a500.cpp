@@ -359,7 +359,7 @@ void canvas_reflecttitle(t_glist* g)
              titlech, buf, (char*)nm->s_thing);
 }
 
-// @ 0x00a4a9a0
+// 0x00a4a9a0 (byte-exact lifted version: match/slices/s00a4a9a0/s00a4a9a0.cpp)
 void canvas_drawredrect(t_glist* g, int flag)
 {
     if (flag != 0) {

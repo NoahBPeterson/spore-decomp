@@ -1,1 +1,2 @@
 slices/s010527f0/s010527f0.cpp  ?AdjustCost@cSPEnergyRepairToolStrategy@@QAEHH@Z  01053590  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s010527f0/s010527f0_lifted.cpp  _FUN_010527f0  010527f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

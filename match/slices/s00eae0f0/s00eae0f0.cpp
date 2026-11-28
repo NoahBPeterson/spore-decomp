@@ -139,7 +139,7 @@ int* FUN_00eae540(int* v, int* other)
     return v;
 }
 
-// @ 0x00eaeef0
+// 0x00eaeef0 (byte-exact lifted version: match/slices/s00eaeef0/s00eaeef0.cpp)
 // 0x00eaeef0  eastl::vector<float,SP_STL_Sound>::assign(first,last)
 void FUN_00eaeef0(int* v, float* first, float* last)
 {

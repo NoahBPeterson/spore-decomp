@@ -1,1 +1,0 @@
-00545220  8    AtomParser::StartElementHandler: complete; frame 0x20 smaller (string16::resize, 0x00429520, reserves nested-inline slots not reproduced) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
