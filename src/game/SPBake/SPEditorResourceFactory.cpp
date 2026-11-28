@@ -2124,7 +2124,7 @@ bool FUN_004bfb20(StreamWriter* w, int data)
     return false;
 }
 
-// @ 0x004bfc10
+// 0x004bfc10 (byte-exact lifted version: match/slices/s004bfc10/s004bfc10.cpp)
 void FUN_004bfc10(void* p)
 {
     FixedBufferAllocatorStub* fba = (FixedBufferAllocatorStub*)g_tls_current;
