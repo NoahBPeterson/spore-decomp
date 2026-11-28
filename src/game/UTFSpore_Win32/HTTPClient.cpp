@@ -2005,8 +2005,7 @@ bool ReportClient::CancelJob(unsigned id)
 
 // @ 0x00943a30
 bool ReportClient::CancelAllJobs(bool bWait, unsigned timeout)
-{
-    ThreadRef thread;
+{    ThreadRef thread;
     thread.Init();
     bool haveThread = false;
     mMutex.Lock(&kTimeoutForever);
@@ -2033,18 +2032,21 @@ bool ReportClient::CancelAllJobs(bool bWait, unsigned timeout)
     EAMutex* m = &mMutex;
     m->Lock(&kTimeoutForever);
     WorkerInfo* w = mpWorker;
-    if (w)
+    if (w) {
         w->mCancelCurrent = 1;
-    m->Unlock();
+        m->Unlock();
+    } else {
+        m->Unlock();
+    }
     m->Unlock();
     if (haveThread) {
-        bool ok;
         if (timeout) {
             unsigned deadline = GetThreadTime() + timeout;
-            ok = thread.WaitForEnd(&deadline, 0) == 2;
-        } else {
-            ok = thread.WaitForEnd(&kTimeoutForever, 0) == 2;
+            bool ok = thread.WaitForEnd(&deadline, 0) == 2;
+            thread.Release();
+            return ok;
         }
+        bool ok = thread.WaitForEnd(&kTimeoutForever, 0) == 2;
         thread.Release();
         return ok;
     }

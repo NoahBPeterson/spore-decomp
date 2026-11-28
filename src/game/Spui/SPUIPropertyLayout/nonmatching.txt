@@ -1,5 +1,4 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-00828110 45 ForceVisibleLocation: SSE load/spill scheduling of the inlined point copies and frame size 0x20 vs 0x1c [equiv: WEAK (286 valid, 34.0% cov)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 008284f0 177 eastl do_move_start: original strength-reduces src+0x1c / dst+0x1a pointers (compared without /EHsc) [equiv: WEAK (110 valid, 15.2% cov)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00828560 98 eastl copy do_copy: original keeps first in its arg slot and src+0x1c as induction pointer [equiv: UNSUPPORTED (harness 0/400 valid)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 008285e0 98 eastl copy_backward do_copy: same induction-pointer difference as 00828560 [equiv: UNSUPPORTED (harness 0/400 valid)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

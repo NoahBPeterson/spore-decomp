@@ -6,6 +6,5 @@
 0071ea40  394  vector<cFaceCluster>::DoInsertValues: complete; helper call arg slots and register choices differ (483 vs 470 bytes); difftest PASS (--inputs 1000 --alias 0.3; 62.5% coverage; WEAK at default 400 inputs) after adding the // @ marker
 0071ecc0  99   index collector by key: complete; same local i slot difference
 0071ed30  4    merge of sorted keys into {short,short} vector: complete; only the second temp's stack slot differs; difftest PASS after fixing the checker symbol pick (marker named the inline push_back; added MergeKeys to symbols/slices/s0071e390.txt)
-0071ee10  41   SP::FindPrimitives: complete; register allocation of the count (edx vs ecx) differs
 0071f0f0  159  find-or-add vertex record: complete; register assignment (mesh in edi vs esi) and temp offsets differ; difftest PASS after fix: Handle had its refcounted pointer at +0 instead of +0xc (Handle_Assign 0x424f70 layout), so ~VertexKey released the wrong field; also added the // @ marker
 0071f300  232  0x8c entry assignment loop: complete; ref-assign register allocation and spills differ

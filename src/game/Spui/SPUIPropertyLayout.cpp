@@ -188,7 +188,7 @@ virtual void s45();
 virtual void s46();
 virtual void s47();
 virtual void s48();
-  virtual Pt* FindPos(Pt* out, Pt p);  // +0xc4
+  virtual Pt FindPos(Pt p);  // +0xc4
 };
 struct WinMgr {
   virtual void s0(); 
@@ -508,21 +508,28 @@ EA::UTFWin::IWindow * cSPUIPropertyLayout::GetRootWindow()
 
 // @ 0x00828110
 void CPL::ForceVisibleLocation()
-{
-  IWindow* w = (IWindow*)mLayout.FindWindowByID(mRootWinId, 1);
+{  IWindow* w = (IWindow*)mLayout.FindWindowByID(mRootWinId, 1);
   if (w) {
     if (w->Get10()) {
       if (WindowManager()->GetMain()) {
         QObj* q = WindowManager()->GetMain();
         RectF* r = q->GetRect();
         Rect2 R;
-        Pt P;
         FUN_00808370(&R, w, 1);
-        Pt pf = *q->FindPos(&P, R.b);
-        float x = P.x;
-        float y = P.y;
-        if (pf.x > r->x1) x = (P.x - mOffsetX * 2.0f) - (R.a.x - P.x);
-        if (pf.y > r->y1) y = (P.y - mOffsetY * 2.0f) - (R.a.y - P.y);
+        Pt b = R.b;
+        struct Helper {
+          static __forceinline void Read(const Pt& p, float& ox, float& oy) {
+            ox = p.x;
+            oy = p.y;
+          }
+        };
+        float pfx, pfy;
+        Helper::Read(q->FindPos(b), pfx, pfy);
+        _ReadWriteBarrier();
+        float x = R.a.x;
+        float y = R.a.y;
+        if (pfx > r->x1) x = (R.a.x - mOffsetX * 2.0f) - (R.b.x - R.a.x);
+        if (pfy > r->y1) y = (R.a.y - mOffsetY * 2.0f) - (R.b.y - R.a.y);
         w->SetPos(x, y);
       }
     }

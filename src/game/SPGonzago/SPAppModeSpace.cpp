@@ -5055,6 +5055,12 @@ cAppModeSpace_s00fd_bd60::~cAppModeSpace_s00fd_bd60()
 // @ 0x00fdcd40
 bool cAppModeSpace_s00fd_cd40::Init(void* arg)
 {
+    extern void FUN_0101a9a0();
+    extern void FUN_0101ae70();
+    extern void* vtbl_01493e54[];
+    extern float* __fastcall FUN_0041ea70(void* prop);
+    extern uint8_t* __fastcall FUN_0041e920(void* prop);
+
     void* loc = FUN_0067dcc0();
     if (loc != 0) {
         ((V20s*)loc)->Add(this ? (void*)mSub04 : 0, 0x1a0219e);
@@ -5062,14 +5068,14 @@ bool cAppModeSpace_s00fd_cd40::Init(void* arg)
     }
 
     void* overlay = ((V50*)arg)->GetModeManager();
-    ((V20s*)overlay)->Add((void*)0x14a5b6e, 0x101a9a0);
+    ((V20s*)overlay)->Add((void*)0x14a5b6e, (int)&FUN_0101a9a0);
     overlay = ((V50*)arg)->GetModeManager();
-    ((V20s*)overlay)->Add((void*)0x1103194, 0x101ae70);
+    ((V20s*)overlay)->Add((void*)0x1103194, (int)&FUN_0101ae70);
 
     void* cmd = operator new[](0x10, DAT_013f09b4, 0, 0, 0, 0);
     if (cmd != 0) {
         ((cSelf_s00fd_cd40*)cmd)->FUN_0083c800();
-        *(void**)cmd = (void*)0x1493e54;
+        *(void**)cmd = vtbl_01493e54;
     }
 
     FUN_0067de20();
@@ -5088,20 +5094,21 @@ bool cAppModeSpace_s00fd_cd40::Init(void* arg)
         void* val;
         if (((V24*)*pvessel)->GetProp(0x2e5710a, &val))
             if (((cPropVal*)val)->mKind == kind)
-                m138.f = *FUN_0041ea70();
+                m138.f = *FUN_0041ea70(val);
     }
+    _ReadWriteBarrier();
     if (*pvessel != 0) {
         void* val;
         if (((V24*)*pvessel)->GetProp(0x2e57110, &val))
             if (((cPropVal*)val)->mKind == kind)
-                m13c.f = *FUN_0041ea70();
+                m13c.f = *FUN_0041ea70(val);
     }
 
     if (DAT_015fd918 != 0) {
         void* val;
         if (((V24*)DAT_015fd918)->GetProp(0x64a44a8, &val))
             if (((cPropVal*)val)->mKind == 1)
-                mFlag18e = *FUN_0041e920();
+                mFlag18e = *FUN_0041e920(val);
     }
 
     ((cSelf_s00fd_cd40*)&mObj144)->FUN_004e0880(9);

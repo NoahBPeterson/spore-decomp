@@ -711,7 +711,7 @@ namespace XHTML {
 namespace Layout {
 class ImageRequester {
 public:
-    virtual ~ImageRequester();
+    virtual ~ImageRequester() {}
     virtual void vf04();
     virtual void OnImageRequest(void* pArg);
     void* mpVf1;          // +0x04
@@ -796,6 +796,9 @@ struct intrusive_list_node_s008e_b250 {
     intrusive_list_node_s008e_b250* mpNext;
     intrusive_list_node_s008e_b250* mpPrev;
     void Destroy();  // 0x00620230
+};
+struct intrusive_list_member_s008e_b250 : intrusive_list_node_s008e_b250 {
+    ~intrusive_list_member_s008e_b250() { Destroy(); }
 };  // namespace eastl
 }
 namespace EA {
@@ -909,7 +912,7 @@ namespace Layout {
 class Item_s008e_b250 : public eastl::intrusive_list_node_s008e_b250 {
 public:
     Item_s008e_b250(Page_s008e_b250* pPage, int itemType);  // 0x008EAE40
-    virtual ~Item_s008e_b250();
+    virtual ~Item_s008e_b250() {}
     virtual void vf04();
     virtual void vf08();
     virtual void vf0c();
@@ -930,7 +933,7 @@ namespace Layout {
 class ContainerItem_s008e_b250 : public Item_s008e_b250 {
 public:
     __forceinline ContainerItem_s008e_b250(Page_s008e_b250* pPage, int type) : Item_s008e_b250(pPage, type) {}
-    eastl::intrusive_list_node_s008e_b250 mChildItems;  // +0x18
+    eastl::intrusive_list_member_s008e_b250 mChildItems;  // +0x18
     void* mpElement;                         // +0x20
     void* mStyleRules;                       // +0x24
     unsigned int mnRuleCount;                // +0x28
@@ -1123,14 +1126,10 @@ EA::XHTML::Layout::ListItem_s008e_b250::ListItem_s008e_b250(EA::XHTML::Layout::P
 
 // @ 0x008eb2e0
 EA::XHTML::Layout::ListItem_s008e_b250::~ListItem_s008e_b250()
-{
-    if (mMarkerTextBegin) {
-        unsigned int nBytes = (unsigned int)((char*)mMarkerTextCapacity - (char*)mMarkerTextBegin);
-        if ((nBytes & 0xfffffffe) > 2)
-            operator delete[]((char*)mMarkerTextBegin);
-    }
-    mMarkerImageURI = kStr_None;
-    mMarkerTextBegin = (wchar_t*)kStr_None;
+{    _ReadWriteBarrier();
+    int nBytes = (int)((char*)mMarkerTextCapacity - (char*)mMarkerTextBegin) & 0xfffffffe;
+    if (nBytes > 2 && mMarkerTextBegin != 0)
+        operator delete[]((char*)mMarkerTextBegin);
 }
 
 // @ 0x008eb350

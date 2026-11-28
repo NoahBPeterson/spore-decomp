@@ -12,7 +12,6 @@
 0064f730 48 UninitCopyOut complete; the Entry copy ctor is emitted out-of-line and called instead of inlined, and the fourth-arg pointer loses its home-slot spill, not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 0064f7c0 29 uninitialized copy complete; the Entry copy ctor is emitted out-of-line and called instead of inlined at this site, not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 0064f8d0 73 uninitialized_fill_n complete; cl picks an aggregate-copy base pointer at +0xc (ours +0x10) and register allocation differs, not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-006505d0 47 cSPUIAssetGrid::Find(id): complete, branch/register layout differs
 00650630 2171 ReloadCallback complete (teardown + window wiring); register allocation / frame reuse of dead arg slots differs
 006511b0  436  eastl::insertion_sort<GridEntry*,CompareA> complete; iterator strength-reduction/register layout differs
 00651390  355  unguarded insertion sort complete; iterator strength-reduction/register layout differs

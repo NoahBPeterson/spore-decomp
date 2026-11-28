@@ -1,4 +1,3 @@
-00fdcd40 39 Init: size 412 vs 412; equiv WEAK (162 valid, coverage 55.2% < 60%)
 00fdcee0 566 PreGameModeTransition: size 794 vs 797; equiv UNSUPPORTED (only 0/400 inputs valid; fake-arity=394, fault(read)=4, fault(write)=2)
 00fdd200 217 FUN_00fdd200: size 277 vs 282; equiv WEAK (275 valid, coverage 49.0% < 60%)
 00fdd320 101 FUN_00fdd320: size 108 vs 114; equiv PASS (281 valid, coverage 71.7%) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]

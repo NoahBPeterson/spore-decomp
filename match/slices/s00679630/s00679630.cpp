@@ -324,25 +324,27 @@ void Container::Shutdown() {
 
 // ---- 0x00679ff0 : container push (copies into a new block slot) ------
 // @ 0x00679ff0
-void Container::Push(Elem* other) {
+void Container::Push(Elem* other) {    struct S8 { int a, b; };
+    struct S32 { S8 a, b, c, d; };
+    struct S128 { S32 a, b, c, d; };
+    struct LocalElem { S128 a, b; S32 c; S8 d, e; int f; };
     char* thisp = (char*)this;
-    Elem local;
-    local.CopyFrom(other);
+    LocalElem local;
+    ((Elem*)&local)->CopyFrom(other);
     int n = (*(int*)(thisp + 0x24) - *(int*)thisp) >> 2;
     if (n + 1 >= *(int*)(thisp + 4))
         ((Grow*)thisp)->GrowVec(1, 1);
     void* p = OperatorNew(0x4d0, "Editor", 0, 0, "allocator.h", 0xd1);
     *(void**)(*(int*)(thisp + 0x24) + 4) = p;
     if (*(int*)(thisp + 0x18) != 0)
-        (*(Elem**)(thisp + 0x18))->CopyFrom(&local);
+        (*(Elem**)(thisp + 0x18))->CopyFrom((Elem*)&local);
     int q = *(int*)(thisp + 0x24);
     *(int*)(thisp + 0x24) = q + 4;
     int v = *(int*)(q + 4);
     *(int*)(thisp + 0x1c) = v;
-    *(int*)(thisp + 0x20) = v + 0x4d0;
-    *(int*)(thisp + 0x18) = *(int*)(thisp + 0x1c);
-    FUN_00678f70((char*)&local);
-}
+    *(volatile int*)(thisp + 0x20) = v + 0x4d0;
+    *(int*)(thisp + 0x18) = *(volatile int*)(thisp + 0x1c);
+    FUN_00678f70((char*)&local);}
 
 // ---- 0x0067a120 : destroy every element ------------------------------
 // @ 0x0067a120

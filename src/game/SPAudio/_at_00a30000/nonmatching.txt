@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00a34d70 47 SetSendId (fixed_vector<uint> push/back overwrite): operand/branch layout flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 00a34dc0 86 cEapdMessage::Init: original keeps result byte in bl (xor bl,bl) and pushes ebp flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 00a3bc70 1176 complete; register allocation in the offset-add blocks and zero-test scheduling differ; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; calls 25/25, size 1.005x, vcall slots equal; difftest WEAK (2.1% coverage: SP::App() global is null in the image so random runs return at once)
 00a3cbb0 177 cMixEventInlineCommand::Execute: complete; EH prolog + debug-new/"Swarm" MapDescription construction scheduling differ; harness discards every input (_CxxThrowException from the faked debug operator new). difftest UNSUPPORTED. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

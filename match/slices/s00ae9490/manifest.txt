@@ -15,3 +15,4 @@ slices/s00ae9490/s00ae9490.cpp  ?copy_addref@@YAPAUE12@@PAU1@00@Z  00ae97e0  /O2
 slices/s00ae9490/s00ae9490.cpp  ?Select@SpaceTool@@QAE_NHH@Z  00ae9b90  /O2 /MD /Gy /EHsc /TP
 slices/s00ae9490/s00ae9490.cpp  ?MatchesCiv@SpaceTool@@QAE_NH@Z  00ae9f10  /O2 /MD /Gy /EHsc /TP
 slices/s00ae9490/s00ae9490.cpp  ?dtor@Entry@@QAEXXZ  00aea310  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?write_vec@@YAXPAXPAUVec12@@@Z  00ae9e60  /O2 /MD /Gy /EHsc /TP

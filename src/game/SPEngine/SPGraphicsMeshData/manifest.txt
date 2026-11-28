@@ -9,3 +9,4 @@
 ../src/game/SPEngine/SPGraphicsMeshData.cpp  ?WriteStream@@YA_NPAURend@@PBUStream@@@Z  0071dbf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshData.cpp  ?Vec20_find@@YAHPBUVecDescr@@I@Z  0071dd80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshData.cpp  ?CollectVertexIndices@@YAXPBUMesh20@@PAUVecInt@@HHH@Z  0071ec20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshData.cpp  ?FindPrimitives@@YAXPAUMeshPrims@@PAUVecInt@@HHH@Z  0071ee10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -1055,10 +1055,10 @@ int trixie_new(int a, int b, int arg3, int arg4)
     return self;}
 
 // @ 0x00a40e80
-int SP_Audio_Trixie_Register()
-{
-    int buf[2];
-    int* g;
+bool SP_Audio_Trixie_Register()
+{    int buf[2];
+    int* __restrict g;
+    int* g2;
     g = EA::Audio::Eapd::gensym(buf, DAT_01409070);
     DAT_0166ef2c = g[0];
     DAT_0166ef30 = g[1];
@@ -1077,12 +1077,12 @@ int SP_Audio_Trixie_Register()
     g = EA::Audio::Eapd::gensym(buf, DAT_01453aa4);
     DAT_0166ef14 = g[0];
     DAT_0166ef18 = g[1];
-    g = EA::Audio::Eapd::gensym(buf, DAT_01453b84);
-    DAT_0166ef04 = g[0];
-    DAT_0166ef08 = g[1];
-    g = EA::Audio::Eapd::gensym(buf, DAT_01453b7c);
-    DAT_0166ef34 = g[0];
-    DAT_0166ef38 = g[1];
+    g2 = EA::Audio::Eapd::gensym(buf, DAT_01453b84);
+    DAT_0166ef04 = g2[0];
+    DAT_0166ef08 = g2[1];
+    g2 = EA::Audio::Eapd::gensym(buf, DAT_01453b7c);
+    DAT_0166ef34 = g2[0];
+    DAT_0166ef38 = g2[1];
     DAT_0166ef44 = EA::Audio::Eapd::class_new(DAT_0166ef0c, DAT_0166ef10,
                                               (void*)trixie_new, (void*)FUN_00a3fdc0,
                                               0x38, 0, 9, 0);
@@ -1090,5 +1090,4 @@ int SP_Audio_Trixie_Register()
                                      DAT_0166ef1c, DAT_0166ef20, 9, 0);
     EA::Audio::Eapd::class_addmethod(DAT_0166ef44, (void*)trixie_use,
                                      DAT_0166ef3c, DAT_0166ef40, 2, 0);
-    return 1;
-}
+    return true;}

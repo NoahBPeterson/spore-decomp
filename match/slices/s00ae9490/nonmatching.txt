@@ -18,7 +18,6 @@
                fault on read before reaching the body).
                differ.  Equiv WEAK 26.8% coverage.
 00ae9c90  27  FUN_00ae9c90: complete.  Equiv UNSUPPORTED (all inputs fault on read).
-00ae9e60  47  write_vec: complete.  Equiv UNSUPPORTED (stream/vector inputs fault).
 00ae9f50 386  SpaceTool::OnShutdown0: complete (kept noinline).  Equiv WEAK 7.1% coverage
                (only the early-out paths are reachable with generated inputs).
 00aea250 105  Entry::ctor: complete.  Equiv PASS, 100% coverage.

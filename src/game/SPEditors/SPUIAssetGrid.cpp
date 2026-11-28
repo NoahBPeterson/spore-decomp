@@ -2345,22 +2345,23 @@ void __fastcall sub_650470(void*)
 
 // @ 0x006505d0
 GridEntry* Grid::Find(uint32_t id)
-{
-    int index = -1;
+{    int index = -1;
     if (id == 0) {
         index = 0;
     } else {
+        int i = 0;
         const int n = (int)(mpEnd - mpBegin);
-        for (int i = 0; i < n; ++i) {
+        _ReadWriteBarrier();
+        for (; i < n; ++i) {
             if (mpBegin[i].mID == id) {
                 index = i;
                 break;
             }
         }
     }
-    if (index == -1)
-        return 0;
-    return &mpBegin[index];
+    if (index != -1)
+        return &mpBegin[index];
+    return 0;
 }
 
 // @ 0x00650630

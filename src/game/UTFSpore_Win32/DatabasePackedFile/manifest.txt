@@ -67,3 +67,4 @@
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?insertUnique@RBTree@@QAEPAHPAH00D@Z  008db560  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ??0PFIndexModifiable_s008d_aff0@@QAE@PAX@Z  008db730  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetDataEnd@PFIndexModifiable@@QAEHXZ  008daf40  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetTotalDiskSize@PFIndexModifiable@@QAEHXZ  008dafa0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

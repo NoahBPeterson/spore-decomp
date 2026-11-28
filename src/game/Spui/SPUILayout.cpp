@@ -14,6 +14,8 @@
 #include "EA/Stopwatch.h"
 #include "cSPUILayoutCheat.h"
 #include "EA/ArgScript/cArguments.h"
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 // unnamed retail callees and globals (address in the comment)
 extern void  __cdecl FlushCache(int);
@@ -1327,28 +1329,38 @@ bool cSPUILayoutObjectCollection::Reload()
 // @ 0x00811f20
 void* __thiscall cSPUILayoutManager_s0081_17f0::ctor()
 {
+    struct MgrBytes {
+        u8 mPad00[0x1c];
+        u8 mColor1;
+        u8 mPad1d[0x1b];
+        u8 mColor2;
+    };
     u32* s = (u32*)this;
+    volatile u32* vs = (volatile u32*)s;
     s[1] = (u32)&vtbl_SimCreatureAbility;
+    _ReadWriteBarrier();
     s[2] = 0;
     s[0] = (u32)&vtbl_014182a4;
     s[1] = (u32)&vtbl_014182a0;
-    s[5] = 0;
-    s[6] = 0;
-    s[7] = 0;
+    vs[5] = 0;
+    vs[6] = 0;
+    vs[7] = 0;
     u32* c = s + 4;
     *c = (u32)c;
     s[5] = (u32)c;
     s[6] = 0;
-    *((u8*)s + 0x1c) = 0;
+    ((MgrBytes*)s)->mColor1 = 0;
     s[8] = 0;
-    c = s + 0xb;
-    s[0xc] = 0;
+    _ReadWriteBarrier();
+    u32* c2 = s + 0xb;
+    volatile u32* vc2 = (volatile u32*)c2;
+    vc2[1] = 0;
+    vc2[2] = 0;
+    vc2[3] = 0;
+    *c2 = (u32)c2;
+    s[0xc] = (u32)c2;
     s[0xd] = 0;
-    s[0xe] = 0;
-    *c = (u32)c;
-    s[0xc] = (u32)c;
-    s[0xd] = 0;
-    *((u8*)s + 0x38) = 0;
+    ((MgrBytes*)s)->mColor2 = 0;
     s[0xf] = 0;
     g_spLayoutManager = s;
     return s;

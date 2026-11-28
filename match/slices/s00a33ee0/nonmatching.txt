@@ -8,5 +8,4 @@
 00a34930 28 vector<tBinding>::DoInsertValue: store order of end/capacity after do_move_start
 00a34a10 154 Submix::ConnectSendToSubmix: register allocation (ebx/edi), lock scope
 00a34bf0 33 VoiceContainer::Connect: bl vs al result byte and plugin load register
-00a34d70 75 SetSendId (fixed_vector<uint> push/back overwrite): operand/branch layout
 00a34dc0 92 cEapdMessage::Init: original keeps result byte in bl (xor bl,bl) and pushes ebp

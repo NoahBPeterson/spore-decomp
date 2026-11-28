@@ -663,12 +663,15 @@ int Entry::GetCiv()
 // ===========================================================================
 // @ 0x00ae9e60
 void write_vec(void* stream, Vec12* v)
-{
-    u32 count = (u32)(v->mpEnd - v->mpBegin);
-    void* inner = vt0(stream, 0x20 / 4);
-    void* io = vt0(inner, 0x18 / 4);
-    EA_WriteUint32(io, &count, 1, 0);
-    for (E12* p = v->mpBegin; p != v->mpEnd; ++p)
+{    u32 count = (u32)(v->mpEnd - v->mpBegin);
+    void* __restrict inner = vt0(stream, 0x20 / 4);
+    u32 val = count;
+    tc0_t* __restrict vt = *(tc0_t**)inner;
+    void* io = vt[0x18 / 4](inner);
+    EA_WriteUint32(io, &val, 1, 0);
+    E12* p = v->mpBegin;
+    E12* end = v->mpEnd;
+    for (; p != end; ++p)
         p->Write(stream);
     vt0(stream, 0x1c / 4);
 }

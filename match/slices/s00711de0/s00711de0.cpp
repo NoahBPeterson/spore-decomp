@@ -558,14 +558,17 @@ void MatRefVec::resize(uint32_t n)
     void** pEnd = mpEnd;
     uint32_t nSize = (uint32_t)(pEnd - mpBegin);
     if (n > nSize) {
-        const ARefMat zero;
-        DoInsertValues(pEnd, n - nSize, zero);
-    } else {
-        void** first = mpBegin + n;
-        void** pos = AssignWeak14(pEnd, pEnd, first);
-        RangeWeakRelease(pos, mpEnd);
-        mpEnd -= (pEnd - first);
+        {
+            const ARefMat zero;
+            DoInsertValues(pEnd, n - nSize, zero);
+            __assume(zero.mpObject == 0);
+        }
+        return;
     }
+    void** first = mpBegin + n;
+    void** pos = AssignWeak14(pEnd, pEnd, first);
+    RangeWeakRelease(pos, mpEnd);
+    mpEnd -= (pEnd - first);
 }
 
 // ---------------------------------------------------------------------------------------------

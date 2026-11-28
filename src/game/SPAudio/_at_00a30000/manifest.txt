@@ -21,3 +21,4 @@
 ../src/game/SPAudio/_at_00a30000.cpp  ?sendgame_new@@YAHHH@Z  00a3eef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/_at_00a30000.cpp  ?sendgame_anything@@YAXHHHHPAH@Z  00a3ef30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/_at_00a30000.cpp  ?FindByName@TrackList@@QAEPAUTrack@@PAX@Z  00a3f050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a30000.cpp  ?SetSendId@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEXI@Z  00a34d70  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

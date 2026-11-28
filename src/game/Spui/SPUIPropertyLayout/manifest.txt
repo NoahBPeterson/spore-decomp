@@ -11,3 +11,4 @@
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?func24h@CPL@@UAE_NXZ  00828be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?AddRef@cSPUIPropertyLayout@@UAEHXZ  00c6a960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?DoDestroyValues@ElemVec@@QAEXPAUElem@@0@Z  00828410  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyLayout.cpp  ?ForceVisibleLocation@CPL@@QAEXXZ  00828110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
