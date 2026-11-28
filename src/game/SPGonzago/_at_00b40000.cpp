@@ -7035,7 +7035,7 @@ u8 __cdecl FUN_00b4ec70(float* out, float a, float b, float c, const float* in, 
                 t = limit;
             }
             float v = -((((((t * t) * b) * g_three - (t * t) * t) *
-                          (g_pi * g_third)) * g_one) * scale);
+                          (g_third * g_pi)) * g_one) * scale);
             out[0] = in[0] * v;
             out[1] = in[1] * v;
             out[2] = in[2] * v;

@@ -22,6 +22,7 @@ extern float   DAT_0169fa68;   // 0x0169fa68
 extern float   DAT_0169fa6c;   // 0x0169fa6c
 extern float   DAT_0169fa70;   // 0x0169fa70
 extern void* __stdcall SP_PlanetModel(void* a);  // 0xb3d350
+extern void* SP_PlanetModel();                   // 0xb3d350
 #include <math.h>
 #include "SP/cActionCircle.h"
 #include "SP/cCity.h"
@@ -98,6 +99,7 @@ struct Sub {
 struct City        { float* GetPositionPtr(); };                  // 0xfa0e00
 struct PlanetModel {
     int    GetContinent();                                   // 0xb88590
+    int    GetContinent(void* a);                            // 0xb88590
     float* CalcSurface(void* a, void* b);                    // 0xb81630
     float* DirectionToSurfacePosition(float* a, float* b);   // 0xb815a0
     char   Cb7e3e0(float* v);                                // 0xb7e3e0
@@ -2550,12 +2552,10 @@ char FUN_00dc4d40(Obj* self, Obj* ctx)
 {    switch (self->mStateB1c) {
     case 0: {
         Sub* s2 = &ctx->mSub120;
-        void* a = (void*)((VfnP)self->mSub34.mpVtbl->mSlots[kVt2C])(&self->mSub34);
-        PlanetModel* pm1 = (PlanetModel*)SP_PlanetModel(a);
-        int c1 = pm1->GetContinent();
-        void* b = (void*)((VfnP)s2->mpVtbl->mSlots[kVt2C])(s2);
-        PlanetModel* pm2 = (PlanetModel*)SP_PlanetModel(b);
-        int c2 = pm2->GetContinent();
+        int c1 = ((PlanetModel*)SP_PlanetModel())->GetContinent(
+            (void*)((VfnP)self->mSub34.mpVtbl->mSlots[kVt2C])(&self->mSub34));
+        int c2 = ((PlanetModel*)SP_PlanetModel())->GetContinent(
+            (void*)((VfnP)s2->mpVtbl->mSlots[kVt2C])(s2));
         return (int)(c2 == c1);
     }
     case 1: {
