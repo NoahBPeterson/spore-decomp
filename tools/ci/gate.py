@@ -30,8 +30,9 @@ import targets as T             # noqa: E402
 
 
 # compiler options a manifest row may use (every option the manifests used on 2026-11-09).  Anything else is refused
-# before compiling: cl's /B1 /B2 load a compiler pass from a DLL path, @file reads more options, /Fo /Fe /Fp write files
-FLAG_OK = re.compile(r"^(/MD|/MT|/Gy|/TP|/TC|/O1|/O2|/Od|/Oi|/Oy-?|/Ob[0-2]|/EHsc|/EHs-|/GS-|/GR-|/arch[:=](SSE2?|IA32)"
+# before compiling: cl's /B1 /B2 load a compiler pass from a DLL path, @file reads more options, /Fo /Fe /Fp write files.
+# /G5 /G6 /G7 (cl 13.10's processor tuning; /G7 changes `dec` to `sub r,1` and `shl r,2` to two adds) added 2026-11-28.
+FLAG_OK = re.compile(r"^(/MD|/MT|/Gy|/TP|/TC|/O1|/O2|/Od|/Oi|/Oy-?|/Ob[0-2]|/EHsc|/EHs-|/GS-|/GR-|/G[5-7]|/arch[:=](SSE2?|IA32)"
                      r"|/fp[:=](fast|precise|strict)|/vc71|/vmg|/vmv|/nologo|/c|/wd\d{4}"
                      r"|[/-]D[A-Za-z_]\w*(=[\w.]*)?)$")
 
